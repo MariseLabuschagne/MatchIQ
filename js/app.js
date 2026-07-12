@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 app.js
-Version: 0.3.0
+Version: 0.3.2
 =========================================================
 */
 
@@ -128,10 +128,12 @@ function startMatch() {
             .value
             .trim();
 
-    if (!validateMatchSetup(
-        ourTeam,
-        opponent
-    )) {
+    if (
+        !validateMatchSetup(
+            ourTeam,
+            opponent
+        )
+    ) {
 
         return;
 
@@ -183,7 +185,9 @@ MATCH OBJECT
 =========================================================
 */
 
-function createMatchObject(data) {
+function createMatchObject(
+    data
+) {
 
     return {
 

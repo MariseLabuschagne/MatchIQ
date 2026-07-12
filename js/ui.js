@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 0.3.0
+Version: 0.3.2
 =========================================================
 */
 
@@ -31,19 +31,23 @@ function renderLiveMatch() {
 
         <div class="card scoreboard">
 
-            <div class="team-name">
-                ${App.currentMatch.ourTeam}
-            </div>
+            <div class="score-row">
 
-            <div
-                id="scoreDisplay"
-                class="score"
-            >
-                0 - 0
-            </div>
+                <div class="score-team">
+                    ${App.currentMatch.ourTeam}
+                </div>
 
-            <div class="team-name">
-                ${App.currentMatch.opponent}
+                <div
+                    id="scoreDisplay"
+                    class="score"
+                >
+                    0 - 0
+                </div>
+
+                <div class="score-team">
+                    ${App.currentMatch.opponent}
+                </div>
+
             </div>
 
             <div
@@ -61,30 +65,23 @@ function renderLiveMatch() {
 
                 <button
                     id="pauseButton"
-                    class="primary-button"
+                    class="control-button"
                 >
                     ⏸ Pause
                 </button>
 
                 <button
                     id="resetButton"
-                    class="primary-button"
+                    class="control-button"
                 >
                     🔄 Reset
                 </button>
 
                 <button
-                    id="undoButton"
-                    class="primary-button"
-                >
-                    ↩ Undo
-                </button>
-
-                <button
                     id="endMatchButton"
-                    class="primary-button"
+                    class="end-button"
                 >
-                    ✅ End
+                    ✅ End Match
                 </button>
 
             </div>
@@ -99,7 +96,20 @@ function renderLiveMatch() {
 
         <div class="card">
 
-            <h2>Timeline</h2>
+            <div class="timeline-header">
+
+                <h2>
+                    Timeline
+                </h2>
+
+                <button
+                    id="undoButton"
+                    class="undo-button"
+                >
+                    ↩ Undo Last Event
+                </button>
+
+            </div>
 
             <div id="timeline"></div>
 
@@ -166,7 +176,7 @@ function renderEventSections() {
                 );
 
             heading.className =
-                "event-category";
+                `event-category ${category.id}`;
 
             heading.textContent =
                 category.name;
@@ -197,7 +207,7 @@ function renderEventSections() {
                         );
 
                     button.className =
-                        "primary-button event-button";
+                        `event-button ${event.category}`;
 
                     button.innerHTML = `
                         ${event.icon}<br>
@@ -292,31 +302,17 @@ function renderTimeline() {
             row.className =
                 "timeline-row";
 
-            const eventName =
-                config
-                    ? config.name
-                    : event.eventType;
-
-            const icon =
-                config
-                    ? config.icon
-                    : "🏑";
-
             row.innerHTML = `
 
-                <div
-                    class="timeline-time"
-                >
+                <div class="timeline-time">
                     ${formatTime(
                         event.matchSecond
                     )}
                 </div>
 
-                <div
-                    class="timeline-event"
-                >
-                    ${icon}
-                    ${eventName}
+                <div class="timeline-event">
+                    ${config?.icon || "🏑"}
+                    ${config?.name || event.eventType}
                 </div>
 
             `;
@@ -344,13 +340,14 @@ function undoLastEvent() {
 
     if (
         confirm(
-            "Undo last event?"
+            "Remove the last captured event?"
         )
     ) {
 
         removeLastEvent();
 
     }
+
 }
 
 function endMatch() {
@@ -365,7 +362,6 @@ function endMatch() {
 `🏑 Match Finished
 
 ${App.currentMatch.ourTeam}: ${score.our}
-
 ${App.currentMatch.opponent}: ${score.opposition}
 
 Events Recorded:
