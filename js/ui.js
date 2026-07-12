@@ -49,29 +49,15 @@ function renderLiveMatch() {
             <div
                 id="matchTimer"
                 class="timer"
-                style="
-                    font-size:72px;
-                    color:#38bdf8;
-                "
             >
                 00:00
             </div>
 
-            <div
-                class="period"
-            >
+            <div class="period">
                 ${App.currentMatch.period}
             </div>
 
-            <div
-                style="
-                    display:flex;
-                    gap:12px;
-                    justify-content:center;
-                    flex-wrap:wrap;
-                    margin-top:20px;
-                "
-            >
+            <div class="match-controls">
 
                 <button
                     id="pauseButton"
@@ -107,8 +93,7 @@ function renderLiveMatch() {
 
         <div class="card">
 
-            <div id="eventSections">
-            </div>
+            <div id="eventSections"></div>
 
         </div>
 
@@ -123,36 +108,28 @@ function renderLiveMatch() {
     `;
 
     document
-        .getElementById(
-            "pauseButton"
-        )
+        .getElementById("pauseButton")
         .addEventListener(
             "click",
             toggleTimer
         );
 
     document
-        .getElementById(
-            "resetButton"
-        )
+        .getElementById("resetButton")
         .addEventListener(
             "click",
             resetTimer
         );
 
     document
-        .getElementById(
-            "undoButton"
-        )
+        .getElementById("undoButton")
         .addEventListener(
             "click",
             undoLastEvent
         );
 
     document
-        .getElementById(
-            "endMatchButton"
-        )
+        .getElementById("endMatchButton")
         .addEventListener(
             "click",
             endMatch
@@ -174,81 +151,196 @@ function renderEventSections() {
             "eventSections"
         );
 
+    if (!container) {
+        return;
+    }
+
     container.innerHTML = "";
 
-    MatchIQ.categories.forEach(cat => {
+    MatchIQ.categories.forEach(
+        category => {
 
-        const title =
-            document.createElement("h2");
+            const heading =
+                document.createElement(
+                    "h2"
+                );
 
-        title.textContent =
-            cat.name;
+            heading.className =
+                "event-category";
 
-        title.style.marginTop =
-            "20px";
+            heading.textContent =
+                category.name;
 
-        container.appendChild(
-            title
-        );
+            container.appendChild(
+                heading
+            );
 
-        const grid =
-            document.createElement("div");
+            const grid =
+                document.createElement(
+                    "div"
+                );
 
-        grid.style.display =
-            "grid";
+            grid.className =
+                "event-grid";
 
-        grid.style.gridTemplateColumns =
-            "repeat(auto-fill,minmax(180px,1fr))";
+            MatchIQ.events
+                .filter(
+                    event =>
+                        event.category ===
+                        category.id
+                )
+                .forEach(event => {
 
-        grid.style.gap =
-            "12px";
+                    const button =
+                        document.createElement(
+                            "button"
+                        );
 
-        MatchIQ.events
-            .filter(
-                e =>
-                    e.category ===
-                    cat.id
-            )
-            .forEach(event => {
+                    button.className =
+                        "primary-button event-button";
 
-                const btn =
-                    document.createElement(
-                        "button"
+                    button.innerHTML = `
+                        ${event.icon}<br>
+                        ${event.name}
+                    `;
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+                            recordEvent(
+                                event.id
+                            );
+                        }
                     );
 
-                btn.className =
-                    "primary-button";
+                    grid.appendChild(
+                        button
+                    );
 
-                btn.style.height =
-                    "95px";
+                });
 
-                btn.innerHTML =
-                    `${event.icon}<br>${event.name}`;
+            container.appendChild(
+                grid
+            );
 
-                btn.addEventListener(
-                    "click",
-                    () =>
-                        recordEvent(
-                            event.id
-                        )
-                );
-
-                grid.appendChild(
-                    btn
-                );
-
-            });
-
-        container.appendChild(
-            grid
-        );
-
-    });
-
+        }
+    );
 }
 
+function updateScoreboard() {
+
+    const scoreDisplay =
+        document.getElementById(
+            "scoreDisplay"
+        );
+
+    if (!scoreDisplay) {
+        return;
+    }
+
+    const score =
+        getScore();
+
+    scoreDisplay.textContent =
+        `${score.our} - ${score.opposition}`;
+}
+
+function renderTimeline() {
+
+    const timeline =
+        document.getElementById(
+            "timeline"
+        );
+
+    if (!timeline) {
+        return;
+    }
+
+    if (
+        !App.currentMatch ||
+        App.currentMatch.events.length === 0
+    ) {
+
+        timeline.innerHTML = `
+            <div class="timeline-empty">
+                No events captured yet.
+            </div>
+        `;
+
+        return;
+    }
+
+    timeline.innerHTML = "";
+
+    App.currentMatch.events
+        .slice()
+        .reverse()
+        .forEach(event => {
+
+            const config =
+                MatchIQ.events.find(
+                    e =>
+                        e.id ===
+                        event.eventType
+                );
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "timeline-row";
+
+            const eventName =
+                config
+                    ? config.name
+                    : event.eventType;
+
+            const icon =
+                config
+                    ? config.icon
+                    : "🏑";
+
+            row.innerHTML = `
+
+                <div
+                    class="timeline-time"
+                >
+                    ${formatTime(
+                        event.matchSecond
+                    )}
+                </div>
+
+                <div
+                    class="timeline-event"
+                >
+                    ${icon}
+                    ${eventName}
+                </div>
+
+            `;
+
+            timeline.appendChild(
+                row
+            );
+
+        });
+}
 
 function undoLastEvent() {
+
+    if (
+        !App.currentMatch ||
+        App.currentMatch.events.length === 0
+    ) {
+
+        alert(
+            "No events to undo."
+        );
+
+        return;
+    }
 
     if (
         confirm(
@@ -259,14 +351,14 @@ function undoLastEvent() {
         removeLastEvent();
 
     }
-
-    
+}
 
 function endMatch() {
 
     pauseTimer();
 
-    const score = getScore();
+    const score =
+        getScore();
 
     alert(
 
@@ -282,6 +374,3 @@ ${App.currentMatch.events.length}`
     );
 
 }
-
-
-

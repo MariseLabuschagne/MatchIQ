@@ -2,41 +2,109 @@
 /*
 =========================================================
 MatchIQ
-File: events.js
+events.js
 Version: 0.3.0
 Event Engine
 =========================================================
 */
 
-function createEvent(eventType,options = {}) {
+/*
+=========================================================
+EVENT LOOKUP
+=========================================================
+*/
+
+function getEventDefinition(eventId) {
+
+    return MatchIQ.events.find(
+        event => event.id === eventId
+    );
+
+}
+
+/*
+=========================================================
+EVENT CREATION
+=========================================================
+*/
+
+function createEvent(
+    eventType,
+    options = {}
+) {
 
     return {
 
-       id: crypto.randomUUID(),
+        id:
+            crypto.randomUUID(),
 
-       timestamp: new Date().toISOString(),
+        timestamp:
+            new Date().toISOString(),
 
-        matchSecond: App.timer.seconds,
+        matchSecond:
+            App.timer.seconds,
 
-        period: App.currentMatch.period,
+        period:
+            App.currentMatch.period,
 
-        eventType: eventType,
+        eventType:
+            eventType,
 
-        outcome: options.outcome || null,
+        player:
+            options.player || null,
 
-        player: options.player || null,
+        player2:
+            options.player2 || null,
 
-        player2: options.player2 || null,
+        outcome:
+            options.outcome || null,
 
-        value: options.value || null,
+        value:
+            options.value || null,
 
-        notes: options.notes || ""
+        notes:
+            options.notes || ""
 
     };
 
 }
 
-function recordEvent(eventType, options = {}) {
+/*
+=========================================================
+EVENT RECORDING
+=========================================================
+*/
+
+function recordEvent(
+    eventType,
+    options = {}
+) {
+
+    if (!App.currentMatch) {
+
+        console.error(
+            "No active match."
+        );
+
+        return null;
+
+    }
+
+    const eventDefinition =
+        getEventDefinition(
+            eventType
+        );
+
+    if (!eventDefinition) {
+
+        console.error(
+            "Unknown event type:",
+            eventType
+        );
+
+        return null;
+
+    }
 
     const event =
         createEvent(
@@ -71,18 +139,107 @@ UNDO
 
 function removeLastEvent() {
 
-   if (
-        !App.currentMatch |
+    if (
+        !App.currentMatch ||
         App.currentMatch.events.length === 0
     ) {
-        return;    }
 
-    App.currentMatch.events.pop();
+        return null;
+
+    }
+
+    const removedEvent =
+        App.currentMatch.events.pop();
 
     saveMatch();
 
     updateScoreboard();
 
     renderTimeline();
+
+    console.log(
+        "EVENT REMOVED",
+        removedEvent
+    );
+
+    return removedEvent;
+
+}
+
+/*
+=========================================================
+EVENT ACCESS HELPERS
+=========================================================
+*/
+
+function getEvents() {
+
+    if (!App.currentMatch) {
+
+        return [];
+
+    }
+
+    return App.currentMatch.events;
+
+}
+
+function getLastEvent() {
+
+    if (
+        !App.currentMatch ||
+        App.currentMatch.events.length === 0
+    ) {
+
+        return null;
+
+    }
+
+    return App.currentMatch.events[
+        App.currentMatch.events.length - 1
+    ];
+
+}
+
+function clearEvents() {
+
+    if (!App.currentMatch) {
+
+        return;
+
+    }
+
+    App.currentMatch.events = [];
+
+    saveMatch();
+
+    updateScoreboard();
+
+    renderTimeline();
+
+}
+
+/*
+=========================================================
+MATCH EVENT SUMMARY
+=========================================================
+*/
+
+function getEventSummary() {
+
+    const summary = {};
+
+    MatchIQ.events.forEach(
+        event => {
+
+            summary[event.id] =
+                getEventCount(
+                    event.id
+                );
+
+        }
+    );
+
+    return summary;
 
 }

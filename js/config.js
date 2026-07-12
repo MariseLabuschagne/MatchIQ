@@ -16,7 +16,6 @@ const MatchIQ = {
         version: "0.3.0",
 
         company: "MatchIQ"
-
     },
 
     categories: [
@@ -40,9 +39,9 @@ const MatchIQ = {
 
     events: [
 
-        //-----------------------------------
+        // =====================================================
         // ATTACK
-        //-----------------------------------
+        // =====================================================
 
         {
             id: "goalScored",
@@ -52,48 +51,27 @@ const MatchIQ = {
         },
 
         {
-            id: "shotOnTarget",
-            name: "Shot On Target",
-            icon: "🎯",
-            category: "attack"
-        },
-
-        {
-            id: "shotOffTarget",
-            name: "Shot Wide",
-            icon: "↗️",
-            category: "attack"
-        },
-
-        {
-            id: "circleEntry",
-            name: "Circle Entry",
-            icon: "⭕",
-            category: "attack"
-        },
-
-        {
             id: "pcWon",
-            name: "PC Won",
+            name: "Penalty Corner Won",
             icon: "🚩",
             category: "attack"
         },
 
         {
             id: "psWon",
-            name: "PS Won",
+            name: "Penalty Stroke Won",
             icon: "🏑",
             category: "attack"
         },
 
-        //-----------------------------------
+        // =====================================================
         // DEFENCE
-        //-----------------------------------
+        // =====================================================
 
         {
             id: "goalConceded",
             name: "Goal Conceded",
-            icon: "🥅",
+            icon: "⚽",
             category: "defence"
         },
 
@@ -105,7 +83,7 @@ const MatchIQ = {
         },
 
         {
-            id: "intercept",
+            id: "interception",
             name: "Interception",
             icon: "🛡️",
             category: "defence"
@@ -127,21 +105,21 @@ const MatchIQ = {
 
         {
             id: "pcConceded",
-            name: "PC Conceded",
+            name: "Penalty Corner Conceded",
             icon: "🚩",
             category: "defence"
         },
 
         {
             id: "psConceded",
-            name: "PS Conceded",
+            name: "Penalty Stroke Conceded",
             icon: "⚠️",
             category: "defence"
         },
 
-        //-----------------------------------
+        // =====================================================
         // DISCIPLINE
-        //-----------------------------------
+        // =====================================================
 
         {
             id: "greenCard",

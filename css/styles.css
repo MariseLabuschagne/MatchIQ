@@ -2,13 +2,14 @@
 =========================================================
 MatchIQ
 styles.css
-Version: 1.1.0
+Version: 0.3.0
 =========================================================
 */
 
 :root {
 
     --bg: #020617;
+
     --card: #0f172a;
     --card-light: #1e293b;
 
@@ -16,6 +17,9 @@ Version: 1.1.0
     --primary-dark: #16a34a;
 
     --accent: #38bdf8;
+
+    --danger: #ef4444;
+    --warning: #f59e0b;
 
     --text: #f8fafc;
     --muted: #94a3b8;
@@ -33,7 +37,11 @@ Version: 1.1.0
 
 body {
 
-    font-family: "Inter", sans-serif;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
 
     background: var(--bg);
 
@@ -41,7 +49,7 @@ body {
 
     min-height: 100vh;
 
-    padding: 20px;
+    padding: 16px;
 }
 
 #app {
@@ -57,7 +65,7 @@ HEADER
 
 .app-header {
 
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .logo-area {
@@ -76,11 +84,12 @@ HEADER
 
     border-radius: 50%;
 
-    background: linear-gradient(
-        135deg,
-        var(--primary),
-        var(--accent)
-    );
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--accent)
+        );
 
     display: flex;
 
@@ -93,7 +102,7 @@ HEADER
 
 .app-header h1 {
 
-    font-size: 52px;
+    font-size: 42px;
 
     font-weight: 800;
 }
@@ -119,10 +128,12 @@ CARD
 
     border-radius: var(--radius);
 
-    padding: 24px;
+    padding: 20px;
+
+    margin-bottom: 18px;
 
     box-shadow:
-        0 8px 30px rgba(0,0,0,0.25);
+        0 10px 35px rgba(0,0,0,0.25);
 }
 
 /* =====================================================
@@ -131,18 +142,18 @@ FORMS
 
 .form-group {
 
-    margin-bottom: 22px;
+    margin-bottom: 20px;
 }
 
 label {
 
     display: block;
 
-    color: var(--muted);
-
     margin-bottom: 8px;
 
-    font-size: 15px;
+    color: var(--muted);
+
+    font-size: 14px;
 }
 
 input[type="text"],
@@ -150,7 +161,7 @@ select {
 
     width: 100%;
 
-    padding: 16px;
+    padding: 14px;
 
     border-radius: 14px;
 
@@ -160,7 +171,7 @@ select {
 
     color: white;
 
-    font-size: 18px;
+    font-size: 16px;
 }
 
 /* =====================================================
@@ -171,11 +182,9 @@ RADIOS
 
     display: flex;
 
-    gap: 20px;
+    gap: 16px;
 
     flex-wrap: wrap;
-
-    margin-top: 8px;
 }
 
 .radio-group label {
@@ -186,16 +195,10 @@ RADIOS
 
     gap: 8px;
 
-    margin-bottom: 0;
-
-    cursor: pointer;
-
     color: white;
 }
 
-.radio-group input[type="radio"] {
-
-    width: auto;
+.radio-group input {
 
     margin: 0;
 }
@@ -208,19 +211,20 @@ BUTTONS
 
     border: none;
 
+    border-radius: 16px;
+
     cursor: pointer;
 
     color: white;
 
     font-weight: 700;
 
-    border-radius: 18px;
-
-    background: linear-gradient(
-        135deg,
-        var(--primary),
-        var(--primary-dark)
-    );
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
 
     transition: all 0.15s ease;
 }
@@ -235,28 +239,19 @@ BUTTONS
     transform: scale(0.98);
 }
 
-/* =====================================================
-START MATCH BUTTON
-===================================================== */
-
 #startMatchButton {
 
     display: block;
 
-    width: 340px;
+    width: 320px;
 
-    max-width: 95%;
+    max-width: 100%;
 
-    margin: 40px auto 10px auto;
+    margin: 40px auto 0 auto;
 
     height: 76px;
 
     font-size: 24px;
-
-    letter-spacing: 0.5px;
-
-    box-shadow:
-        0 8px 20px rgba(34,197,94,0.35);
 }
 
 /* =====================================================
@@ -268,6 +263,208 @@ LIVE MATCH
     display: none;
 }
 
+/* =====================================================
+SCOREBOARD
+===================================================== */
+
 .scoreboard {
 
- 
+    text-align: center;
+}
+
+.team-name {
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+}
+
+.score {
+
+    font-size: 58px;
+
+    font-weight: 800;
+
+    color: var(--accent);
+
+    margin-bottom: 10px;
+}
+
+.timer {
+
+    font-size: 72px;
+
+    font-weight: 800;
+
+    color: var(--accent);
+
+    margin-top: 15px;
+
+    margin-bottom: 10px;
+}
+
+.period {
+
+    color: var(--muted);
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+/* =====================================================
+MATCH CONTROLS
+===================================================== */
+
+.match-controls {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    justify-content: center;
+
+    margin-top: 20px;
+}
+
+.match-controls button {
+
+    min-width: 120px;
+
+    min-height: 54px;
+
+    padding: 0 20px;
+}
+
+/* =====================================================
+EVENT BUTTONS
+===================================================== */
+
+.event-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(180px,1fr)
+        );
+
+    gap: 12px;
+}
+
+.event-button {
+
+    min-height: 95px;
+
+    font-size: 16px;
+
+    line-height: 1.4;
+}
+
+.event-category {
+
+    margin-top: 25px;
+
+    margin-bottom: 12px;
+
+    color: var(--accent);
+
+    font-size: 20px;
+}
+
+/* =====================================================
+TIMELINE
+===================================================== */
+
+#timeline {
+
+    margin-top: 10px;
+}
+
+.timeline-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 12px;
+
+    margin-bottom: 8px;
+
+    border-radius: 12px;
+
+    background: var(--card-light);
+
+    border: 1px solid var(--border);
+}
+
+.timeline-time {
+
+    color: var(--accent);
+
+    font-weight: 700;
+
+    min-width: 60px;
+}
+
+.timeline-event {
+
+    flex: 1;
+
+    text-align: left;
+}
+
+.timeline-empty {
+
+    color: var(--muted);
+
+    text-align: center;
+
+    padding: 20px;
+}
+
+/* =====================================================
+MOBILE
+===================================================== */
+
+@media (max-width: 640px) {
+
+    body {
+
+        padding: 10px;
+    }
+
+    .app-header h1 {
+
+        font-size: 34px;
+    }
+
+    .score {
+
+        font-size: 46px;
+    }
+
+    .timer {
+
+        font-size: 56px;
+    }
+
+    .event-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .match-controls button {
+
+        width: 100%;
+    }
+}
