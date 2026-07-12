@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 export.js
-Version: 0.4.0
+Version: 0.4.2
 =========================================================
 */
 
@@ -34,6 +34,7 @@ function exportMatch() {
     const rows = [];
 
     rows.push([
+
         "Match ID",
         "Competition",
         "Our Team",
@@ -44,7 +45,9 @@ function exportMatch() {
         "Time",
         "Match Second",
         "Period",
-        "Event Type"
+        "Event Type",
+        "Event Value"
+
     ]);
 
     App.currentMatch.events.forEach(
@@ -83,7 +86,9 @@ function exportMatch() {
 
                 eventDefinition
                     ? eventDefinition.name
-                    : event.eventType
+                    : event.eventType,
+
+                event.value || ""
 
             ]);
 
@@ -125,10 +130,12 @@ function exportMatch() {
     const fileName =
         createExportFileName();
 
-    link.href =
+    const url =
         URL.createObjectURL(
             blob
         );
+
+    link.href = url;
 
     link.download =
         fileName;
@@ -147,7 +154,11 @@ function exportMatch() {
     );
 
     URL.revokeObjectURL(
-        link.href
+        url
+    );
+
+    alert(
+        `Match exported successfully:\n${fileName}`
     );
 
 }

@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 config.js
-Version: 0.3.0
+Version: 0.4.2
 =========================================================
 */
 
@@ -13,7 +13,7 @@ const MatchIQ = {
 
         name: "MatchIQ",
 
-        version: "0.3.0",
+        version: "0.4.2",
 
         company: "MatchIQ"
     },
@@ -140,6 +140,17 @@ const MatchIQ = {
             name: "Red Card",
             icon: "🟥",
             category: "discipline"
+        },
+
+        // =====================================================
+        // SYSTEM EVENTS
+        // =====================================================
+
+        {
+            id: "periodChanged",
+            name: "Period Changed",
+            icon: "⏭",
+            category: "system"
         }
 
     ]

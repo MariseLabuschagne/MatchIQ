@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 0.4.1
+Version: 0.4.2
 =========================================================
 */
 
@@ -349,8 +349,10 @@ function renderTimeline() {
                 </div>
 
                 <div class="timeline-event">
-                    ${config?.icon || "🏑"}
-                    ${config?.name || event.eventType}
+                    ${getTimelineText(
+                        config,
+                        event
+                    )}
                 </div>
             `;
 
@@ -359,6 +361,28 @@ function renderTimeline() {
             );
 
         });
+}
+
+function getTimelineText(
+    config,
+    event
+) {
+
+    if (
+        event.eventType ===
+        "periodChanged"
+    ) {
+
+        return `
+            ⏭ Period Changed: ${event.value}
+        `;
+
+    }
+
+    return `
+        ${config?.icon || "🏑"}
+        ${config?.name || event.eventType}
+    `;
 }
 
 function advancePeriod() {
@@ -381,6 +405,13 @@ function advancePeriod() {
 
     App.currentMatch.period =
         nextPeriod;
+
+    recordEvent(
+        "periodChanged",
+        {
+            value: nextPeriod
+        }
+    );
 
     saveMatch();
 
