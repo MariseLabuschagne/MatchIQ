@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 0.4.0
+Version: 0.4.1
 =========================================================
 */
 
@@ -57,7 +57,10 @@ function renderLiveMatch() {
                 00:00
             </div>
 
-            <div class="period">
+            <div
+                id="periodDisplay"
+                class="period"
+            >
                 ${App.currentMatch.period}
             </div>
 
@@ -75,6 +78,13 @@ function renderLiveMatch() {
                     class="control-button"
                 >
                     🔄 Reset
+                </button>
+
+                <button
+                    id="nextPeriodButton"
+                    class="period-button"
+                >
+                    ⏭ Next Period
                 </button>
 
                 <button
@@ -146,6 +156,13 @@ function renderLiveMatch() {
         .addEventListener(
             "click",
             resetTimer
+        );
+
+    document
+        .getElementById("nextPeriodButton")
+        .addEventListener(
+            "click",
+            advancePeriod
         );
 
     document
@@ -233,10 +250,8 @@ function renderEventSections() {
                     button.className =
                         `event-button ${event.category}`;
 
-                    button.innerHTML = `
-                        ${event.icon}<br>
-                        ${event.name}
-                    `;
+                    button.innerHTML =
+                        `${event.icon}<br>${event.name}`;
 
                     button.addEventListener(
                         "click",
@@ -346,6 +361,81 @@ function renderTimeline() {
         });
 }
 
+function advancePeriod() {
+
+    if (!App.currentMatch) {
+        return;
+    }
+
+    const nextPeriod =
+        getNextPeriod();
+
+    if (!nextPeriod) {
+
+        alert(
+            "Final period already reached."
+        );
+
+        return;
+    }
+
+    App.currentMatch.period =
+        nextPeriod;
+
+    saveMatch();
+
+    updatePeriodDisplay();
+
+    alert(
+        `Period advanced to ${nextPeriod}`
+    );
+}
+
+function getNextPeriod() {
+
+    const current =
+        App.currentMatch.period;
+
+    if (
+        App.currentMatch.format === "2"
+    ) {
+
+        if (current === "H1") {
+            return "H2";
+        }
+
+        return null;
+    }
+
+    if (
+        App.currentMatch.format === "4"
+    ) {
+
+        if (current === "Q1") return "Q2";
+        if (current === "Q2") return "Q3";
+        if (current === "Q3") return "Q4";
+
+        return null;
+    }
+
+    return null;
+}
+
+function updatePeriodDisplay() {
+
+    const periodDisplay =
+        document.getElementById(
+            "periodDisplay"
+        );
+
+    if (!periodDisplay) {
+        return;
+    }
+
+    periodDisplay.textContent =
+        App.currentMatch.period;
+}
+
 function undoLastEvent() {
 
     if (
@@ -369,7 +459,6 @@ function undoLastEvent() {
         removeLastEvent();
 
     }
-
 }
 
 function endMatch() {
