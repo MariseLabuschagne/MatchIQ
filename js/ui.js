@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 0.4.0
+Version: 0.3.2
 =========================================================
 */
 
@@ -102,29 +102,12 @@ function renderLiveMatch() {
                     Timeline
                 </h2>
 
-                <div
-                    style="
-                        display:flex;
-                        gap:10px;
-                        flex-wrap:wrap;
-                    "
+                <button
+                    id="undoButton"
+                    class="undo-button"
                 >
-
-                    <button
-                        id="exportButton"
-                        class="control-button"
-                    >
-                        ⬇ Export Match
-                    </button>
-
-                    <button
-                        id="undoButton"
-                        class="undo-button"
-                    >
-                        ↩ Undo Last Event
-                    </button>
-
-                </div>
+                    ↩ Undo Last Event
+                </button>
 
             </div>
 
@@ -153,13 +136,6 @@ function renderLiveMatch() {
         .addEventListener(
             "click",
             undoLastEvent
-        );
-
-    document
-        .getElementById("exportButton")
-        .addEventListener(
-            "click",
-            exportMatch
         );
 
     document
@@ -314,7 +290,8 @@ function renderTimeline() {
             const config =
                 MatchIQ.events.find(
                     e =>
-                        e.id === event.eventType
+                        e.id ===
+                        event.eventType
                 );
 
             const row =
@@ -326,6 +303,7 @@ function renderTimeline() {
                 "timeline-row";
 
             row.innerHTML = `
+
                 <div class="timeline-time">
                     ${formatTime(
                         event.matchSecond
@@ -336,6 +314,7 @@ function renderTimeline() {
                     ${config?.icon || "🏑"}
                     ${config?.name || event.eventType}
                 </div>
+
             `;
 
             timeline.appendChild(
@@ -357,7 +336,6 @@ function undoLastEvent() {
         );
 
         return;
-
     }
 
     if (
