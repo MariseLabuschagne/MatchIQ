@@ -1,0 +1,9 @@
+{
+  "name": "MatchIQ",
+  "short_name": "MatchIQ",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#F5F7FA",
+  "theme_color": "#1E3A5F",
+  "icons": []
+}

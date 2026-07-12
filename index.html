@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <title>MatchIQ</title>
+
+    <meta
+        name="theme-color"
+        content="#0f172a">
+
+    <meta
+        name="description"
+        content="Sports Match Analysis">
+
+    <!-- iPhone / PWA -->
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes">
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes">
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="MatchIQ">
+
+    <!-- Manifest -->
+
+    <link
+        rel="manifest"
+        href="manifest.json">
+
+    <!-- Fonts -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com">
+
+    <!-- Styles -->
+
+    <link
+        rel="stylesheet"
+        href="css/styles.css">
+
+</head>
+
+<body>
+
+    <div id="app">
+
+        <!-- ===================================================== -->
+        <!-- HEADER                                                 -->
+        <!-- ===================================================== -->
+
+        <header class="app-header">
+
+            <div class="logo-area">
+
+                <div class="logo-circle">
+                    🏑
+                </div>
+
+                <div>
+
+                    <h1>MatchIQ</h1>
+
+                    <p class="subtitle">
+                        Capture. Analyse. Improve.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- ===================================================== -->
+        <!-- MAIN CONTENT                                           -->
+        <!-- ===================================================== -->
+
+        <main id="main-content">
+
+            <!-- NEW MATCH SCREEN -->
+
+            <section
+                id="setupScreen"
+                class="card">
+
+                <h2>New Match</h2>
+
+                <!-- Competition -->
+
+                <div class="form-group">
+
+                    <label for="competition">
+                        Competition
+                    </label>
+
+                    <input
+                        id="competition"
+                        type="text"
+                        placeholder="Tournament / League">
+
+                </div>
+
+                <!-- Our Team -->
+
+                <div class="form-group">
+
+                    <label for="ourTeam">
+                        Our Team
+                    </label>
+
+                    <input
+                        id="ourTeam"
+                        type="text"
+                        placeholder="e.g. Waterkloof U13A">
+
+                </div>
+
+                <!-- Opponent -->
+
+                <div class="form-group">
+
+                    <label for="opponent">
+                        Opponent
+                    </label>
+
+                    <input
+                        id="opponent"
+                        type="text"
+                        placeholder="Opponent">
+
+                </div>
+
+                <!-- Venue -->
+
+                <div class="form-group">
+
+                    <label>
+                        Venue
+                    </label>
+
+                    <div class="radio-group">
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="venue"
+                                value="Home"
+                                checked>
+                            Home
+                        </label>
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="venue"
+                                value="Away">
+                            Away
+                        </label>
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="venue"
+                                value="Neutral">
+                            Neutral
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- Format -->
+
+                <div class="form-group">
+
+                    <label>
+                        Game Format
+                    </label>
+
+                    <div class="radio-group">
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="format"
+                                value="2"
+                                checked>
+                            2 Halves
+                        </label>
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="format"
+                                value="4">
+                            4 Quarters
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- Period Length -->
+
+                <div class="form-group">
+
+                    <label for="periodLength">
+                        Period Length
+                    </label>
+
+                    <select id="periodLength">
+
+                        <option>10</option>
+                        <option selected>15</option>
+                        <option>20</option>
+                        <option>25</option>
+                        <option>30</option>
+                        <option>35</option>
+
+                    </select>
+
+                </div>
+
+                <!-- START MATCH -->
+
+                <button
+                    id="startMatchButton"
+                    class="primary-button">
+
+                    🏑 START MATCH
+
+                </button>
+
+            </section>
+
+            <!-- LIVE MATCH SCREEN -->
+
+            <section
+                id="liveMatchScreen"
+                class="hidden">
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- JAVASCRIPT                                             -->
+    <!-- ===================================================== -->
+
+
+<script src="js/config.js"></script>
+
+<script src="js/state.js"></script>
+
+
+<script src="js/storage.js"></script>
+<script src="js/events.js"></script>
+<script src="js/stats.js"></script>
+
+
+<script src="js/timer.js"></script>
+
+<script src="js/ui.js"></script>
+
+<script src="js/app.js"></script>
+
+
+</body>
+
+</html>
