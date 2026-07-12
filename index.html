@@ -14,13 +14,13 @@
 
     <meta
         name="theme-color"
-        content="#0f172a">
+        content="#020617">
 
     <meta
         name="description"
-        content="Sports Match Analysis">
+        content="Capture. Analyse. Improve.">
 
-    <!-- iPhone / PWA -->
+    <!-- PWA -->
 
     <meta
         name="mobile-web-app-capable"
@@ -31,10 +31,12 @@
         content="yes">
 
     <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent">
+
+    <meta
         name="apple-mobile-web-app-title"
         content="MatchIQ">
-
-    <!-- Manifest -->
 
     <link
         rel="manifest"
@@ -66,9 +68,9 @@
 
     <div id="app">
 
-        <!-- ===================================================== -->
-        <!-- HEADER                                                 -->
-        <!-- ===================================================== -->
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
 
         <header class="app-header">
 
@@ -92,19 +94,26 @@
 
         </header>
 
-        <!-- ===================================================== -->
-        <!-- MAIN CONTENT                                           -->
-        <!-- ===================================================== -->
+        <!-- =====================================================
+             CONTENT
+        ====================================================== -->
 
         <main id="main-content">
 
-            <!-- NEW MATCH SCREEN -->
+            <!-- =================================================
+                 MATCH SETUP
+            ================================================== -->
 
             <section
                 id="setupScreen"
                 class="card">
 
-                <h2>New Match</h2>
+                <h2
+                    style="
+                        margin-bottom:24px;
+                    ">
+                    New Match
+                </h2>
 
                 <!-- Competition -->
 
@@ -195,7 +204,7 @@
                 <div class="form-group">
 
                     <label>
-                        Game Format
+                        Match Format
                     </label>
 
                     <div class="radio-group">
@@ -226,7 +235,7 @@
                 <div class="form-group">
 
                     <label for="periodLength">
-                        Period Length
+                        Period Length (Minutes)
                     </label>
 
                     <select id="periodLength">
@@ -242,7 +251,7 @@
 
                 </div>
 
-                <!-- START MATCH -->
+                <!-- Start Match -->
 
                 <button
                     id="startMatchButton"
@@ -254,38 +263,32 @@
 
             </section>
 
-            <!-- LIVE MATCH SCREEN -->
+            <!-- =================================================
+                 LIVE MATCH SCREEN
+            ================================================== -->
 
             <section
                 id="liveMatchScreen"
                 class="hidden">
+
             </section>
 
         </main>
 
     </div>
 
-    <!-- ===================================================== -->
-    <!-- JAVASCRIPT                                             -->
-    <!-- ===================================================== -->
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
 
-
-<script src="js/config.js"></script>
-
-<script src="js/state.js"></script>
-
-
-<script src="js/storage.js"></script>
-<script src="js/events.js"></script>
-<script src="js/stats.js"></script>
-
-
-<script src="js/timer.js"></script>
-
-<script src="js/ui.js"></script>
-
-<script src="js/app.js"></script>
-
+    <script src="js/config.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/stats.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
 
 </body>
 

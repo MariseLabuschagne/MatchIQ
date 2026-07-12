@@ -1,45 +1,137 @@
+
 /*
-=====================================================
+=========================================================
 MatchIQ
 app.js
 Version: 0.3.0
-=====================================================
+=========================================================
 */
 
-document.addEventListener("DOMContentLoaded", initialiseApp);
+document.addEventListener(
+    "DOMContentLoaded",
+    initialiseApp
+);
+
+/*
+=========================================================
+APPLICATION STARTUP
+=========================================================
+*/
 
 function initialiseApp() {
 
-    console.log("🏑 MatchIQ v0.3.0");
+    console.log(
+        `🏑 ${MatchIQ.app.name} v${MatchIQ.app.version}`
+    );
 
-    const startButton = document.getElementById("startMatchButton");
+    App.app.loaded = true;
 
-    startButton.addEventListener("click", startMatch);
+    const startButton =
+        document.getElementById(
+            "startMatchButton"
+        );
 
+    if (startButton) {
+
+        startButton.addEventListener(
+            "click",
+            startMatch
+        );
+
+    }
+
+    recoverExistingMatch();
 }
 
-function startMatch() {
+/*
+=========================================================
+MATCH RECOVERY
+=========================================================
+*/
 
-    const competition =
-        document.getElementById("competition").value.trim();
+function recoverExistingMatch() {
 
-    const ourTeam =
-        document.getElementById("ourTeam").value.trim();
+    const savedMatch =
+        recoverSavedMatch();
 
-    const opponent =
-        document.getElementById("opponent").value.trim();
-
-    if (ourTeam === "") {
-
-        alert("Please enter Our Team.");
+    if (!savedMatch) {
 
         return;
 
     }
 
-    if (opponent === "") {
+    const restore =
+        confirm(
 
-        alert("Please enter an Opponent.");
+`Resume previous match?
+
+${savedMatch.ourTeam}
+vs
+${savedMatch.opponent}
+
+Events Captured:
+${savedMatch.events.length}`
+
+        );
+
+    if (!restore) {
+
+        deleteCurrentMatch();
+
+        return;
+
+    }
+
+    App.currentMatch =
+        savedMatch;
+
+    restoreMatchClock();
+
+    renderLiveMatch();
+
+    updateScoreboard();
+
+    renderTimeline();
+
+    updateTimerDisplay();
+}
+
+/*
+=========================================================
+MATCH CREATION
+=========================================================
+*/
+
+function startMatch() {
+
+    const competition =
+        document
+            .getElementById(
+                "competition"
+            )
+            .value
+            .trim();
+
+    const ourTeam =
+        document
+            .getElementById(
+                "ourTeam"
+            )
+            .value
+            .trim();
+
+    const opponent =
+        document
+            .getElementById(
+                "opponent"
+            )
+            .value
+            .trim();
+
+    if (!validateMatchSetup(
+        ourTeam,
+        opponent
+    )) {
 
         return;
 
@@ -57,44 +149,156 @@ function startMatch() {
 
     const periodLength =
         Number(
-            document.getElementById(
-                "periodLength"
-            ).value
+            document
+                .getElementById(
+                    "periodLength"
+                )
+                .value
         );
 
-    App.currentMatch = {
+    App.currentMatch =
+        createMatchObject({
 
-        id: crypto.randomUUID(),
+            competition,
+            ourTeam,
+            opponent,
+            venue,
+            format,
+            periodLength
 
-        createdAt: new Date().toISOString(),
+        });
 
-        competition,
+    saveMatch();
 
-        ourTeam,
+    resetTimer();
 
-        opponent,
+    renderLiveMatch();
 
-        venue,
+    startTimer();
+}
 
-        format,
+/*
+=========================================================
+MATCH OBJECT
+=========================================================
+*/
 
-        periodLength,
+function createMatchObject(data) {
+
+    return {
+
+        id:
+            crypto.randomUUID(),
+
+        createdAt:
+            new Date().toISOString(),
+
+        completedAt:
+            null,
+
+        competition:
+            data.competition,
+
+        ourTeam:
+            data.ourTeam,
+
+        opponent:
+            data.opponent,
+
+        venue:
+            data.venue,
+
+        format:
+            data.format,
+
+        periodLength:
+            data.periodLength,
 
         period:
-            format === "2"
+            data.format === "2"
                 ? "H1"
                 : "Q1",
+
+        sport:
+            "hockey",
+
+        elapsedSeconds: 0,
 
         events: []
 
     };
+}
+
+/*
+=========================================================
+VALIDATION
+=========================================================
+*/
+
+function validateMatchSetup(
+    ourTeam,
+    opponent
+) {
+
+    if (ourTeam === "") {
+
+        alert(
+            "Please enter Our Team."
+        );
+
+        return false;
+    }
+
+    if (opponent === "") {
+
+        alert(
+            "Please enter an Opponent."
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+/*
+=========================================================
+MATCH COMPLETION
+=========================================================
+*/
+
+function completeMatch() {
+
+    if (!App.currentMatch) {
+
+        return;
+    }
+
+    App.currentMatch.completedAt =
+        new Date().toISOString();
 
     saveMatch();
+}
 
-    renderLiveMatch();
+/*
+=========================================================
+NEW MATCH
+=========================================================
+*/
+
+function startNewMatch() {
+
+    if (
+        App.timer.running
+    ) {
+
+        pauseTimer();
+
+    }
 
     resetTimer();
 
-    startTimer();
+    deleteCurrentMatch();
 
+    location.reload();
 }
