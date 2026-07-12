@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 0.3.2
+Version: 0.4.0
 =========================================================
 */
 
@@ -102,12 +102,29 @@ function renderLiveMatch() {
                     Timeline
                 </h2>
 
-                <button
-                    id="undoButton"
-                    class="undo-button"
+                <div
+                    style="
+                        display:flex;
+                        gap:10px;
+                        flex-wrap:wrap;
+                    "
                 >
-                    ↩ Undo Last Event
-                </button>
+
+                    <button
+                        id="exportButton"
+                        class="control-button"
+                    >
+                        ⬇ Export Match
+                    </button>
+
+                    <button
+                        id="undoButton"
+                        class="undo-button"
+                    >
+                        ↩ Undo Last Event
+                    </button>
+
+                </div>
 
             </div>
 
@@ -136,6 +153,13 @@ function renderLiveMatch() {
         .addEventListener(
             "click",
             undoLastEvent
+        );
+
+    document
+        .getElementById("exportButton")
+        .addEventListener(
+            "click",
+            exportMatch
         );
 
     document
@@ -303,7 +327,6 @@ function renderTimeline() {
                 "timeline-row";
 
             row.innerHTML = `
-
                 <div class="timeline-time">
                     ${formatTime(
                         event.matchSecond
@@ -314,7 +337,6 @@ function renderTimeline() {
                     ${config?.icon || "🏑"}
                     ${config?.name || event.eventType}
                 </div>
-
             `;
 
             timeline.appendChild(
@@ -362,6 +384,7 @@ function endMatch() {
 `🏑 Match Finished
 
 ${App.currentMatch.ourTeam}: ${score.our}
+
 ${App.currentMatch.opponent}: ${score.opposition}
 
 Events Recorded:
