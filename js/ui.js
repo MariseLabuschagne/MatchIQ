@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 0.4.2
+Version: 0.5.0
 =========================================================
 */
 
@@ -492,24 +492,133 @@ function undoLastEvent() {
     }
 }
 
+
 function endMatch() {
 
     pauseTimer();
 
-    const score =
-        getScore();
+    completeMatch();
 
-    alert(
-
-`🏑 Match Finished
-
-${App.currentMatch.ourTeam}: ${score.our}
-
-${App.currentMatch.opponent}: ${score.opposition}
-
-Events Recorded:
-${App.currentMatch.events.length}`
-
-    );
+    renderMatchSummary();
 
 }
+
+
+function renderMatchSummary() {
+
+    const liveScreen =
+        document.getElementById(
+            "liveMatchScreen"
+        );
+
+    const stats =
+        getMatchStatistics();
+
+    const score =
+        stats.score;
+
+    liveScreen.innerHTML = `
+
+        <div class="summary-screen">
+
+            <div class="card">
+
+                <div class="summary-title">
+                    🏑 Match Summary
+                </div>
+
+                <div class="summary-score">
+                    ${App.currentMatch.ourTeam}
+                    ${score.our}
+                    -
+                    ${score.opposition}
+                    ${App.currentMatch.opponent}
+                </div>
+
+            </div>
+
+            <div class="card summary-section">
+
+                <h3>Attack</h3>
+
+                ${renderSummaryStat(
+                    "Goals Scored",
+                    stats.attack.goalsScored
+                )}
+
+                ${renderSummaryStat(
+                    "Penalty Corners Won",
+                    stats.attack.penaltyCornersWon
+                )}
+
+                ${renderSummaryStat(
+                    "Penalty Strokes Won",
+                    stats.attack.penaltyStrokesWon
+                )}
+
+            </div>
+
+            <div class="summary-actions">
+
+                <button
+                    id="summaryExportButton"
+                    class="summary-button export"
+                >
+                    ⬇ Export Match
+                </button>
+
+                <button
+                    id="newMatchButton"
+                    class="summary-button new-match"
+                >
+                    🏑 Start New Match
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+    document
+        .getElementById(
+            "summaryExportButton"
+        )
+        .addEventListener(
+            "click",
+            exportMatch
+        );
+
+    document
+        .getElementById(
+            "newMatchButton"
+        )
+        .addEventListener(
+            "click",
+            startNewMatch
+        );
+}
+
+function renderSummaryStat(
+    label,
+    value
+) {
+
+    return `
+
+        <div class="summary-stat">
+
+            <div>
+                ${label}
+            </div>
+
+            <div class="summary-value">
+                ${value}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
