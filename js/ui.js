@@ -558,6 +558,95 @@ function renderMatchSummary() {
 
             </div>
 
+            
+            <div class="card summary-section">
+
+                <h3>Defence</h3>
+
+                ${renderSummaryStat(
+                    "Goals Conceded",
+                    stats.defence.goalsConceded
+                )}
+
+                ${renderSummaryStat(
+                    "Goalkeeper Saves",
+                    stats.defence.goalkeeperSaves
+                )}
+
+                ${renderSummaryStat(
+                    "Interceptions",
+                    stats.defence.interceptions
+                )}
+
+                ${renderSummaryStat(
+                    "Turnovers Won",
+                    stats.defence.turnoversWon
+                )}
+
+                ${renderSummaryStat(
+                    "Turnovers Lost",
+                    stats.defence.turnoversLost
+                )}
+
+                ${renderSummaryStat(
+                    "Penalty Corners Conceded",
+                    stats.defence.penaltyCornersConceded
+                )}
+
+            </div>
+
+            <div class="card summary-section">
+
+                <h3>Discipline</h3>
+
+                ${renderSummaryStat(
+                    "Green Cards",
+                    stats.discipline.greenCards
+                )}
+
+                ${renderSummaryStat(
+                    "Yellow Cards",
+                    stats.discipline.yellowCards
+                )}
+
+                ${renderSummaryStat(
+                    "Red Cards",
+                    stats.discipline.redCards
+                )}
+
+            </div>
+
+            <div class="card summary-section">
+
+                <h3>Match Information</h3>
+
+                ${renderSummaryStat(
+                    "Events Recorded",
+                    stats.totalEvents
+                )}
+
+                ${renderSummaryStat(
+                    "Match Duration",
+                    formatTime(
+                        App.timer.seconds
+                    )
+                )}
+
+            </div>
+
+            <div class="card summary-section">
+
+                <h3>Highlights</h3>
+
+                <div class="highlights">
+
+                    ${buildHighlights()}
+
+                </div>
+
+            </div>
+
+
             <div class="summary-actions">
 
                 <button
@@ -621,4 +710,82 @@ function renderSummaryStat(
     `;
 
 }
+
+
+function buildHighlights() {
+
+    const highlights = [];
+
+    const attack =
+        getAttackStats();
+
+    const defence =
+        getDefenceStats();
+
+    const turnoverDiff =
+        getTurnoverDifferential();
+
+    if (
+        turnoverDiff > 0
+    ) {
+
+        highlights.push(
+            `
+            <div class="summary-highlight">
+                ✅ Positive Turnover Differential
+                (+${turnoverDiff})
+            </div>
+            `
+        );
+
+    }
+
+    if (
+        attack.penaltyCornersWon >
+        defence.penaltyCornersConceded
+    ) {
+
+        highlights.push(
+            `
+            <div class="summary-highlight">
+                ✅ More Penalty Corners Won than Conceded
+            </div>
+            `
+        );
+
+    }
+
+    if (
+        defence.goalkeeperSaves >= 5
+    ) {
+
+        highlights.push(
+            `
+            <div class="summary-highlight">
+                ✅ Strong Goalkeeping Performance
+                (${defence.goalkeeperSaves} saves)
+            </div>
+            `
+        );
+
+    }
+
+    if (
+        highlights.length === 0
+    ) {
+
+        highlights.push(
+            `
+            <div class="summary-highlight">
+                📊 Match summary available.
+            </div>
+            `
+        );
+
+    }
+
+    return highlights.join("");
+
+}
+
 
