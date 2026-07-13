@@ -388,6 +388,11 @@ HOME SCREEN
     font-weight: 500;
 
     opacity: 0.75;
+    
+    display: block;
+
+    margin-top: 4px;
+
 }
 
 

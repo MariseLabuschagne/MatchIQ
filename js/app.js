@@ -295,6 +295,7 @@ NEW MATCH
 =========================================================
 */
 
+
 function startNewMatch() {
 
     if (
@@ -309,22 +310,6 @@ function startNewMatch() {
 
     deleteCurrentMatch();
 
-    
-    const header =
-        document.getElementById(
-            "appHeader"
-        );
-
-    if (header) {
-
-        header.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    
     document
         .getElementById(
             "liveMatchScreen"
