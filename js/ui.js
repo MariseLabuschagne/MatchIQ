@@ -914,38 +914,30 @@ function showPenaltyCornerOutcomeOptions() {
         <h3>Penalty Corner Outcome</h3>
 
         <div class="event-grid">
+            
+        <button
+            class="event-button attack"
+            onclick="recordPenaltyCornerOutcome('pcSaved')"
+        >
+            🧤<br>
+            Saved
+        </button>
 
-            <button
-                class="event-button attack"
-                onclick="recordPenaltyCornerOutcome('pcGoal')"
-            >
-                🥅<br>
-                Goal
-            </button>
+        <button
+            class="event-button attack"
+            onclick="recordPenaltyCornerOutcome('pcMissed')"
+        >
+            ❌<br>
+            Missed
+        </button>
 
-            <button
-                class="event-button attack"
-                onclick="recordPenaltyCornerOutcome('pcSaved')"
-            >
-                🧤<br>
-                Saved
-            </button>
-
-            <button
-                class="event-button attack"
-                onclick="recordPenaltyCornerOutcome('pcMissed')"
-            >
-                ❌<br>
-                Missed
-            </button>
-
-            <button
-                class="event-button attack"
-                onclick="recordPenaltyCornerOutcome('pcBrokenDown')"
-            >
-                ⚠️<br>
-                Broken Down
-            </button>
+        <button
+            class="event-button attack"
+            onclick="recordPenaltyCornerOutcome('pcBrokenDown')"
+        >
+            ⚠️<br>
+            Broken Down
+        </button>
 
         </div>
 
