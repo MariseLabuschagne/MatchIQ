@@ -175,6 +175,8 @@ function startMatch() {
 
         });
 
+    App.currentAttack = null;
+
     saveMatch();
 
     resetTimer();
@@ -314,6 +316,7 @@ function startNewMatch() {
     resetTimer();
 
     deleteCurrentMatch();
+    App.currentAttack = null;
 
     document
         .getElementById(

@@ -136,7 +136,7 @@ function recordEvent(
         
     const event = {
 
-        id: generateId(),
+        id: crypto.randomUUID(),
 
         timestamp:
             new Date()
