@@ -1844,7 +1844,30 @@ function renderMatchHistory() {
 
     }
 
+    
+    const ourGoals =
+        match.events.filter(
+            e =>
+                e.eventType ===
+                "goalScored"
+        ).length;
+
+    const oppositionGoals =
+        match.events.filter(
+            e =>
+                e.eventType ===
+                "goalConceded"
+        ).length;
+
+
     screen.innerHTML = `
+        
+        <button
+            class="secondary-button"
+            onclick="closeMatchHistory()"
+        >
+            ← Back
+        </button>
 
         <h2>
             Match History
@@ -1870,6 +1893,16 @@ function renderMatchHistory() {
                         ${match.opponent}
 
                     </h3>
+                    
+                    <h2>
+
+                        ${ourGoals}
+
+                        -
+
+                        ${oppositionGoals}
+
+                    </h2>
 
                     <p>
 
@@ -1920,6 +1953,80 @@ function renderMatchHistory() {
 
 }
 
+
+function openHistoricalMatch(
+    matchId
+) {
+
+    const history =
+        JSON.parse(
+            localStorage.getItem(
+                "matchHistory"
+            ) || "[]"
+        );
+
+    const match =
+        history.find(
+            m =>
+                m.id ===
+                matchId
+        );
+
+    if (!match) {
+
+        return;
+
+    }
+
+    App.currentMatch =
+        match;
+
+    document
+        .getElementById(
+            "historyScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    const liveScreen =
+        document.getElementById(
+            "liveMatchScreen"
+        );
+
+    if (
+        liveScreen
+    ) {
+
+        liveScreen.classList.remove(
+            "hidden"
+        );
+
+    }
+
+    renderMatchSummary();
+
+}
+
+function closeMatchHistory() {
+
+    document
+        .getElementById(
+            "historyScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "homeScreen"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+}
 
 function openHistoricalMatch(
     matchId
