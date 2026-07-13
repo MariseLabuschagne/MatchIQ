@@ -597,52 +597,45 @@ function renderMatchSummary() {
                 </div>
 
             </div>
-
             
             <div class="card summary-section">
 
                 <h3>
-                    Attacking Funnel
+                    Attack Journey
                 </h3>
 
-                <div class="funnel-container">
+                ${renderSummaryStat(
+                    "Circle Entries",
+                    stats.attack.circleEntries
+                )}
 
-                    ${renderFunnelStep(
-                        "Circle Entries",
-                        stats.attack.circleEntries
-                    )}
+                ${renderSummarySubStat(
+                    "Shots",
+                    stats.attack.shots
+                )}
 
-                    <div class="funnel-arrow">
+                ${renderSummarySubStat(
+                    "Penalty Corners",
+                    stats.attack.penaltyCornersWon
+                )}
 
-                        ↓
-                        <br>
+                ${renderSummarySubStat(
+                    "Long Corners",
+                    stats.attack.entryLongCorners
+                )}
 
-                        ${stats.effectiveness.entryToShotConversion}%
+                ${renderSummarySubStat(
+                    "Turnovers Lost",
+                    stats.attack.entryTurnoversLost
+                )}
 
-                    </div>
-
-                    ${renderFunnelStep(
-                        "Shots",
-                        stats.attack.shots
-                    )}
-
-                    <div class="funnel-arrow">
-
-                        ↓
-                        <br>
-
-                        ${stats.effectiveness.shotToGoalConversion}%
-
-                    </div>
-
-                    ${renderFunnelStep(
-                        "Goals",
-                        stats.attack.goalsScored
-                    )}
-
-                </div>
+                ${renderSummaryStat(
+                    "Goals",
+                    stats.attack.goalsScored
+                )}
 
             </div>
+
 
 
             <div class="card summary-section">
@@ -698,6 +691,25 @@ function renderMatchSummary() {
                     "Penalty Corners",
                     stats.attack.penaltyCornersWon
                 )}
+                ${renderSummarySubStat(
+                    "Converted",
+                    stats.attack.pcGoals
+                )}
+
+                ${renderSummarySubStat(
+                    "Saved",
+                    stats.attack.pcSaved
+                )}
+
+                ${renderSummarySubStat(
+                    "Missed",
+                    stats.attack.pcMissed
+                )}
+
+                ${renderSummarySubStat(
+                    "Broken Down",
+                    stats.attack.pcBrokenDown
+                )}
 
                 ${renderSummarySubStat(
                     "Long Corners",
@@ -719,25 +731,7 @@ function renderMatchSummary() {
                     stats.attack.highTurnoversWon
                 )}
 
-                ${renderSummarySubStat(
-                    "Converted",
-                    stats.attack.pcGoals
-                )}
-
-                ${renderSummarySubStat(
-                    "Saved",
-                    stats.attack.pcSaved
-                )}
-
-                ${renderSummarySubStat(
-                    "Missed",
-                    stats.attack.pcMissed
-                )}
-
-                ${renderSummarySubStat(
-                    "Broken Down",
-                    stats.attack.pcBrokenDown
-                )}
+                
 
                 ${renderSummaryStat(
                     "Penalty Strokes Won",
