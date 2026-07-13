@@ -69,6 +69,32 @@ function createEvent(
 
 }
 
+
+function startAttack(
+    location
+) {
+
+    App.currentMatch.attackCounter += 1;
+
+    App.currentMatch.activeAttackId =
+        App.currentMatch.attackCounter;
+
+    recordEvent(
+        "attackStart",
+        {
+            value:
+                App.currentMatch
+                    .activeAttackId
+        }
+    );
+
+    recordEvent(
+        location
+    );
+
+}
+
+
 /*
 =========================================================
 EVENT RECORDING

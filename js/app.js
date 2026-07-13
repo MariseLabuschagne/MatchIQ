@@ -232,8 +232,13 @@ function createMatchObject(
             "hockey",
 
         elapsedSeconds: 0,
+        
+        events: [],
 
-        events: []
+        attackCounter: 0,
+
+        activeAttackId: null
+
 
     };
 }

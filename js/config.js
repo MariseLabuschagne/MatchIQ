@@ -46,19 +46,21 @@ const MatchIQ = {
         =====================================================
         */
 
+        
         {
-            id: "circleEntry",
+            id: "attackStart",
             name: "Circle Entry",
             icon: "⭕",
             category: "attack"
         },
 
         {
-            id: "shot",
-            name: "Shot",
-            icon: "🎯",
+            id: "MidfieldTurnoverWon",
+            name: "Midfield Turnover Won",
+            icon: "⬆️",
             category: "attack"
         },
+
 
         {
             id: "goalScored",
@@ -87,6 +89,70 @@ const MatchIQ = {
             icon: "⬆️",
             category: "attack"
         },
+
+
+        /*
+        =====================================================
+        ATTACK ENTRY LOCATIONS
+        =====================================================
+        */
+
+        {
+            id: "entryLeft",
+            name: "Entry Left",
+            icon: "⬅️",
+            category: "system"
+        },
+
+        {
+            id: "entryTopD",
+            name: "Entry Top D",
+            icon: "⬆️",
+            category: "system"
+        },
+
+        {
+            id: "entryRight",
+            name: "Entry Right",
+            icon: "➡️",
+            category: "system"
+        },
+
+                
+        /*
+        =====================================================
+        ATTACK ENTRY OUTCOMES
+        =====================================================
+        */
+
+        {
+            id: "entryShot",
+            name: "Shot",
+            icon: "🎯",
+            category: "system"
+        },
+
+        {
+            id: "entryPenaltyCorner",
+            name: "Penalty Corner",
+            icon: "🚩",
+            category: "system"
+        },
+
+        {
+            id: "entryLongCorner",
+            name: "Long Corner",
+            icon: "↩️",
+            category: "system"
+        },
+
+        {
+            id: "entryTurnoverLost",
+            name: "Turnover Lost",
+            icon: "❌",
+            category: "system"
+        },
+            
 
         /*
         =====================================================
