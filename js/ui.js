@@ -562,12 +562,42 @@ function renderMatchSummary() {
             </div>
 
             <div class="card summary-section">
-
+                
                 <h3>Attack</h3>
+
+                ${renderSummaryStat(
+                    "Circle Entries",
+                    stats.attack.circleEntries
+                )}
+
+                ${renderSummaryStat(
+                    "Shots",
+                    stats.attack.shots
+                )}
+
+                ${renderSummaryStat(
+                    "Shots On Target",
+                    stats.attack.shotsOnTarget
+                )}
+
+                ${renderSummaryStat(
+                    "Shots Off Target",
+                    stats.attack.shotsOffTarget
+                )}
+
+                ${renderSummaryStat(
+                    "Shots Blocked",
+                    stats.attack.shotsBlocked
+                )}
 
                 ${renderSummaryStat(
                     "Goals Scored",
                     stats.attack.goalsScored
+                )}
+
+                ${renderSummaryStat(
+                    "High Turnovers Won",
+                    stats.attack.highTurnoversWon
                 )}
 
                 ${renderSummaryStat(
@@ -576,8 +606,62 @@ function renderMatchSummary() {
                 )}
 
                 ${renderSummaryStat(
+                    "PC Goals",
+                    stats.attack.pcGoals
+                )}
+
+                ${renderSummaryStat(
+                    "PC Saved",
+                    stats.attack.pcSaved
+                )}
+
+                ${renderSummaryStat(
+                    "PC Missed",
+                    stats.attack.pcMissed
+                )}
+
+                ${renderSummaryStat(
+                    "PC Broken Down",
+                    stats.attack.pcBrokenDown
+                )}
+
+                ${renderSummaryStat(
                     "Penalty Strokes Won",
                     stats.attack.penaltyStrokesWon
+                )}     
+
+            </div>
+
+            
+            <div class="card summary-section">
+
+                <h3>
+                    Attacking Effectiveness
+                </h3>
+
+                ${renderSummaryStat(
+                    "Entry → Shot %",
+                    stats.effectiveness.entryToShotConversion + "%"
+                )}
+
+                ${renderSummaryStat(
+                    "Shot → Goal %",
+                    stats.effectiveness.shotToGoalConversion + "%"
+                )}
+
+                ${renderSummaryStat(
+                    "Entry → Goal %",
+                    stats.effectiveness.entryToGoalConversion + "%"
+                )}
+
+                ${renderSummaryStat(
+                    "Shot Accuracy %",
+                    stats.effectiveness.shotAccuracy + "%"
+                )}
+
+                ${renderSummaryStat(
+                    "PC Conversion %",
+                    stats.effectiveness.pcConversion + "%"
                 )}
 
             </div>
