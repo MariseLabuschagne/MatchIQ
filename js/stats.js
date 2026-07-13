@@ -166,7 +166,18 @@ function getDefenceStats() {
         penaltyStrokesConceded:
             getEventCount(
                 "psConceded"
+            ),
+
+        pcConcededLow:
+            getEventCount(
+                "pcConcededLow"
+            ),
+
+        pcConcededHigh:
+            getEventCount(
+                "pcConcededHigh"
             )
+
 
     };
 }

@@ -198,6 +198,27 @@ const MatchIQ = {
             category: "defence"
         },
 
+         /*
+        =====================================================
+        HIDDEN DEFENCE EVENTS
+        =====================================================
+        */
+        
+        {
+            id: "pcConcededLow",
+            name: "PC Conceded Low",
+            icon: "⬇️",
+            category: "system"
+        },
+
+        {
+            id: "pcConcededHigh",
+            name: "PC Conceded High",
+            icon: "⬆️",
+            category: "system"
+        },
+
+
         /*
         =====================================================
         DISCIPLINE

@@ -293,6 +293,17 @@ function renderEventSections() {
 
                             }
 
+                            
+                            if (
+                                event.id === "pcConceded"
+                            ) {
+
+                                showPenaltyCornerConcededOptions();
+
+                                return;
+
+                            }
+
                             recordEvent(
                                 event.id
                             );
@@ -1152,4 +1163,83 @@ function removeOutcomePanel() {
 
 }
 
+
+function showPenaltyCornerConcededOptions() {
+
+    removeOutcomePanel();
+
+    const container =
+        document.getElementById(
+            "eventSections"
+        );
+
+    const panel =
+        document.createElement(
+            "div"
+        );
+
+    panel.id =
+        "outcomePanel";
+
+    panel.className =
+        "card outcome-panel";
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+            🚩 SELECT PC TYPE
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button defence"
+                onclick="recordPCConceded('pcConcededLow')"
+            >
+                ⬇️<br>
+                Low Flying
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordPCConceded('pcConcededHigh')"
+            >
+                ⬆️<br>
+                High Flying
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+    container.prepend(
+        panel
+    );
+
+}
+
+
+function recordPCConceded(
+    outcome
+) {
+
+    recordEvent(
+        "pcConceded"
+    );
+
+    recordEvent(
+        outcome
+    );
+
+    removeOutcomePanel();
+
+}
 
