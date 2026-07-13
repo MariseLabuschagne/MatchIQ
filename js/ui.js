@@ -1844,41 +1844,42 @@ function renderMatchHistory() {
 
     }
 
-    
-    const ourGoals =
-        match.events.filter(
-            e =>
-                e.eventType ===
-                "goalScored"
-        ).length;
-
-    const oppositionGoals =
-        match.events.filter(
-            e =>
-                e.eventType ===
-                "goalConceded"
-        ).length;
-
-
-    screen.innerHTML = `
-        
-        <button
-            class="secondary-button"
-            onclick="closeMatchHistory()"
-        >
-            ← Back
-        </button>
-
-        <h2>
-            Match History
-        </h2>
-
-    `;
-
     history
         .slice()
         .reverse()
         .forEach(match => {
+
+            const ourGoals =
+                match.events.filter(
+                    e =>
+                        e.eventType ===
+                        "goalScored"
+                ).length;
+
+            const oppositionGoals =
+                match.events.filter(
+                    e =>
+                        e.eventType ===
+                        "goalConceded"
+                ).length;
+
+
+            screen.innerHTML = `
+                
+                <button
+                    class="secondary-button"
+                    onclick="closeMatchHistory()"
+                >
+                    ← Back
+                </button>
+
+                <h2>
+                    Match History
+                </h2>
+
+            `;
+
+    
 
             screen.innerHTML += `
 
