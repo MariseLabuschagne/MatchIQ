@@ -273,9 +273,9 @@ function renderEventSections() {
                         "click",
                         () => {
 
-                                                        
+                                                                                    
                             if (
-                                event.id === "circleEntry"
+                                event.id === "attackStart"
                             ) {
 
                                 showCircleEntryLocationOptions();
@@ -283,6 +283,7 @@ function renderEventSections() {
                                 return;
 
                             }
+
                             if (
                                 event.id === "shot"
                             ) {
@@ -1292,9 +1293,11 @@ function recordEntryLocation(
     location
 ) {
 
+   
     recordEvent(
-        "circleEntry"
+        "attackStart"
     );
+
 
     recordEvent(
         location

@@ -240,42 +240,6 @@ const MatchIQ = {
 
         /*
         =====================================================
-        ATTACK JOURNEY
-        ENTRY OUTCOMES
-        =====================================================
-        */
-
-        {
-            id: "entryShot",
-            name: "Entry Shot",
-            icon: "🎯",
-            category: "system"
-        },
-
-        {
-            id: "entryPenaltyCorner",
-            name: "Entry Penalty Corner",
-            icon: "🚩",
-            category: "system"
-        },
-
-        {
-            id: "entryLongCorner",
-            name: "Entry Long Corner",
-            icon: "↩️",
-            category: "system"
-        },
-
-        {
-            id: "entryTurnoverLost",
-            name: "Entry Turnover Lost",
-            icon: "❌",
-            category: "system"
-        },
-
-
-        /*
-        =====================================================
         DEFENCE
         =====================================================
         */
