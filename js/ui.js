@@ -1326,12 +1326,11 @@ function showCircleEntryLocationOptions() {
 
 
 
+
 function recordEntryLocation(
     location
 ) {
 
-    App.attackCounter += 1;
-    
     App.currentMatch.attackCounter += 1;
 
     App.currentMatch.activeAttackId =
