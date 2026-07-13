@@ -922,6 +922,26 @@ MATCH SUMMARY
 }
 
 
+
+.hockey-menu-buttons {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+    margin-top: 24px;
+
+}
+
+.hockey-menu-buttons .sport-button {
+
+    width: 100%;
+
+}
+
+
 .sport-button.history {
 
     background:

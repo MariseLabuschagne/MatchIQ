@@ -2090,25 +2090,25 @@ function showHockeyMenu() {
                 🏑 Field Hockey
             </h1>
 
-            <p class="screen-subtitle">
+            
+            <div class="hockey-menu-buttons">
 
-                Capture and analyse hockey matches
+                <button
+                    class="sport-button hockey"
+                    onclick="showSetupScreen()"
+                >
+                    ▶ New Match
+                </button>
 
-            </p>
+                <button
+                    class="sport-button history"
+                    onclick="renderMatchHistory()"
+                >
+                    📊 Match History
+                </button>
 
-            <button
-                class="sport-button hockey"
-                onclick="showSetupScreen()"
-            >
-                ▶ New Match
-            </button>
+            </div>
 
-            <button
-                class="sport-button history"
-                onclick="renderMatchHistory()"
-            >
-                📂 Match History
-            </button>
 
         </div>
 
