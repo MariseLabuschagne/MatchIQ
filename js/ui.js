@@ -696,7 +696,7 @@ function renderMatchSummary() {
 
                 ${renderSummarySubStat(
                     "Penalty Corners",
-                    stats.attack.entryPenaltyCorners
+                    stats.attack.penaltyCornersWon
                 )}
 
                 ${renderSummarySubStat(
@@ -717,11 +717,6 @@ function renderMatchSummary() {
                 ${renderSummaryStat(
                     "High Turnovers Won",
                     stats.attack.highTurnoversWon
-                )}
-
-                ${renderSummaryStat(
-                    "Penalty Corners Won",
-                    stats.attack.penaltyCornersWon
                 )}
 
                 ${renderSummarySubStat(
