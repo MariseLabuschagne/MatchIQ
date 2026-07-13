@@ -97,12 +97,73 @@
         <main id="main-content">
 
             <!-- =================================================
+                 HOME SCREEN
+            ================================================== -->
+
+            
+            <div id="homeScreen">
+
+                <div class="home-container">
+
+                    <img
+                        src="assets/logo/matchiq_logo.jpeg"
+                        alt="MatchIQ Logo"
+                        class="home-logo"
+                    />
+
+                    <div class="home-tagline">
+
+                        Capture • Analyse • Improve
+
+                    </div>
+
+                    <div class="sport-selection">
+
+                        <button
+                            class="sport-button hockey"
+                            onclick="selectSport('hockey')"
+                        >
+                            🏑 Hockey
+                        </button>
+
+                        <button
+                            class="sport-button disabled"
+                            disabled
+                        >
+                            🥎 Softball
+                            <br>
+                            Coming Soon
+                        </button>
+
+                        <button
+                            class="sport-button disabled"
+                            disabled
+                        >
+                            🎾 Tennis
+                            <br>
+                            Coming Soon
+                        </button>
+
+                    </div>
+
+                    <div class="home-version">
+
+                        Version 0.7.0
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
                  MATCH SETUP
             ================================================== -->
 
             <section
                 id="setupScreen"
-                class="card">
+                class="card hidden">
 
                 <h2
                     style="

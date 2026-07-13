@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 styles.css
-Version: 0.5.0
+Version: 0.7.0
 =========================================================
 */
 
@@ -266,6 +266,104 @@ BUTTONS
 
     transform: scale(0.98);
 }
+
+
+/* =====================================================
+HOME SCREEN
+===================================================== */
+
+.home-container {
+
+    text-align: center;
+
+    padding: 20px;
+}
+
+.home-logo {
+
+    width: 240px;
+
+    max-width: 90%;
+
+    height: auto;
+
+    margin: 0 auto 20px auto;
+
+    display: block;
+}
+
+.home-tagline {
+
+    color: var(--muted);
+
+    margin-bottom: 30px;
+
+    font-size: 18px;
+}
+
+.sport-selection {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+    max-width: 350px;
+
+    margin: 0 auto;
+}
+
+.sport-button {
+
+    min-height: 85px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    color: white;
+}
+
+.sport-button.hockey {
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #38bdf8
+        );
+}
+
+.sport-button.disabled {
+
+    background:
+        linear-gradient(
+            135deg,
+            #64748b,
+            #475569
+        );
+
+    opacity: 0.7;
+
+    cursor: not-allowed;
+}
+
+.home-version {
+
+    margin-top: 30px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
 
 /* =====================================================
 START BUTTON

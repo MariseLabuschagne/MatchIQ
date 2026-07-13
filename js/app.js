@@ -26,6 +26,11 @@ function initialiseApp() {
 
     App.app.loaded = true;
 
+    
+    App.selectedSport =
+        null;
+
+
     const startButton =
         document.getElementById(
             "startMatchButton"
@@ -319,5 +324,67 @@ function startNewMatch() {
     }
 
 
-    location.reload();
+    
+    document
+        .getElementById(
+            "liveMatchScreen"
+        )
+        .innerHTML = "";
+
+    document
+        .getElementById(
+            "setupScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "homeScreen"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+    const header =
+        document.getElementById(
+            "appHeader"
+        );
+
+    if (header) {
+
+        header.classList.remove(
+            "hidden"
+        );
+
+    }
+
 }
+
+
+function selectSport(
+    sport
+) {
+
+    App.selectedSport =
+        sport;
+
+    document
+        .getElementById(
+            "homeScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "setupScreen"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+}
+
