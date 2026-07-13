@@ -1959,6 +1959,12 @@ function openHistoricalMatch(
     matchId
 ) {
 
+    
+    alert(
+            "Opening match: " +
+            matchId
+        );
+
     const history =
         JSON.parse(
             localStorage.getItem(
