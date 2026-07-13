@@ -575,18 +575,18 @@ function renderMatchSummary() {
                     stats.attack.shots
                 )}
 
-                ${renderSummaryStat(
-                    "Shots On Target",
+                ${renderSummarySubStat(
+                    "On Target",
                     stats.attack.shotsOnTarget
                 )}
 
-                ${renderSummaryStat(
-                    "Shots Off Target",
+                ${renderSummarySubStat(
+                    "Off Target",
                     stats.attack.shotsOffTarget
                 )}
 
-                ${renderSummaryStat(
-                    "Shots Blocked",
+                ${renderSummarySubStat(
+                    "Blocked",
                     stats.attack.shotsBlocked
                 )}
 
@@ -605,23 +605,23 @@ function renderMatchSummary() {
                     stats.attack.penaltyCornersWon
                 )}
 
-                ${renderSummaryStat(
-                    "PC Goals",
+                ${renderSummarySubStat(
+                    "Converted",
                     stats.attack.pcGoals
                 )}
 
-                ${renderSummaryStat(
-                    "PC Saved",
+                ${renderSummarySubStat(
+                    "Saved",
                     stats.attack.pcSaved
                 )}
 
-                ${renderSummaryStat(
-                    "PC Missed",
+                ${renderSummarySubStat(
+                    "Missed",
                     stats.attack.pcMissed
                 )}
 
-                ${renderSummaryStat(
-                    "PC Broken Down",
+                ${renderSummarySubStat(
+                    "Broken Down",
                     stats.attack.pcBrokenDown
                 )}
 
@@ -807,6 +807,29 @@ function renderSummaryStat(
 
             <div>
                 ${label}
+            </div>
+
+            <div class="summary-value">
+                ${value}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+function renderSummarySubStat(
+    label,
+    value
+) {
+
+    return `
+
+        <div class="summary-stat summary-sub-stat">
+
+            <div>
+                ↳ ${label}
             </div>
 
             <div class="summary-value">

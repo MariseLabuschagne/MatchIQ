@@ -640,6 +640,25 @@ MATCH SUMMARY
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
+
+.summary-sub-stat {
+
+    padding-left: 30px;
+
+    opacity: 0.85;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.03
+        );
+
+    border-radius: 8px;
+}
+
+
 .summary-stat:last-child {
 
     border-bottom: none;
