@@ -727,6 +727,17 @@ function renderMatchSummary() {
                     stats.defence.penaltyCornersConceded
                 )}
 
+                ${renderSummarySubStat(
+                    "Low Flying",
+                    stats.defence.pcConcededLow
+                )}
+
+                ${renderSummarySubStat(
+                    "High Flying",
+                    stats.defence.pcConcededHigh
+                )}
+
+
             </div>
 
             <div class="card summary-section">
