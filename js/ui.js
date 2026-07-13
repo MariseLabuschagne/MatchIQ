@@ -273,6 +273,16 @@ function renderEventSections() {
                         "click",
                         () => {
 
+                                                        
+                            if (
+                                event.id === "circleEntry"
+                            ) {
+
+                                showCircleEntryLocationOptions();
+
+                                return;
+
+                            }
                             if (
                                 event.id === "shot"
                             ) {
@@ -1198,6 +1208,98 @@ function showPenaltyCornerOutcomeOptions() {
     container.prepend(
         panel
     );
+
+}
+
+
+function showCircleEntryLocationOptions() {
+
+    removeOutcomePanel();
+
+    const container =
+        document.getElementById(
+            "eventSections"
+        );
+
+    const panel =
+        document.createElement(
+            "div"
+        );
+
+    panel.id =
+        "outcomePanel";
+
+    panel.className =
+        "card outcome-panel";
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            ⭕
+
+            SELECT ENTRY LOCATION
+
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button attack"
+                onclick="recordEntryLocation('entryLeft')"
+            >
+                ⬅️<br>
+                Left
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordEntryLocation('entryTopD')"
+            >
+                ⬆️<br>
+                Top D
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordEntryLocation('entryRight')"
+            >
+                ➡️<br>
+                Right
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+    container.prepend(
+        panel
+    );
+
+}
+
+
+function recordEntryLocation(
+    location
+) {
+
+    recordEvent(
+        "circleEntry"
+    );
+
+    recordEvent(
+        location
+    );
+
+    removeOutcomePanel();
 
 }
 

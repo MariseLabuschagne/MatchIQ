@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 config.js
-Version: 0.6.0
+Version: 0.8.0
 =========================================================
 */
 
@@ -13,7 +13,7 @@ const MatchIQ = {
 
         name: "MatchIQ",
 
-        version: "0.6.0",
+        version: "0.8.0",
 
         company: "MatchIQ"
 
@@ -208,6 +208,71 @@ const MatchIQ = {
             icon: "⚠️",
             category: "system"
         },
+
+        
+        /*
+        =====================================================
+        ATTACK JOURNEY
+        ENTRY LOCATIONS
+        =====================================================
+        */
+
+        {
+            id: "entryLeft",
+            name: "Entry Left",
+            icon: "⬅️",
+            category: "system"
+        },
+
+        {
+            id: "entryTopD",
+            name: "Entry Top D",
+            icon: "⬆️",
+            category: "system"
+        },
+
+        {
+            id: "entryRight",
+            name: "Entry Right",
+            icon: "➡️",
+            category: "system"
+        },
+
+        /*
+        =====================================================
+        ATTACK JOURNEY
+        ENTRY OUTCOMES
+        =====================================================
+        */
+
+        {
+            id: "entryShot",
+            name: "Entry Shot",
+            icon: "🎯",
+            category: "system"
+        },
+
+        {
+            id: "entryPenaltyCorner",
+            name: "Entry Penalty Corner",
+            icon: "🚩",
+            category: "system"
+        },
+
+        {
+            id: "entryLongCorner",
+            name: "Entry Long Corner",
+            icon: "↩️",
+            category: "system"
+        },
+
+        {
+            id: "entryTurnoverLost",
+            name: "Entry Turnover Lost",
+            icon: "❌",
+            category: "system"
+        },
+
 
         /*
         =====================================================
