@@ -163,11 +163,6 @@ function getAttackStats() {
                 "entryRight"
             ),
             
-        entryPenaltyCorners:
-
-            getEventCount(
-                "entryPenaltyCorner"
-            ),
 
         entryLongCorners:
 
