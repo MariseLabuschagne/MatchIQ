@@ -2093,12 +2093,14 @@ function showHockeyMenu() {
             
             <div class="hockey-menu-buttons">
 
+                
                 <button
                     class="sport-button hockey"
-                    onclick="showSetupScreen()"
+                    onclick="showHockeySetup()"
                 >
                     ▶ New Match
                 </button>
+
 
                 <button
                     class="sport-button history"
@@ -2136,3 +2138,23 @@ function returnToHomeScreen() {
 
 }
 
+
+function showHockeySetup() {
+
+    document
+        .getElementById(
+            "hockeyMenuScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "setupScreen"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+}
