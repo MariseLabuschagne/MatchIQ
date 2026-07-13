@@ -1289,15 +1289,26 @@ function showCircleEntryLocationOptions() {
 
 
 
+
 function recordEntryLocation(
     location
 ) {
 
-   
+    App.currentAttack = {
+
+        active: true,
+
+        startedAt:
+            Date.now(),
+
+        location:
+            location
+
+    };
+
     recordEvent(
         "attackStart"
     );
-
 
     recordEvent(
         location
@@ -1448,6 +1459,7 @@ function recordEntryOutcome(
 }
 
 
+
 function recordAttackAction(
     outcome
 ) {
@@ -1463,6 +1475,9 @@ function recordAttackAction(
         outcome ===
             "entryTurnoverLost"
     ) {
+
+        App.currentAttack =
+            null;
 
         removeOutcomePanel();
 
