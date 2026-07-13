@@ -930,6 +930,18 @@ OUTCOME PANELS
     color: white;
 }
 
+.attack-context {
+
+    text-align: center;
+
+    color: #a5f3fc;
+
+    font-size: 14px;
+
+    margin-bottom: 12px;
+
+    font-weight: 600;
+}
 
 /* =====================================================
 ATTACK FUNNEL

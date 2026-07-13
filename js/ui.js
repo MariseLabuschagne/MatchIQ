@@ -1377,12 +1377,22 @@ function showEntryOutcomeOptions() {
     }
 
     panel.innerHTML = `
-
+        
         <h3 class="outcome-title">
 
-            🎯 ENTRY OUTCOME
+            🎯 ACTIVE ATTACK
 
         </h3>
+
+        <div class="attack-context">
+
+            Entry:
+
+            ${App.currentAttack.location
+                .replace("entry", "")}
+
+        </div>
+
 
         <div class="event-grid">
 
