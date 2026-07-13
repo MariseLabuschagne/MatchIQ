@@ -2053,3 +2053,76 @@ function deleteHistoricalMatch(
     );
 
 }
+
+
+function showHockeyMenu() {
+
+    document
+        .getElementById(
+            "homeScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    const screen =
+        document.getElementById(
+            "hockeyMenuScreen"
+        );
+
+    screen.classList.remove(
+        "hidden"
+    );
+
+    screen.innerHTML = `
+
+        <button
+            class="secondary-button"
+            onclick="returnToHomeScreen()"
+        >
+            ← Back
+        </button>
+
+        <h2>
+            🏑 Field Hockey
+        </h2>
+
+        <button
+            class="primary-button"
+            onclick="showSetupScreen()"
+        >
+            ▶ New Match
+        </button>
+
+        <button
+            class="secondary-button"
+            onclick="renderMatchHistory()"
+        >
+            📂 Match History
+        </button>
+
+    `;
+
+}
+
+
+function returnToHomeScreen() {
+
+    document
+        .getElementById(
+            "hockeyMenuScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "homeScreen"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+}
+
