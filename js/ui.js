@@ -1838,6 +1838,48 @@ function renderMatchHistory() {
         .reverse()
         .forEach(match => {
 
+            
+            document
+                .querySelectorAll(
+                    ".history-open-button"
+                )
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            openHistoricalMatch(
+                                button.dataset.matchId
+                            );
+
+                        }
+                    );
+
+                });
+
+            document
+                .querySelectorAll(
+                    ".history-delete-button"
+                )
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            deleteHistoricalMatch(
+                                button.dataset.matchId
+                            );
+
+                            renderMatchHistory();
+
+                        }
+                    );
+
+                });
+
+
             const matchEvents =
                 match.events || [];
 
@@ -1900,20 +1942,21 @@ function renderMatchHistory() {
 
                     </p>
 
+                    
                     <button
-                        onclick="openHistoricalMatch('${match.id}')"
+                        class="history-open-button"
+                        data-match-id="${match.id}"
                     >
                         📂 Open
                     </button>
 
                     <button
-                        onclick="
-                            deleteHistoricalMatch('${match.id}');
-                            renderMatchHistory();
-                        "
+                        class="history-delete-button"
+                        data-match-id="${match.id}"
                     >
                         🗑 Delete
                     </button>
+
 
                 </div>
 
