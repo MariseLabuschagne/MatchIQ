@@ -1418,7 +1418,7 @@ function showEntryOutcomeOptions() {
 
             <button
                 class="event-button attack"
-                onclick="showAttackPenaltyCornerOutcomeOptions()"
+                onclick="recordEntryPenaltyCorner()"
             >
                 🚩<br>
                 Penalty Corner
@@ -1526,6 +1526,17 @@ function recordAttackAction(
     }
 
 }
+
+function recordEntryPenaltyCorner() {
+
+    recordEvent(
+        "entryPenaltyCorner"
+    );
+
+    showAttackPenaltyCornerOutcomeOptions();
+
+}
+
 
 function showAttackPenaltyCornerOutcomeOptions() {
 
