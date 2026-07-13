@@ -924,7 +924,15 @@ function showPenaltyCornerOutcomeOptions() {
 
 
         <div class="event-grid">
-            
+                    
+        <button
+            class="event-button attack"
+            onclick="recordPenaltyCornerOutcome('pcGoal')"
+        >
+            🥅<br>
+            Goal
+        </button>
+
         <button
             class="event-button attack"
             onclick="recordPenaltyCornerOutcome('pcSaved')"
@@ -959,6 +967,7 @@ function showPenaltyCornerOutcomeOptions() {
 
 }
 
+
 function recordPenaltyCornerOutcome(
     outcome
 ) {
@@ -971,9 +980,20 @@ function recordPenaltyCornerOutcome(
         outcome
     );
 
+    if (
+        outcome === "pcGoal"
+    ) {
+
+        recordEvent(
+            "goalScored"
+        );
+
+    }
+
     removeOutcomePanel();
 
 }
+
 
 function removeOutcomePanel() {
 
