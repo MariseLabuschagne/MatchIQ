@@ -710,6 +710,47 @@ MATCH SUMMARY
         );
 }
 
+
+/* =====================================================
+OUTCOME PANELS
+===================================================== */
+
+.outcome-panel {
+
+    background:
+        linear-gradient(
+            135deg,
+            #10384a,
+            #0c4a5d
+        );
+
+    border: 3px solid #67e8f9;
+
+    box-shadow:
+        0 0 20px rgba(
+            103,
+            232,
+            249,
+            0.35
+        );
+}
+
+.outcome-title {
+
+    text-align: center;
+
+    margin-bottom: 16px;
+
+    color: #67e8f9;
+
+    font-size: 22px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.5px;
+}
+
+
 /* =====================================================
 MOBILE
 ===================================================== */

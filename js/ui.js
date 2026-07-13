@@ -831,11 +831,15 @@ function showShotOutcomeOptions() {
         "outcomePanel";
 
     panel.className =
-        "card";
+    "card outcome-panel";
+
 
     panel.innerHTML = `
+        
+        <h3 class="outcome-title">
+                🎯 SELECT SHOT OUTCOME
+            </h3>
 
-        <h3>Shot Outcome</h3>
 
         <div class="event-grid">
 
@@ -906,12 +910,18 @@ function showPenaltyCornerOutcomeOptions() {
     panel.id =
         "outcomePanel";
 
+    
     panel.className =
-        "card";
+    "card outcome-panel";
+
 
     panel.innerHTML = `
 
-        <h3>Penalty Corner Outcome</h3>
+        
+        <h3 class="outcome-title">
+            ⚠️ SELECT PENALTY CORNER OUTCOME
+        </h3>
+
 
         <div class="event-grid">
             
