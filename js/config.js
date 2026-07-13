@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 config.js
-Version: 0.4.2
+Version: 0.6.0
 =========================================================
 */
 
@@ -13,9 +13,10 @@ const MatchIQ = {
 
         name: "MatchIQ",
 
-        version: "0.4.2",
+        version: "0.6.0",
 
         company: "MatchIQ"
+
     },
 
     categories: [
@@ -39,9 +40,25 @@ const MatchIQ = {
 
     events: [
 
-        // =====================================================
-        // ATTACK
-        // =====================================================
+        /*
+        =====================================================
+        ATTACK
+        =====================================================
+        */
+
+        {
+            id: "circleEntry",
+            name: "Circle Entry",
+            icon: "⭕",
+            category: "attack"
+        },
+
+        {
+            id: "shot",
+            name: "Shot",
+            icon: "🎯",
+            category: "attack"
+        },
 
         {
             id: "goalScored",
@@ -64,9 +81,73 @@ const MatchIQ = {
             category: "attack"
         },
 
-        // =====================================================
-        // DEFENCE
-        // =====================================================
+        {
+            id: "highTurnoverWon",
+            name: "High Turnover Won",
+            icon: "⬆️",
+            category: "attack"
+        },
+
+        /*
+        =====================================================
+        HIDDEN ATTACK EVENTS
+        =====================================================
+        */
+
+        {
+            id: "shotOnTarget",
+            name: "Shot On Target",
+            icon: "🎯",
+            category: "system"
+        },
+
+        {
+            id: "shotOffTarget",
+            name: "Shot Off Target",
+            icon: "⚪",
+            category: "system"
+        },
+
+        {
+            id: "shotBlocked",
+            name: "Shot Blocked",
+            icon: "🛑",
+            category: "system"
+        },
+
+        {
+            id: "pcGoal",
+            name: "PC Goal",
+            icon: "🥅",
+            category: "system"
+        },
+
+        {
+            id: "pcSaved",
+            name: "PC Saved",
+            icon: "🧤",
+            category: "system"
+        },
+
+        {
+            id: "pcMissed",
+            name: "PC Missed",
+            icon: "❌",
+            category: "system"
+        },
+
+        {
+            id: "pcBrokenDown",
+            name: "PC Broken Down",
+            icon: "⚠️",
+            category: "system"
+        },
+
+        /*
+        =====================================================
+        DEFENCE
+        =====================================================
+        */
 
         {
             id: "goalConceded",
@@ -117,9 +198,11 @@ const MatchIQ = {
             category: "defence"
         },
 
-        // =====================================================
-        // DISCIPLINE
-        // =====================================================
+        /*
+        =====================================================
+        DISCIPLINE
+        =====================================================
+        */
 
         {
             id: "greenCard",
@@ -142,9 +225,11 @@ const MatchIQ = {
             category: "discipline"
         },
 
-        // =====================================================
-        // SYSTEM EVENTS
-        // =====================================================
+        /*
+        =====================================================
+        SYSTEM
+        =====================================================
+        */
 
         {
             id: "periodChanged",
