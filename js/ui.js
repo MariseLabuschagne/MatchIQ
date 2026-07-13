@@ -866,6 +866,16 @@ function showShotOutcomeOptions() {
                 🛑<br>
                 Blocked
             </button>
+                        
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+
 
         </div>
 
@@ -956,6 +966,16 @@ function showPenaltyCornerOutcomeOptions() {
             ⚠️<br>
             Broken Down
         </button>
+               
+        <button
+            class="event-button outcome-cancel"
+            onclick="removeOutcomePanel()"
+        >
+            ✖<br>
+            Cancel
+        </button>
+
+
 
         </div>
 
