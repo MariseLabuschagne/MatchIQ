@@ -1287,6 +1287,7 @@ function showCircleEntryLocationOptions() {
 }
 
 
+
 function recordEntryLocation(
     location
 ) {
@@ -1298,6 +1299,286 @@ function recordEntryLocation(
     recordEvent(
         location
     );
+
+    showEntryOutcomeOptions();
+
+}
+
+
+function showEntryOutcomeOptions() {
+
+    const panel =
+        document.getElementById(
+            "outcomePanel"
+        );
+
+    if (!panel) {
+
+        return;
+
+    }
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            🎯 ENTRY OUTCOME
+
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button attack"
+                onclick="recordEntryOutcome('entryShot')"
+            >
+                🎯<br>
+                Shot
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordEntryOutcome('entryPenaltyCorner')"
+            >
+                🚩<br>
+                Penalty Corner
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordEntryOutcome('entryLongCorner')"
+            >
+                ↩️<br>
+                Long Corner
+            </button>
+
+            <button
+                class="event-button discipline"
+                onclick="recordEntryOutcome('entryTurnoverLost')"
+            >
+                ❌<br>
+                Turnover Lost
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+
+function recordEntryOutcome(
+    outcome
+) {
+
+    recordEvent(
+        outcome
+    );
+
+    if (
+        outcome ===
+        "entryShot"
+    ) {
+
+        showAttackShotOutcomeOptions();
+
+        return;
+
+    }
+
+    if (
+        outcome ===
+        "entryPenaltyCorner"
+    ) {
+
+        showAttackPenaltyCornerOutcomeOptions();
+
+        return;
+
+    }
+
+    removeOutcomePanel();
+
+}
+
+function showAttackShotOutcomeOptions() {
+
+    const panel =
+        document.getElementById(
+            "outcomePanel"
+        );
+
+    if (!panel) {
+
+        return;
+
+    }
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            🎯 SHOT OUTCOME
+
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackShotOutcome('goalScored')"
+            >
+                🥅<br>
+                Goal
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackShotOutcome('shotOnTarget')"
+            >
+                🎯<br>
+                On Target
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackShotOutcome('shotOffTarget')"
+            >
+                ⚪<br>
+                Off Target
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackShotOutcome('shotBlocked')"
+            >
+                🛑<br>
+                Blocked
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+function recordAttackShotOutcome(
+    outcome
+) {
+
+    recordEvent(
+        outcome
+    );
+
+    removeOutcomePanel();
+
+}
+
+function showAttackPenaltyCornerOutcomeOptions() {
+
+    const panel =
+        document.getElementById(
+            "outcomePanel"
+        );
+
+    if (!panel) {
+
+        return;
+
+    }
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            🚩 PENALTY CORNER OUTCOME
+
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackPenaltyCornerOutcome('pcGoal')"
+            >
+                🥅<br>
+                Goal
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackPenaltyCornerOutcome('pcSaved')"
+            >
+                🧤<br>
+                Saved
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackPenaltyCornerOutcome('pcMissed')"
+            >
+                ❌<br>
+                Missed
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackPenaltyCornerOutcome('pcBrokenDown')"
+            >
+                ⚠️<br>
+                Broken Down
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+function recordAttackPenaltyCornerOutcome(
+    outcome
+) {
+
+    recordEvent(
+        outcome
+    );
+
+    if (
+        outcome ===
+        "pcGoal"
+    ) {
+
+        recordEvent(
+            "goalScored"
+        );
+
+    }
 
     removeOutcomePanel();
 
@@ -1425,4 +1706,3 @@ function recordPCConceded(
     removeOutcomePanel();
 
 }
-
