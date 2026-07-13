@@ -60,14 +60,41 @@ function getAttackStats() {
                 "goalScored"
             ),
 
+        
         circleEntries:
+
             getEventCount(
-                "circleEntry"
+                "entryLeft"
+            )
+
+            +
+
+            getEventCount(
+                "entryTopD"
+            )
+
+            +
+
+            getEventCount(
+                "entryRight"
             ),
 
         shots:
+
             getEventCount(
-                "shot"
+                "shotOnTarget"
+            )
+
+            +
+
+            getEventCount(
+                "shotOffTarget"
+            )
+
+            +
+
+            getEventCount(
+                "shotBlocked"
             ),
 
         shotsOnTarget:
@@ -118,7 +145,42 @@ function getAttackStats() {
         pcBrokenDown:
             getEventCount(
                 "pcBrokenDown"
+            ),
+
+        
+        entryLeft:
+            getEventCount(
+                "entryLeft"
+            ),
+
+        entryTopD:
+            getEventCount(
+                "entryTopD"
+            ),
+
+        entryRight:
+            getEventCount(
+                "entryRight"
+            ),
+            
+        entryPenaltyCorners:
+
+            getEventCount(
+                "entryPenaltyCorner"
+            ),
+
+        entryLongCorners:
+
+            getEventCount(
+                "entryLongCorner"
+            ),
+
+        entryTurnoversLost:
+
+            getEventCount(
+                "entryTurnoverLost"
             )
+
 
     };
 }
