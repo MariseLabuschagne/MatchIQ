@@ -45,6 +45,7 @@ function exportMatch() {
         "Time",
         "Match Second",
         "Period",
+        "Attack ID",
         "Event Type",
         "Event Value"
 
@@ -83,6 +84,8 @@ function exportMatch() {
                 event.matchSecond,
 
                 event.period,
+
+                event.attackId || "",,
 
                 eventDefinition
                     ? eventDefinition.name

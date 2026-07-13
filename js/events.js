@@ -144,10 +144,12 @@ function recordEvent(
 
         matchSecond:
             App.timer.seconds,
-
+        
+        period:
+            App.currentMatch.period,
+    
         eventType:
             eventType,
-
         
         attackId:
             App.currentMatch

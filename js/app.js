@@ -42,6 +42,31 @@ function initialiseApp() {
             "click",
             startMatch
         );
+    
+    const savedTeam =
+        localStorage.getItem(
+            "defaultTeam"
+        );
+
+    if (
+        savedTeam
+    ) {
+
+        const teamInput =
+            document.getElementById(
+                "ourTeam"
+            );
+
+        if (
+            teamInput
+        ) {
+
+            teamInput.value =
+                savedTeam;
+
+        }
+
+    }
 
     }
 
@@ -143,6 +168,13 @@ function startMatch() {
         return;
 
     }
+
+
+    localStorage.setItem(
+        "defaultTeam",
+        ourTeam
+    );
+
 
     const venue =
         document.querySelector(
@@ -317,6 +349,26 @@ function startNewMatch() {
 
     deleteCurrentMatch();
     App.currentAttack = null;
+    
+    const savedTeam =
+        localStorage.getItem(
+            "defaultTeam"
+        );
+
+    const teamInput =
+        document.getElementById(
+            "ourTeam"
+        );
+
+    if (
+        teamInput &&
+        savedTeam
+    ) {
+
+        teamInput.value =
+            savedTeam;
+
+    }
 
     document
         .getElementById(
@@ -324,21 +376,22 @@ function startNewMatch() {
         )
         .innerHTML = "";
 
-    document
-        .getElementById(
-            "setupScreen"
-        )
-        .classList.add(
-            "hidden"
-        );
+        document
+            .getElementById(
+                "homeScreen"
+            )
+            .classList.add(
+                "hidden"
+            );
 
-    document
-        .getElementById(
-            "homeScreen"
-        )
-        .classList.remove(
-            "hidden"
-        );
+        document
+            .getElementById(
+                "setupScreen"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
 
     const header =
         document.getElementById(
