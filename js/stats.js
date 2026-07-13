@@ -278,38 +278,50 @@ ATTACKING EFFECTIVENESS
 =========================================================
 */
 
+
 function getAttackingEffectiveness() {
 
     const attack =
         getAttackStats();
 
+    const attacksWithShots =
+        getAttacksWithShots();
+
+    const attacksWithGoals =
+        getAttacksWithGoals();
+
     return {
 
         entryToShotConversion:
+
             calculatePercentage(
-                attack.shots,
+                attacksWithShots,
                 attack.circleEntries
             ),
 
         shotToGoalConversion:
+
             calculatePercentage(
                 attack.goalsScored,
                 attack.shots
             ),
 
         entryToGoalConversion:
+
             calculatePercentage(
-                attack.goalsScored,
+                attacksWithGoals,
                 attack.circleEntries
             ),
 
         shotAccuracy:
+
             calculatePercentage(
                 attack.shotsOnTarget,
                 attack.shots
             ),
 
         pcConversion:
+
             calculatePercentage(
                 attack.pcGoals,
                 attack.penaltyCornersWon
@@ -358,6 +370,102 @@ function getMatchStatistics() {
 HELPERS
 =========================================================
 */
+
+
+function getAttackJourneys() {
+
+    if (
+        !App.currentMatch
+    ) {
+
+        return [];
+
+    }
+
+    const attacks = {};
+
+    App.currentMatch.events
+        .forEach(event => {
+
+            if (
+                !event.attackId
+            ) {
+
+                return;
+
+            }
+
+            if (
+                !attacks[
+                    event.attackId
+                ]
+            ) {
+
+                attacks[
+                    event.attackId
+                ] = [];
+
+            }
+
+            attacks[
+                event.attackId
+            ].push(
+                event
+            );
+
+        });
+
+    return Object.values(
+        attacks
+    );
+
+}
+
+
+function getAttacksWithShots() {
+
+    return getAttackJourneys()
+        .filter(
+            attack =>
+
+                attack.some(
+                    event =>
+
+                        event.eventType ===
+                            "shotOnTarget"
+
+                        ||
+
+                        event.eventType ===
+                            "shotOffTarget"
+
+                        ||
+
+                        event.eventType ===
+                            "shotBlocked"
+                )
+        )
+        .length;
+
+}
+
+function getAttacksWithGoals() {
+
+    return getAttackJourneys()
+        .filter(
+            attack =>
+
+                attack.some(
+                    event =>
+
+                        event.eventType ===
+                            "goalScored"
+                )
+        )
+        .length;
+
+}
+
 
 function getTotalCards() {
 

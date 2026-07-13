@@ -759,7 +759,7 @@ function renderMatchSummary() {
                 </h3>
 
                 ${renderSummaryStat(
-                    "Entry → Shot %",
+                    "Entries Producing Shot %",
                     stats.effectiveness.entryToShotConversion + "%"
                 )}
 
