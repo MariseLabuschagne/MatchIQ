@@ -60,20 +60,26 @@ const MatchIQ = {
             icon: "⬆️",
             category: "attack"
         },
-
+        
+        {
+            id: "highTurnoverWon",
+            name: "High Turnover Won",
+            icon: "⬆️",
+            category: "attack"
+        },
 
         {
             id: "goalScored",
             name: "Goal Scored",
             icon: "🥅",
-            category: "attack"
+            category: "system"
         },
 
         {
             id: "pcWon",
             name: "Penalty Corner Won",
             icon: "🚩",
-            category: "attack"
+            category: "system"
         },
 
         {
@@ -83,13 +89,7 @@ const MatchIQ = {
             category: "attack"
         },
 
-        {
-            id: "highTurnoverWon",
-            name: "High Turnover Won",
-            icon: "⬆️",
-            category: "attack"
-        },
-
+      
 
         /*
         =====================================================
