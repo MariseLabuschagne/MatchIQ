@@ -279,18 +279,34 @@ HOME SCREEN
     padding: 20px;
 }
 
+
 .home-logo {
 
-    width: 240px;
+    width: 320px;
 
     max-width: 90%;
 
     height: auto;
 
+    display: block;
+
     margin: 0 auto 20px auto;
 
-    display: block;
+    background: white;
+
+    padding: 12px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 25px rgba(
+            0,
+            0,
+            0,
+            0.30
+        );
 }
+
 
 .home-tagline {
 
@@ -362,6 +378,16 @@ HOME SCREEN
     color: var(--muted);
 
     font-size: 14px;
+}
+
+
+.coming-soon {
+
+    font-size: 11px;
+
+    font-weight: 500;
+
+    opacity: 0.75;
 }
 
 
