@@ -653,6 +653,21 @@ function renderMatchSummary() {
                     "Circle Entries",
                     stats.attack.circleEntries
                 )}
+                
+                ${renderSummarySubStat(
+                    "Left",
+                    stats.attack.entryLeft
+                )}
+
+                ${renderSummarySubStat(
+                    "Top D",
+                    stats.attack.entryTopD
+                )}
+
+                ${renderSummarySubStat(
+                    "Right",
+                    stats.attack.entryRight
+                )}
 
                 ${renderSummaryStat(
                     "Shots",
@@ -672,6 +687,26 @@ function renderMatchSummary() {
                 ${renderSummarySubStat(
                     "Blocked",
                     stats.attack.shotsBlocked
+                )}
+
+                ${renderSummaryStat(
+                    "Attack Outcomes",
+                    ""
+                )}
+
+                ${renderSummarySubStat(
+                    "Penalty Corners",
+                    stats.attack.entryPenaltyCorners
+                )}
+
+                ${renderSummarySubStat(
+                    "Long Corners",
+                    stats.attack.entryLongCorners
+                )}
+
+                ${renderSummarySubStat(
+                    "Turnovers Lost",
+                    stats.attack.entryTurnoversLost
                 )}
 
                 ${renderSummaryStat(
