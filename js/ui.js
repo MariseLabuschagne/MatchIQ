@@ -18,6 +18,21 @@ function renderLiveMatch() {
         document.getElementById(
             "liveMatchScreen"
         );
+    
+    
+    const header =
+        document.getElementById(
+            "appHeader"
+        );
+
+    if (header) {
+
+        header.classList.add(
+            "hidden"
+        );
+
+    }
+
 
     setupScreen.classList.add(
         "hidden"
