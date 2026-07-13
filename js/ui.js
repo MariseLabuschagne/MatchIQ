@@ -253,14 +253,38 @@ function renderEventSections() {
                     button.innerHTML =
                         `${event.icon}<br>${event.name}`;
 
+                    
                     button.addEventListener(
                         "click",
                         () => {
+
+                            if (
+                                event.id === "shot"
+                            ) {
+
+                                showShotOutcomeOptions();
+
+                                return;
+
+                            }
+
+                            if (
+                                event.id === "pcWon"
+                            ) {
+
+                                showPenaltyCornerOutcomeOptions();
+
+                                return;
+
+                            }
+
                             recordEvent(
                                 event.id
                             );
+
                         }
                     );
+
 
                     grid.appendChild(
                         button
@@ -785,6 +809,182 @@ function buildHighlights() {
     }
 
     return highlights.join("");
+
+}
+
+
+function showShotOutcomeOptions() {
+
+    removeOutcomePanel();
+
+    const container =
+        document.getElementById(
+            "eventSections"
+        );
+
+    const panel =
+        document.createElement(
+            "div"
+        );
+
+    panel.id =
+        "outcomePanel";
+
+    panel.className =
+        "card";
+
+    panel.innerHTML = `
+
+        <h3>Shot Outcome</h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button attack"
+                onclick="recordShotOutcome('shotOnTarget')"
+            >
+                🎯<br>
+                On Target
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordShotOutcome('shotOffTarget')"
+            >
+                ⚪<br>
+                Off Target
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordShotOutcome('shotBlocked')"
+            >
+                🛑<br>
+                Blocked
+            </button>
+
+        </div>
+
+    `;
+
+    container.prepend(
+        panel
+    );
+
+}
+
+function recordShotOutcome(
+    outcome
+) {
+
+    recordEvent(
+        "shot"
+    );
+
+    recordEvent(
+        outcome
+    );
+
+    removeOutcomePanel();
+
+}
+
+function showPenaltyCornerOutcomeOptions() {
+
+    removeOutcomePanel();
+
+    const container =
+        document.getElementById(
+            "eventSections"
+        );
+
+    const panel =
+        document.createElement(
+            "div"
+        );
+
+    panel.id =
+        "outcomePanel";
+
+    panel.className =
+        "card";
+
+    panel.innerHTML = `
+
+        <h3>Penalty Corner Outcome</h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button attack"
+                onclick="recordPenaltyCornerOutcome('pcGoal')"
+            >
+                🥅<br>
+                Goal
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordPenaltyCornerOutcome('pcSaved')"
+            >
+                🧤<br>
+                Saved
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordPenaltyCornerOutcome('pcMissed')"
+            >
+                ❌<br>
+                Missed
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordPenaltyCornerOutcome('pcBrokenDown')"
+            >
+                ⚠️<br>
+                Broken Down
+            </button>
+
+        </div>
+
+    `;
+
+    container.prepend(
+        panel
+    );
+
+}
+
+function recordPenaltyCornerOutcome(
+    outcome
+) {
+
+    recordEvent(
+        "pcWon"
+    );
+
+    recordEvent(
+        outcome
+    );
+
+    removeOutcomePanel();
+
+}
+
+function removeOutcomePanel() {
+
+    const panel =
+        document.getElementById(
+            "outcomePanel"
+        );
+
+    if (panel) {
+
+        panel.remove();
+
+    }
 
 }
 
