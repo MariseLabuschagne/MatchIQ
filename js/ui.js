@@ -587,8 +587,55 @@ function renderMatchSummary() {
 
             </div>
 
+            
             <div class="card summary-section">
-                
+
+                <h3>
+                    Attacking Funnel
+                </h3>
+
+                <div class="funnel-container">
+
+                    ${renderFunnelStep(
+                        "Circle Entries",
+                        stats.attack.circleEntries
+                    )}
+
+                    <div class="funnel-arrow">
+
+                        ↓
+                        <br>
+
+                        ${stats.effectiveness.entryToShotConversion}%
+
+                    </div>
+
+                    ${renderFunnelStep(
+                        "Shots",
+                        stats.attack.shots
+                    )}
+
+                    <div class="funnel-arrow">
+
+                        ↓
+                        <br>
+
+                        ${stats.effectiveness.shotToGoalConversion}%
+
+                    </div>
+
+                    ${renderFunnelStep(
+                        "Goals",
+                        stats.attack.goalsScored
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="card summary-section">
+
                 <h3>Attack</h3>
 
                 ${renderSummaryStat(
@@ -871,6 +918,29 @@ function renderSummarySubStat(
 
             <div class="summary-value">
                 ${value}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+function renderFunnelStep(
+    label,
+    value
+) {
+
+    return `
+
+        <div class="funnel-step">
+
+            <div class="funnel-value">
+                ${value}
+            </div>
+
+            <div class="funnel-label">
+                ${label}
             </div>
 
         </div>
