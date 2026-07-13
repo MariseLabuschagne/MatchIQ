@@ -114,7 +114,7 @@ function getAttackStats() {
 
         penaltyCornersWon:
             getEventCount(
-                "pcWon"
+                "entryPenaltyCorner"
             ),
 
         penaltyStrokesWon:
