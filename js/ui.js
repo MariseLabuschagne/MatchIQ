@@ -1331,17 +1331,34 @@ function showEntryOutcomeOptions() {
 
         <div class="event-grid">
 
+            
             <button
                 class="event-button attack"
-                onclick="recordEntryOutcome('entryShot')"
+                onclick="recordAttackAction('shotOnTarget')"
             >
                 🎯<br>
-                Shot
+                Shot On Target
             </button>
 
             <button
                 class="event-button attack"
-                onclick="recordEntryOutcome('entryPenaltyCorner')"
+                onclick="recordAttackAction('shotOffTarget')"
+            >
+                ⚪<br>
+                Shot Off Target
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackAction('shotBlocked')"
+            >
+                🛑<br>
+                Shot Blocked
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="showAttackPenaltyCornerOutcomeOptions()"
             >
                 🚩<br>
                 Penalty Corner
@@ -1349,19 +1366,36 @@ function showEntryOutcomeOptions() {
 
             <button
                 class="event-button attack"
-                onclick="recordEntryOutcome('entryLongCorner')"
+                onclick="recordAttackAction('entryLongCorner')"
             >
                 ↩️<br>
                 Long Corner
             </button>
 
             <button
+                class="event-button success"
+                onclick="recordAttackAction('goalScored')"
+            >
+                🥅<br>
+                Goal
+            </button>
+
+            <button
                 class="event-button discipline"
-                onclick="recordEntryOutcome('entryTurnoverLost')"
+                onclick="recordAttackAction('entryTurnoverLost')"
             >
                 ❌<br>
                 Turnover Lost
             </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
 
             <button
                 class="event-button outcome-cancel"
@@ -1413,77 +1447,8 @@ function recordEntryOutcome(
 
 }
 
-function showAttackShotOutcomeOptions() {
 
-    const panel =
-        document.getElementById(
-            "outcomePanel"
-        );
-
-    if (!panel) {
-
-        return;
-
-    }
-
-    panel.innerHTML = `
-
-        <h3 class="outcome-title">
-
-            🎯 SHOT OUTCOME
-
-        </h3>
-
-        <div class="event-grid">
-
-            <button
-                class="event-button attack"
-                onclick="recordAttackShotOutcome('goalScored')"
-            >
-                🥅<br>
-                Goal
-            </button>
-
-            <button
-                class="event-button attack"
-                onclick="recordAttackShotOutcome('shotOnTarget')"
-            >
-                🎯<br>
-                On Target
-            </button>
-
-            <button
-                class="event-button attack"
-                onclick="recordAttackShotOutcome('shotOffTarget')"
-            >
-                ⚪<br>
-                Off Target
-            </button>
-
-            <button
-                class="event-button attack"
-                onclick="recordAttackShotOutcome('shotBlocked')"
-            >
-                🛑<br>
-                Blocked
-            </button>
-
-            <button
-                class="event-button outcome-cancel"
-                onclick="removeOutcomePanel()"
-            >
-                ✖<br>
-                Cancel
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-function recordAttackShotOutcome(
+function recordAttackAction(
     outcome
 ) {
 
@@ -1491,7 +1456,17 @@ function recordAttackShotOutcome(
         outcome
     );
 
-    removeOutcomePanel();
+    if (
+        outcome ===
+            "goalScored" ||
+
+        outcome ===
+            "entryTurnoverLost"
+    ) {
+
+        removeOutcomePanel();
+
+    }
 
 }
 
