@@ -132,11 +132,31 @@ function recordEvent(
 
     }
 
-    const event =
-        createEvent(
+    
+        
+    const event = {
+
+        id: generateId(),
+
+        timestamp:
+            new Date()
+                .toISOString(),
+
+        matchSecond:
+            App.timer.seconds,
+
+        eventType:
             eventType,
-            options
-        );
+
+        
+        attackId:
+            App.currentMatch
+                ? App.currentMatch.activeAttackId
+                : null,
+
+    };
+
+
 
     App.currentMatch.events.push(
         event

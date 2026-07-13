@@ -1325,11 +1325,22 @@ function showCircleEntryLocationOptions() {
 
 
 
+
 function recordEntryLocation(
     location
 ) {
 
+    App.attackCounter += 1;
+    
+    App.currentMatch.attackCounter += 1;
+
+    App.currentMatch.activeAttackId =
+        App.currentMatch.attackCounter;
+
     App.currentAttack = {
+
+        id:
+            App.currentMatch.activeAttackId,
 
         active: true,
 
@@ -1352,7 +1363,6 @@ function recordEntryLocation(
     showEntryOutcomeOptions();
 
 }
-
 
 function showEntryOutcomeOptions() {
 
@@ -1510,9 +1520,10 @@ function recordAttackAction(
         outcome ===
             "entryTurnoverLost"
     ) {
+        
+        App.currentMatch.activeAttackId =
+                null;
 
-        App.currentAttack =
-            null;
 
         removeOutcomePanel();
 
