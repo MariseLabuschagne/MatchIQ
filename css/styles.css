@@ -648,6 +648,24 @@ EVENT BUTTONS
         );
 }
 
+
+
+.goal-button {
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f766e,
+            #14b8a6
+        ) !important;
+
+    border: 2px solid #2dd4bf;
+
+    color: white;
+}
+
+
+
 /* =====================================================
 TIMELINE
 ===================================================== */

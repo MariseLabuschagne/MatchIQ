@@ -1436,14 +1436,15 @@ function showEntryOutcomeOptions() {
                 ↩️<br>
                 Long Corner
             </button>
-
+            
             <button
-                class="event-button success"
+                class="event-button goal-button"
                 onclick="recordAttackAction('goalScored')"
             >
                 🥅<br>
                 Goal
             </button>
+
 
             <button
                 class="event-button discipline"
@@ -1452,15 +1453,6 @@ function showEntryOutcomeOptions() {
                 ❌<br>
                 Turnover Lost
             </button>
-
-            <button
-                class="event-button outcome-cancel"
-                onclick="removeOutcomePanel()"
-            >
-                ✖<br>
-                Cancel
-            </button>
-
 
             <button
                 class="event-button outcome-cancel"
