@@ -1774,6 +1774,7 @@ function recordPCConceded(
 
 
 
+
 function renderMatchHistory() {
 
     const history =
@@ -1800,39 +1801,27 @@ function renderMatchHistory() {
         "hidden"
     );
 
-    if (
-        history.length === 0
-    ) {
-
-        screen.innerHTML = `
-
-            
-        <h2>
-            Match History
-        </h2>
+    // Build page header ONCE
+    screen.innerHTML = `
 
         <button
-            onclick="
-                document
-                    .getElementById(
-                        'historyScreen'
-                    )
-                    .classList.add(
-                        'hidden'
-                    );
-
-                document
-                    .getElementById(
-                        'homeScreen'
-                    )
-                    .classList.remove(
-                        'hidden'
-                    );
-            "
+            class="secondary-button"
+            onclick="closeMatchHistory()"
         >
             ← Back
         </button>
 
+        <h2>
+            Match History
+        </h2>
+
+    `;
+
+    if (
+        history.length === 0
+    ) {
+
+        screen.innerHTML += `
 
             <p>
                 No matches saved.
@@ -1849,37 +1838,30 @@ function renderMatchHistory() {
         .reverse()
         .forEach(match => {
 
+            const matchEvents =
+                match.events || [];
+
             const ourGoals =
-                match.events.filter(
+                matchEvents.filter(
                     e =>
                         e.eventType ===
                         "goalScored"
                 ).length;
 
             const oppositionGoals =
-                match.events.filter(
+                matchEvents.filter(
                     e =>
                         e.eventType ===
                         "goalConceded"
                 ).length;
 
-
-            screen.innerHTML = `
-                
-                <button
-                    class="secondary-button"
-                    onclick="closeMatchHistory()"
-                >
-                    ← Back
-                </button>
-
-                <h2>
-                    Match History
-                </h2>
-
-            `;
-
-    
+            const matchDate =
+                (
+                    match.completedAt ||
+                    match.createdAt ||
+                    ""
+                )
+                .split("T")[0];
 
             screen.innerHTML += `
 
@@ -1894,7 +1876,7 @@ function renderMatchHistory() {
                         ${match.opponent}
 
                     </h3>
-                    
+
                     <h2>
 
                         ${ourGoals}
@@ -1907,39 +1889,26 @@ function renderMatchHistory() {
 
                     <p>
 
-                        ${
-                            match.completedAt
-                            ||
-                            match.createdAt
-                        }
+                        ${matchDate}
 
                     </p>
 
                     <p>
 
                         Events:
-
-                        ${
-                            match.events.length
-                        }
+                        ${matchEvents.length}
 
                     </p>
 
                     <button
-                        onclick="
-                            openHistoricalMatch(
-                                '${match.id}'
-                            )
-                        "
+                        onclick="openHistoricalMatch('${match.id}')"
                     >
                         📂 Open
                     </button>
 
                     <button
                         onclick="
-                            deleteHistoricalMatch(
-                                '${match.id}'
-                            );
+                            deleteHistoricalMatch('${match.id}');
                             renderMatchHistory();
                         "
                     >
@@ -1951,67 +1920,6 @@ function renderMatchHistory() {
             `;
 
         });
-
-}
-
-
-function openHistoricalMatch(
-    matchId
-) {
-
-    
-    alert(
-            "Opening match: " +
-            matchId
-        );
-
-    const history =
-        JSON.parse(
-            localStorage.getItem(
-                "matchHistory"
-            ) || "[]"
-        );
-
-    const match =
-        history.find(
-            m =>
-                m.id ===
-                matchId
-        );
-
-    if (!match) {
-
-        return;
-
-    }
-
-    App.currentMatch =
-        match;
-
-    document
-        .getElementById(
-            "historyScreen"
-        )
-        .classList.add(
-            "hidden"
-        );
-
-    const liveScreen =
-        document.getElementById(
-            "liveMatchScreen"
-        );
-
-    if (
-        liveScreen
-    ) {
-
-        liveScreen.classList.remove(
-            "hidden"
-        );
-
-    }
-
-    renderMatchSummary();
 
 }
 
