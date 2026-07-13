@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 stats.js
-Version: 0.3.0
+Version: 0.6.0
 =========================================================
 */
 
@@ -60,6 +60,31 @@ function getAttackStats() {
                 "goalScored"
             ),
 
+        circleEntries:
+            getEventCount(
+                "circleEntry"
+            ),
+
+        shots:
+            getEventCount(
+                "shot"
+            ),
+
+        shotsOnTarget:
+            getEventCount(
+                "shotOnTarget"
+            ),
+
+        shotsOffTarget:
+            getEventCount(
+                "shotOffTarget"
+            ),
+
+        shotsBlocked:
+            getEventCount(
+                "shotBlocked"
+            ),
+
         penaltyCornersWon:
             getEventCount(
                 "pcWon"
@@ -68,6 +93,31 @@ function getAttackStats() {
         penaltyStrokesWon:
             getEventCount(
                 "psWon"
+            ),
+
+        highTurnoversWon:
+            getEventCount(
+                "highTurnoverWon"
+            ),
+
+        pcGoals:
+            getEventCount(
+                "pcGoal"
+            ),
+
+        pcSaved:
+            getEventCount(
+                "pcSaved"
+            ),
+
+        pcMissed:
+            getEventCount(
+                "pcMissed"
+            ),
+
+        pcBrokenDown:
+            getEventCount(
+                "pcBrokenDown"
             )
 
     };
@@ -151,6 +201,53 @@ function getDisciplineStats() {
 
 /*
 =========================================================
+ATTACKING EFFECTIVENESS
+=========================================================
+*/
+
+function getAttackingEffectiveness() {
+
+    const attack =
+        getAttackStats();
+
+    return {
+
+        entryToShotConversion:
+            calculatePercentage(
+                attack.shots,
+                attack.circleEntries
+            ),
+
+        shotToGoalConversion:
+            calculatePercentage(
+                attack.goalsScored,
+                attack.shots
+            ),
+
+        entryToGoalConversion:
+            calculatePercentage(
+                attack.goalsScored,
+                attack.circleEntries
+            ),
+
+        shotAccuracy:
+            calculatePercentage(
+                attack.shotsOnTarget,
+                attack.shots
+            ),
+
+        pcConversion:
+            calculatePercentage(
+                attack.pcGoals,
+                attack.penaltyCornersWon
+            )
+
+    };
+
+}
+
+/*
+=========================================================
 FULL MATCH SUMMARY
 =========================================================
 */
@@ -171,12 +268,16 @@ function getMatchStatistics() {
         discipline:
             getDisciplineStats(),
 
+        effectiveness:
+            getAttackingEffectiveness(),
+
         totalEvents:
             App.currentMatch
                 ? App.currentMatch.events.length
                 : 0
 
     };
+
 }
 
 /*
@@ -191,10 +292,15 @@ function getTotalCards() {
         getDisciplineStats();
 
     return (
+
         discipline.greenCards +
+
         discipline.yellowCards +
+
         discipline.redCards
+
     );
+
 }
 
 function getTotalPenaltyCorners() {
@@ -214,6 +320,7 @@ function getTotalPenaltyCorners() {
             defence.penaltyCornersConceded
 
     };
+
 }
 
 function getTurnoverDifferential() {
@@ -222,8 +329,36 @@ function getTurnoverDifferential() {
         getDefenceStats();
 
     return (
+
         defence.turnoversWon -
+
         defence.turnoversLost
+
     );
+
 }
-``
+
+function calculatePercentage(
+    numerator,
+    denominator
+) {
+
+    if (
+        denominator === 0
+    ) {
+
+        return 0;
+
+    }
+
+    return Number(
+
+        (
+            numerator /
+            denominator *
+            100
+        ).toFixed(1)
+
+    );
+
+}
