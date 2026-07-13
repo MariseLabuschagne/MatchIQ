@@ -1773,6 +1773,7 @@ function recordPCConceded(
 }
 
 
+
 function renderMatchHistory() {
 
     const history =
@@ -1782,11 +1783,143 @@ function renderMatchHistory() {
             ) || "[]"
         );
 
-    console.log(
-        history
+    document
+        .getElementById(
+            "homeScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    const screen =
+        document.getElementById(
+            "historyScreen"
+        );
+
+    screen.classList.remove(
+        "hidden"
     );
 
+    if (
+        history.length === 0
+    ) {
+
+        screen.innerHTML = `
+
+            
+        <h2>
+            Match History
+        </h2>
+
+        <button
+            onclick="
+                document
+                    .getElementById(
+                        'historyScreen'
+                    )
+                    .classList.add(
+                        'hidden'
+                    );
+
+                document
+                    .getElementById(
+                        'homeScreen'
+                    )
+                    .classList.remove(
+                        'hidden'
+                    );
+            "
+        >
+            ← Back
+        </button>
+
+
+            <p>
+                No matches saved.
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+    screen.innerHTML = `
+
+        <h2>
+            Match History
+        </h2>
+
+    `;
+
+    history
+        .slice()
+        .reverse()
+        .forEach(match => {
+
+            screen.innerHTML += `
+
+                <div class="card">
+
+                    <h3>
+
+                        ${match.ourTeam}
+
+                        vs
+
+                        ${match.opponent}
+
+                    </h3>
+
+                    <p>
+
+                        ${
+                            match.completedAt
+                            ||
+                            match.createdAt
+                        }
+
+                    </p>
+
+                    <p>
+
+                        Events:
+
+                        ${
+                            match.events.length
+                        }
+
+                    </p>
+
+                    <button
+                        onclick="
+                            openHistoricalMatch(
+                                '${match.id}'
+                            )
+                        "
+                    >
+                        📂 Open
+                    </button>
+
+                    <button
+                        onclick="
+                            deleteHistoricalMatch(
+                                '${match.id}'
+                            );
+                            renderMatchHistory();
+                        "
+                    >
+                        🗑 Delete
+                    </button>
+
+                </div>
+
+            `;
+
+        });
+
 }
+
 
 function openHistoricalMatch(
     matchId
@@ -1814,6 +1947,16 @@ function openHistoricalMatch(
 
     App.currentMatch =
         match;
+
+    
+   document
+        .getElementById(
+            "historyScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
 
     renderMatchSummary();
 
