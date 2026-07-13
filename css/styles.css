@@ -762,6 +762,20 @@ MATCH SUMMARY
     font-weight: 900;
 }
 
+
+.screen-subtitle {
+
+    text-align: center;
+
+    color: #b8c4d9;
+
+    margin-bottom: 24px;
+
+    font-size: 0.95rem;
+
+}
+
+
 .summary-score {
 
     text-align: center;
@@ -905,6 +919,18 @@ MATCH SUMMARY
             var(--success),
             var(--success-dark)
         );
+}
+
+
+.sport-button.history {
+
+    background:
+        linear-gradient(
+            135deg,
+            #475569,
+            #64748b
+        );
+
 }
 
 

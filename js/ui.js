@@ -2055,6 +2055,7 @@ function deleteHistoricalMatch(
 }
 
 
+
 function showHockeyMenu() {
 
     document
@@ -2076,35 +2077,44 @@ function showHockeyMenu() {
 
     screen.innerHTML = `
 
-        <button
-            class="secondary-button"
-            onclick="returnToHomeScreen()"
-        >
-            ← Back
-        </button>
+        <div class="card">
 
-        <h2>
-            🏑 Field Hockey
-        </h2>
+            <button
+                class="secondary-button"
+                onclick="returnToHomeScreen()"
+            >
+                ← Back
+            </button>
 
-        <button
-            class="primary-button"
-            onclick="showSetupScreen()"
-        >
-            ▶ New Match
-        </button>
+            <h1>
+                🏑 Field Hockey
+            </h1>
 
-        <button
-            class="secondary-button"
-            onclick="renderMatchHistory()"
-        >
-            📂 Match History
-        </button>
+            <p class="screen-subtitle">
+
+                Capture and analyse hockey matches
+
+            </p>
+
+            <button
+                class="sport-button hockey"
+                onclick="showSetupScreen()"
+            >
+                ▶ New Match
+            </button>
+
+            <button
+                class="sport-button history"
+                onclick="renderMatchHistory()"
+            >
+                📂 Match History
+            </button>
+
+        </div>
 
     `;
 
 }
-
 
 function returnToHomeScreen() {
 
