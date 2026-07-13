@@ -1771,3 +1771,77 @@ function recordPCConceded(
     removeOutcomePanel();
 
 }
+
+
+function renderMatchHistory() {
+
+    const history =
+        JSON.parse(
+            localStorage.getItem(
+                "matchHistory"
+            ) || "[]"
+        );
+
+    console.log(
+        history
+    );
+
+}
+
+function openHistoricalMatch(
+    matchId
+) {
+
+    const history =
+        JSON.parse(
+            localStorage.getItem(
+                "matchHistory"
+            ) || "[]"
+        );
+
+    const match =
+        history.find(
+            m =>
+                m.id ===
+                matchId
+        );
+
+    if (!match) {
+
+        return;
+
+    }
+
+    App.currentMatch =
+        match;
+
+    renderMatchSummary();
+
+}
+
+function deleteHistoricalMatch(
+    matchId
+) {
+
+    const history =
+        JSON.parse(
+            localStorage.getItem(
+                "matchHistory"
+            ) || "[]"
+        );
+
+    const filtered =
+        history.filter(
+            m =>
+                m.id !==
+                matchId
+        );
+
+    localStorage.setItem(
+        "matchHistory",
+        JSON.stringify(
+            filtered
+        )
+    );
+
+}

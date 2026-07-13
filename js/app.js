@@ -326,6 +326,11 @@ function completeMatch() {
         new Date().toISOString();
 
     saveMatch();
+    
+    saveMatchToHistory(
+        App.currentMatch
+    );
+
 }
 
 /*

@@ -198,3 +198,28 @@ function storageInfo() {
     };
 
 }
+
+
+function saveMatchToHistory(
+    match
+) {
+
+    const history =
+        JSON.parse(
+            localStorage.getItem(
+                "matchHistory"
+            ) || "[]"
+        );
+
+    history.push(
+        match
+    );
+
+    localStorage.setItem(
+        "matchHistory",
+        JSON.stringify(
+            history
+        )
+    );
+
+}
