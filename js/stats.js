@@ -122,10 +122,22 @@ function getAttackStats() {
                 "psWon"
             ),
 
-        highTurnoversWon:
+        
+        turnoversAttacking25:
             getEventCount(
-                "highTurnoverWon"
+                "turnoverAttacking25"
             ),
+
+        turnoversMidfield:
+            getEventCount(
+                "turnoverMidfield"
+            ),
+
+        turnoversDefensive25:
+            getEventCount(
+                "turnoverDefensive25"
+            ),
+
 
         pcGoals:
             getEventCount(

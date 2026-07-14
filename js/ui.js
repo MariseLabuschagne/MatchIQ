@@ -691,6 +691,7 @@ function renderMatchSummary() {
                     "Penalty Corners",
                     stats.attack.penaltyCornersWon
                 )}
+
                 ${renderSummarySubSubStat(
                     "Converted",
                     stats.attack.pcGoals
@@ -715,6 +716,12 @@ function renderMatchSummary() {
                     "Long Corners",
                     stats.attack.entryLongCorners
                 )}
+                
+                ${renderSummarySubStat(
+                    "Penalty Strokes",
+                    stats.attack.penaltyStrokesWon
+                )}
+
 
                 ${renderSummarySubStat(
                     "Turnovers Lost",
@@ -726,17 +733,26 @@ function renderMatchSummary() {
                     stats.attack.goalsScored
                 )}
 
+                
                 ${renderSummaryStat(
-                    "High Turnovers Won",
-                    stats.attack.highTurnoversWon
+                    "Turnovers Won",
+                    ""
                 )}
 
-                
+                ${renderSummarySubStat(
+                    "Attacking 25",
+                    stats.attack.turnoversAttacking25
+                )}
 
-                ${renderSummaryStat(
-                    "Penalty Strokes Won",
-                    stats.attack.penaltyStrokesWon
-                )}     
+                ${renderSummarySubStat(
+                    "Midfield",
+                    stats.attack.turnoversMidfield
+                )}
+
+                ${renderSummarySubStat(
+                    "Defensive 25",
+                    stats.attack.turnoversDefensive25
+                )}                 
 
             </div>
 
