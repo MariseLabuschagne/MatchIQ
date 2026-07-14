@@ -283,6 +283,13 @@ function renderEventSections() {
                                 return;
 
                             }
+                            
+                            if (
+                                event.id === "defenceEntry"
+                            ) {
+                                showDefenceEntryLocationOptions();
+                                return;
+                            }
 
                             if (
                                 event.id === "shot"
@@ -795,6 +802,27 @@ function renderMatchSummary() {
 
                 <h3>Defence</h3>
 
+                
+                ${renderSummaryStat(
+                    "Circle Entries Against",
+                    stats.defence.circleEntriesAgainst
+                )}
+
+                ${renderSummarySubStat(
+                    "Left",
+                    stats.defence.defenceEntryLeft
+                )}
+
+                ${renderSummarySubStat(
+                    "Top D",
+                    stats.defence.defenceEntryTopD
+                )}
+
+                ${renderSummarySubStat(
+                    "Right",
+                    stats.defence.defenceEntryRight
+                )}
+
                 ${renderSummaryStat(
                     "Goals Conceded",
                     stats.defence.goalsConceded
@@ -812,19 +840,20 @@ function renderMatchSummary() {
 
                 ${renderSummarySubStat(
                     "Attacking 25",
-                    stats.defence.turnoversAttacking25Lost
+                    stats.defence.turnoverAttacking25Lost
                 )}
 
                 ${renderSummarySubStat(
                     "Midfield",
-                    stats.defence.turnoversMidfieldLost
+                    stats.defence.turnoverMidfieldLost
                 )}
 
                 ${renderSummarySubStat(
                     "Defensive 25",
-                    stats.defence.turnoversDefensive25Lost
-                )}            
+                    stats.defence.turnoverDefensive25Lost
+                )}
 
+                
                 ${renderSummaryStat(
                     "Penalty Corners Conceded",
                     stats.defence.penaltyCornersConceded
@@ -1357,6 +1386,79 @@ function showCircleEntryLocationOptions() {
 
 }
 
+function showDefenceEntryLocationOptions() {
+
+    removeOutcomePanel();
+
+    const container =
+        document.getElementById(
+            "eventSections"
+        );
+
+    const panel =
+        document.createElement(
+            "div"
+        );
+
+    panel.id =
+        "outcomePanel";
+
+    panel.className =
+        "card outcome-panel";
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            ⭕
+
+            SELECT ENTRY LOCATION
+
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceLocation('defenceEntryLeft')"
+            >
+                ⬅️<br>
+                Left
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceLocation('defenceEntryTopD')"
+            >
+                ⬆️<br>
+                Top D
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceLocation('defenceEntryRight')"
+            >
+                ➡️<br>
+                Right
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+    container.prepend(
+        panel
+    );
+
+}
 
 
 
@@ -1398,6 +1500,19 @@ function recordEntryLocation(
 
 }
 
+
+function recordDefenceLocation(
+    location
+) {
+
+    recordEvent(
+        location
+    );
+
+    showDefenceOutcomeOptions();
+
+}
+
 function showEntryOutcomeOptions() {
 
     const panel =
@@ -1410,6 +1525,106 @@ function showEntryOutcomeOptions() {
         return;
 
     }
+
+function showDefenceOutcomeOptions() {
+
+    const panel =
+        document.getElementById(
+            "outcomePanel"
+        );
+
+    if (!panel) {
+
+        return;
+
+    }
+
+
+function recordDefenceOutcome(
+    outcome
+) {
+
+    recordEvent(
+        outcome
+    );
+
+    removeOutcomePanel();
+
+}
+
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            🛡️ DEFENSIVE OUTCOME
+
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('save')"
+            >
+                🧤<br>
+                Save
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('goalConceded')"
+            >
+                🥅<br>
+                Goal
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('pcConceded')"
+            >
+                🚩<br>
+                Penalty Corner
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('psConceded')"
+            >
+                🏑<br>
+                Penalty Stroke
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('shotOnTargetAgainst')"
+            >
+                🎯<br>
+                Shot On Target
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('shotBlockedAgainst')"
+            >
+                🛑<br>
+                Shot Blocked
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+}
+
 
     panel.innerHTML = `
         

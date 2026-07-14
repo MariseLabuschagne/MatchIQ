@@ -202,6 +202,42 @@ function getDefenceStats() {
 
     return {
 
+        
+        defenceEntryLeft:
+            getEventCount(
+                "defenceEntryLeft"
+            ),
+
+        defenceEntryTopD:
+            getEventCount(
+                "defenceEntryTopD"
+            ),
+
+        defenceEntryRight:
+            getEventCount(
+                "defenceEntryRight"
+            ),
+
+        
+        circleEntriesAgainst:
+
+            getEventCount(
+                "defenceEntryLeft"
+            )
+
+            +
+
+            getEventCount(
+                "defenceEntryTopD"
+            )
+
+            +
+
+            getEventCount(
+                "defenceEntryRight"
+            ),
+
+        
         goalsConceded:
             getEventCount(
                 "goalConceded"

@@ -249,22 +249,15 @@ const MatchIQ = {
         DEFENCE
         =====================================================
         */
-
+        
         {
-            id: "goalConceded",
-            name: "Goal Conceded",
-            icon: "⚽",
+            id: "defenceEntry",
+            name: "Circle Entry Against",
+            icon: "⭕",
             category: "defence"
         },
 
-        {
-            id: "save",
-            name: "Goalkeeper Save",
-            icon: "🧤",
-            category: "defence"
-        },
-
-       {
+{
             id: "turnoverMidfieldLost",
             name: "Turnover Midfield",
             icon: "⬆️",
@@ -282,20 +275,6 @@ const MatchIQ = {
             id: "turnoverDefensive25Lost",
             name: "Turnover Defensive 25",
             icon: "⬆️",
-            category: "defence"
-        },
-
-        {
-            id: "pcConceded",
-            name: "Penalty Corner Conceded",
-            icon: "🚩",
-            category: "defence"
-        },
-
-        {
-            id: "psConceded",
-            name: "Penalty Stroke Conceded",
-            icon: "⚠️",
             category: "defence"
         },
 
