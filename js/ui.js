@@ -1460,10 +1460,6 @@ function showDefenceEntryLocationOptions() {
 
 }
 
-
-
-
-
 function recordEntryLocation(
     location
 ) {
@@ -1513,6 +1509,7 @@ function recordDefenceLocation(
 
 }
 
+
 function showEntryOutcomeOptions() {
 
     const panel =
@@ -1525,7 +1522,95 @@ function showEntryOutcomeOptions() {
         return;
 
     }
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            🎯 ACTIVE ATTACK
+
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackAction('shotOnTarget')"
+            >
+                🎯<br>
+                Shot On Target
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackAction('shotOffTarget')"
+            >
+                ⚪<br>
+                Shot Off Target
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackAction('shotBlocked')"
+            >
+                🛑<br>
+                Shot Blocked
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordEntryPenaltyCorner()"
+            >
+                🚩<br>
+                Penalty Corner
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackAction('psWon')"
+            >
+                🏑<br>
+                Penalty Stroke
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackAction('entryLongCorner')"
+            >
+                ↩️<br>
+                Long Corner
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackAction('goalScored')"
+            >
+                🥅<br>
+                Goal
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackAction('entryTurnoverLost')"
+            >
+                ❌<br>
+                Turnover Lost
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
 }
+
 
 function showDefenceOutcomeOptions() {
 
@@ -1623,175 +1708,6 @@ function recordDefenceOutcome(
     removeOutcomePanel();
 
 }
-
-
-
-    panel.innerHTML = `
-
-        <h3 class="outcome-title">
-
-            🛡️ DEFENSIVE OUTCOME
-
-        </h3>
-
-        <div class="event-grid">
-
-            <button
-                class="event-button defence"
-                onclick="recordDefenceOutcome('save')"
-            >
-                🧤<br>
-                Save
-            </button>
-
-            <button
-                class="event-button defence"
-                onclick="recordDefenceOutcome('goalConceded')"
-            >
-                🥅<br>
-                Goal
-            </button>
-
-            <button
-                class="event-button defence"
-                onclick="recordDefenceOutcome('pcConceded')"
-            >
-                🚩<br>
-                Penalty Corner
-            </button>
-
-            <button
-                class="event-button defence"
-                onclick="recordDefenceOutcome('psConceded')"
-            >
-                🏑<br>
-                Penalty Stroke
-            </button>
-
-            <button
-                class="event-button defence"
-                onclick="recordDefenceOutcome('shotOnTargetAgainst')"
-            >
-                🎯<br>
-                Shot On Target
-            </button>
-
-            <button
-                class="event-button defence"
-                onclick="recordDefenceOutcome('shotBlockedAgainst')"
-            >
-                🛑<br>
-                Shot Blocked
-            </button>
-
-            <button
-                class="event-button outcome-cancel"
-                onclick="removeOutcomePanel()"
-            >
-                ✖<br>
-                Cancel
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-    panel.innerHTML = `
-        
-        <h3 class="outcome-title">
-
-            🎯 ACTIVE ATTACK
-
-        </h3>
-
-        <div class="attack-context">
-
-            Entry:
-
-            ${App.currentAttack.location
-                .replace("entry", "")}
-
-        </div>
-
-
-        <div class="event-grid">
-
-            
-            <button
-                class="event-button attack"
-                onclick="recordAttackAction('shotOnTarget')"
-            >
-                🎯<br>
-                Shot On Target
-            </button>
-
-            <button
-                class="event-button attack"
-                onclick="recordAttackAction('shotOffTarget')"
-            >
-                ⚪<br>
-                Shot Off Target
-            </button>
-
-            <button
-                class="event-button attack"
-                onclick="recordAttackAction('shotBlocked')"
-            >
-                🛑<br>
-                Shot Blocked
-            </button>
-
-            <button
-                class="event-button attack"
-                onclick="recordEntryPenaltyCorner()"
-            >
-                🚩<br>
-                Penalty Corner
-            </button>
-
-            <button
-                class="event-button attack"
-                onclick="recordAttackAction('entryLongCorner')"
-            >
-                ↩️<br>
-                Long Corner
-            </button>
-            
-            <button
-                class="event-button goal-button"
-                onclick="recordAttackAction('goalScored')"
-            >
-                🥅<br>
-                Goal
-            </button>
-
-
-            <button
-                class="event-button discipline"
-                onclick="recordAttackAction('entryTurnoverLost')"
-            >
-                ❌<br>
-                Turnover Lost
-            </button>
-
-            <button
-                class="event-button outcome-cancel"
-                onclick="removeOutcomePanel()"
-            >
-                ✖<br>
-                Cancel
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
 
 function recordEntryOutcome(
     outcome
