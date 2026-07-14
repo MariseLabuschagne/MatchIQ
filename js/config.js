@@ -294,6 +294,13 @@ const MatchIQ = {
         },
         
         {
+            id: "pcConceded",
+            name: "Penalty Corner Conceded",
+            icon: "🚩",
+            category: "system"
+        },
+
+        {
             id: "psConceded",
             name: "Penalty Stroke Conceded",
             icon: "🏑",
