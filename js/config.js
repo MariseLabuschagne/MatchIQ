@@ -278,6 +278,34 @@ const MatchIQ = {
             icon: "➡️",
             category: "system"
         },
+                
+        {
+            id: "goalConceded",
+            name: "Goal Conceded",
+            icon: "🥅",
+            category: "system"
+        },
+
+        {
+            id: "save",
+            name: "Goalkeeper Save",
+            icon: "🧤",
+            category: "system"
+        },
+        
+        {
+            id: "psConceded",
+            name: "Penalty Stroke Conceded",
+            icon: "🏑",
+            category: "system"
+        },
+
+        {
+            id: "turnoverWonDefence",
+            name: "Turnover Won",
+            icon: "✅",
+            category: "system"
+        },
     
         {
             id: "turnoverMidfieldLost",
