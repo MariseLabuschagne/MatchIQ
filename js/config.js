@@ -55,18 +55,26 @@ const MatchIQ = {
         },
 
         {
-            id: "MidfieldTurnoverWon",
-            name: "Midfield Turnover Won",
+            id: "turnoverMidfield",
+            name: "Turnover Midfield",
             icon: "⬆️",
             category: "attack"
         },
         
         {
-            id: "highTurnoverWon",
-            name: "High Turnover Won",
+            id: "turnoverAttacking25",
+            name: "Turnover Attacking 25",
             icon: "⬆️",
             category: "attack"
         },
+
+        {
+            id: "turnoverDefensive25",
+            name: "Turnover Defensive 25",
+            icon: "⬆️",
+            category: "attack"
+        },
+
 
         {
             id: "goalScored",
@@ -80,16 +88,7 @@ const MatchIQ = {
             name: "Penalty Corner Won",
             icon: "🚩",
             category: "system"
-        },
-
-        {
-            id: "psWon",
-            name: "Penalty Stroke Won",
-            icon: "🏑",
-            category: "attack"
-        },
-
-      
+        },   
 
         /*
         =====================================================
@@ -136,6 +135,13 @@ const MatchIQ = {
             id: "entryPenaltyCorner",
             name: "Penalty Corner",
             icon: "🚩",
+            category: "system"
+        },
+
+{
+            id: "psWon",
+            name: "Penalty Stroke Won",
+            icon: "🏑",
             category: "system"
         },
 
