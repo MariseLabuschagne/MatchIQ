@@ -806,19 +806,24 @@ function renderMatchSummary() {
                 )}
 
                 ${renderSummaryStat(
-                    "Interceptions",
-                    stats.defence.interceptions
-                )}
-
-                ${renderSummaryStat(
-                    "Turnovers Won",
-                    stats.defence.turnoversWon
-                )}
-
-                ${renderSummaryStat(
                     "Turnovers Lost",
-                    stats.defence.turnoversLost
+                    ""
                 )}
+
+                ${renderSummarySubStat(
+                    "Attacking 25",
+                    stats.defence.turnoversAttacking25Lost
+                )}
+
+                ${renderSummarySubStat(
+                    "Midfield",
+                    stats.defence.turnoversMidfieldLost
+                )}
+
+                ${renderSummarySubStat(
+                    "Defensive 25",
+                    stats.defence.turnoversDefensive25Lost
+                )}            
 
                 ${renderSummaryStat(
                     "Penalty Corners Conceded",

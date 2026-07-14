@@ -264,24 +264,24 @@ const MatchIQ = {
             category: "defence"
         },
 
+       {
+            id: "turnoverMidfieldLost",
+            name: "Turnover Midfield",
+            icon: "⬆️",
+            category: "defence"
+        },
+        
         {
-            id: "interception",
-            name: "Interception",
-            icon: "🛡️",
+            id: "turnoverAttacking25Lost",
+            name: "Turnover Attacking 25",
+            icon: "⬆️",
             category: "defence"
         },
 
         {
-            id: "turnoverWon",
-            name: "Turnover Won",
-            icon: "✅",
-            category: "defence"
-        },
-
-        {
-            id: "turnoverLost",
-            name: "Turnover Lost",
-            icon: "❌",
+            id: "turnoverDefensive25Lost",
+            name: "Turnover Defensive 25",
+            icon: "⬆️",
             category: "defence"
         },
 
