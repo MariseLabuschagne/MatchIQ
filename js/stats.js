@@ -283,8 +283,29 @@ function getDefenceStats() {
         pcConcededHigh:
             getEventCount(
                 "pcConcededHigh"
-            )
+            ),
 
+        
+        pcGoalConceded:
+            getEventCount(
+                "pcGoalConceded"
+            ),
+
+        pcFirstWaveSave:
+            getEventCount(
+                "pcFirstWaveSave"
+            ),
+
+        pcGoalkeeperSave:
+            getEventCount(
+                "pcGoalkeeperSave"
+            ),
+
+        pcSecondWaveSave:
+            getEventCount(
+                "pcSecondWaveSave"
+            )
+    
 
     };
 }

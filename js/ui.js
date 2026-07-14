@@ -853,21 +853,32 @@ function renderMatchSummary() {
                     stats.defence.turnoverDefensive25Lost
                 )}
 
-                
+                                
                 ${renderSummaryStat(
                     "Penalty Corners Conceded",
                     stats.defence.penaltyCornersConceded
                 )}
 
                 ${renderSummarySubStat(
-                    "Low Flying",
-                    stats.defence.pcConcededLow
+                    "Goals",
+                    stats.defence.pcGoalConceded
                 )}
 
                 ${renderSummarySubStat(
-                    "High Flying",
-                    stats.defence.pcConcededHigh
+                    "First Wave Saves",
+                    stats.defence.pcFirstWaveSave
                 )}
+
+                ${renderSummarySubStat(
+                    "GK Saves",
+                    stats.defence.pcGoalkeeperSave
+                )}
+
+                ${renderSummarySubStat(
+                    "Second Wave Saves",
+                    stats.defence.pcSecondWaveSave
+                )}
+
 
 
             </div>
@@ -1653,7 +1664,7 @@ function showDefenceOutcomeOptions() {
 
             <button
                 class="event-button defence"
-                onclick="recordDefenceOutcome('pcConceded')"
+                onclick="showDefencePenaltyCornerOutcomeOptions()"
             >
                 🚩<br>
                 Penalty Corner
@@ -1716,6 +1727,92 @@ function recordDefenceOutcome(
     }
 
 }
+
+function showDefencePenaltyCornerOutcomeOptions() {
+
+    recordEvent(
+        "pcConceded"
+    );
+
+    const panel =
+        document.getElementById(
+            "outcomePanel"
+        );
+
+    if (!panel) {
+
+        return;
+
+    }
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            🚩 DEFENSIVE PC OUTCOME
+
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button defence"
+                onclick="recordDefencePenaltyCornerOutcome('pcGoalConceded')"
+            >
+                🥅<br>
+                Goal
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefencePenaltyCornerOutcome('pcFirstWaveSave')"
+            >
+                🛑<br>
+                First Wave Save
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefencePenaltyCornerOutcome('pcGoalkeeperSave')"
+            >
+                🧤<br>
+                GK Save
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefencePenaltyCornerOutcome('pcSecondWaveSave')"
+            >
+                ✅<br>
+                Second Wave Save
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+function recordDefencePenaltyCornerOutcome(
+    outcome
+) {
+
+    recordEvent(
+        outcome
+    );
+
+    removeOutcomePanel();
+
+}
+
 
 
 function recordEntryOutcome(

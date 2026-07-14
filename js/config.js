@@ -299,6 +299,34 @@ const MatchIQ = {
             icon: "🚩",
             category: "system"
         },
+        
+        {
+            id: "pcGoalConceded",
+            name: "PC Goal Conceded",
+            icon: "🥅",
+            category: "system"
+        },
+
+        {
+            id: "pcFirstWaveSave",
+            name: "PC First Wave Save",
+            icon: "🛑",
+            category: "system"
+        },
+
+        {
+            id: "pcGoalkeeperSave",
+            name: "PC Goalkeeper Save",
+            icon: "🧤",
+            category: "system"
+        },
+
+        {
+            id: "pcSecondWaveSave",
+            name: "PC Second Wave Save",
+            icon: "✅",
+            category: "system"
+        },
 
         {
             id: "psConceded",
