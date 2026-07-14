@@ -1526,6 +1526,7 @@ function showEntryOutcomeOptions() {
 
     }
 
+
 function showDefenceOutcomeOptions() {
 
     const panel =
@@ -1539,6 +1540,77 @@ function showDefenceOutcomeOptions() {
 
     }
 
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            🛡️ DEFENSIVE OUTCOME
+
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('save')"
+            >
+                🧤<br>
+                Save
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('goalConceded')"
+            >
+                🥅<br>
+                Goal
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('pcConceded')"
+            >
+                🚩<br>
+                Penalty Corner
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('psConceded')"
+            >
+                🏑<br>
+                Penalty Stroke
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('shotOnTargetAgainst')"
+            >
+                🎯<br>
+                Shot On Target
+            </button>
+
+            <button
+                class="event-button defence"
+                onclick="recordDefenceOutcome('shotBlockedAgainst')"
+            >
+                🛑<br>
+                Shot Blocked
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+}
 
 function recordDefenceOutcome(
     outcome
@@ -1551,6 +1623,7 @@ function recordDefenceOutcome(
     removeOutcomePanel();
 
 }
+
 
 
     panel.innerHTML = `

@@ -257,7 +257,29 @@ const MatchIQ = {
             category: "defence"
         },
 
-{
+        
+        {
+            id: "defenceEntryLeft",
+            name: "Defence Entry Left",
+            icon: "⬅️",
+            category: "system"
+        },
+
+        {
+            id: "defenceEntryTopD",
+            name: "Defence Entry Top D",
+            icon: "⬆️",
+            category: "system"
+        },
+
+        {
+            id: "defenceEntryRight",
+            name: "Defence Entry Right",
+            icon: "➡️",
+            category: "system"
+        },
+    
+        {
             id: "turnoverMidfieldLost",
             name: "Turnover Midfield",
             icon: "⬆️",
