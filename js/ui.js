@@ -1640,7 +1640,7 @@ function showDefenceOutcomeOptions() {
                 onclick="recordDefenceOutcome('save')"
             >
                 🧤<br>
-                Save
+                Goalkeeper Save
             </button>
 
             <button
@@ -1666,22 +1666,15 @@ function showDefenceOutcomeOptions() {
                 🏑<br>
                 Penalty Stroke
             </button>
-
+            
             <button
                 class="event-button defence"
-                onclick="recordDefenceOutcome('shotOnTargetAgainst')"
+                onclick="recordDefenceOutcome('turnoverWonDefence')"
             >
-                🎯<br>
-                Shot On Target
+                ✅<br>
+                Turnover Won
             </button>
 
-            <button
-                class="event-button defence"
-                onclick="recordDefenceOutcome('shotBlockedAgainst')"
-            >
-                🛑<br>
-                Shot Blocked
-            </button>
 
             <button
                 class="event-button outcome-cancel"
@@ -1697,6 +1690,7 @@ function showDefenceOutcomeOptions() {
 
 }
 
+
 function recordDefenceOutcome(
     outcome
 ) {
@@ -1705,9 +1699,24 @@ function recordDefenceOutcome(
         outcome
     );
 
-    removeOutcomePanel();
+    if (
+
+        outcome ===
+            "goalConceded"
+
+        ||
+
+        outcome ===
+            "turnoverWonDefence"
+
+    ) {
+
+        removeOutcomePanel();
+
+    }
 
 }
+
 
 function recordEntryOutcome(
     outcome
