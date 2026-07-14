@@ -1525,7 +1525,7 @@ function showEntryOutcomeOptions() {
         return;
 
     }
-
+}
 
 function showDefenceOutcomeOptions() {
 
