@@ -249,20 +249,22 @@ function getDefenceStats() {
             ),
 
         
-        turnoversAttacking25Lost:
+        
+        turnoverAttacking25Lost:
             getEventCount(
                 "turnoverAttacking25Lost"
             ),
 
-        turnoversMidfieldLost:
+        turnoverMidfieldLost:
             getEventCount(
                 "turnoverMidfieldLost"
             ),
 
-        turnoversDefensive25Lost:
+        turnoverDefensive25Lost:
             getEventCount(
                 "turnoverDefensive25Lost"
             ),
+
 
 
         penaltyCornersConceded:
