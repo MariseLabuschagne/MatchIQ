@@ -948,7 +948,7 @@ function renderMatchSummary() {
                     id="newMatchButton"
                     class="summary-button new-match"
                 >
-                    🏑 Start New Match
+                    🏑 Hockey Home Screen
                 </button>
 
             </div>
@@ -966,14 +966,17 @@ function renderMatchSummary() {
             exportMatch
         );
 
-    document
-        .getElementById(
-            "newMatchButton"
-        )
-        .addEventListener(
-            "click",
-            startNewMatch
-        );
+    
+document
+    .getElementById(
+        "newMatchButton"
+    )
+    .addEventListener(
+        "click",
+        returnToHockeyHome
+    );
+`
+
 }
 
 function renderSummaryStat(
@@ -2514,5 +2517,22 @@ function showHockeySetup() {
         .classList.remove(
             "hidden"
         );
+
+}
+
+
+function returnToHockeyHome() {
+
+    App.currentMatch = null;
+
+    document
+        .getElementById(
+            "liveMatchScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    showHockeyMenu();
 
 }
