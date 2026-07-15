@@ -1786,6 +1786,14 @@ function showDefencePenaltyCornerOutcomeOptions() {
                 ✅<br>
                 Second Wave Save
             </button>
+                        
+            <button
+                class="event-button defence"
+                onclick="recordDefencePenaltyCornerOutcome('turnoverWonDefence')"
+            >
+                ✅<br>
+                Turnover Won
+            </button>
 
             <button
                 class="event-button outcome-cancel"
@@ -1801,6 +1809,8 @@ function showDefencePenaltyCornerOutcomeOptions() {
 
 }
 
+
+
 function recordDefencePenaltyCornerOutcome(
     outcome
 ) {
@@ -1809,11 +1819,28 @@ function recordDefencePenaltyCornerOutcome(
         outcome
     );
 
-    removeOutcomePanel();
+    if (
+
+        outcome ===
+            "pcGoalConceded"
+
+        ||
+
+        outcome ===
+            "pcSecondWaveSave"
+
+        ||
+
+        outcome ===
+            "turnoverWonDefence"
+
+    ) {
+
+        removeOutcomePanel();
+
+    }
 
 }
-
-
 
 function recordEntryOutcome(
     outcome

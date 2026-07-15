@@ -301,6 +301,13 @@ function getDefenceStats() {
                 "pcGoalkeeperSave"
             ),
 
+        
+        turnoverWonDefence:
+            getEventCount(
+                "turnoverWonDefence"
+            ),
+
+
         pcSecondWaveSave:
             getEventCount(
                 "pcSecondWaveSave"
