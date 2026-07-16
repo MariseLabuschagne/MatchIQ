@@ -2133,9 +2133,6 @@ function recordPCConceded(
 
 }
 
-
-
-
 function renderMatchHistory() {
 
     
@@ -2167,7 +2164,7 @@ function renderMatchHistory() {
             class="action-button secondary-button
             onclick="closeMatchHistory()"
         >
-            ← Back
+            ← Hockey Screen
         </button>
 
         <h2>
@@ -2252,33 +2249,34 @@ function renderMatchHistory() {
 
                     </p>
 
-                    <p>
+         
+                    <p class="history-events">
 
                         Events:
                         ${matchEvents.length}
 
                     </p>
-                    
-                    <button
-                        class="history-open-button action-button"
-                        onclick="openHistoricalMatch('${match.id}')"
-                    >
-                        📂 Open
-                    </button>
-                    
-                    <button
-                        class="history-delete-button action-button"
-                        onclick="
-                            deleteHistoricalMatch('${match.id}');
-                            renderMatchHistory();
-                        "
-                    >
-                        🗑 Delete
-                    </button>
 
+                    <div class="history-actions">
 
+                        <button
+                            class="action-button"
+                            onclick="openHistoricalMatch('${match.id}')"
+                        >
+                            📂 Open
+                        </button>
 
-                </div>
+                        <button
+                            class="action-button"
+                            onclick="
+                                deleteHistoricalMatch('${match.id}');
+                                renderMatchHistory();
+                            "
+                        >
+                            🗑 Delete
+                        </button>
+
+                    </div>
 
             `;
 
@@ -2288,41 +2286,39 @@ function renderMatchHistory() {
 
 function closeMatchHistory() {
 
-    document
-        .getElementById(
+    const historyScreen =
+        document.getElementById(
             "historyScreen"
-        )
-        .classList.add(
-            "hidden"
         );
 
-    document
-        .getElementById(
-            "homeScreen"
-        )
-        .classList.remove(
-            "hidden"
-        );
+    historyScreen.classList.add(
+        "hidden"
+    );
+
+    historyScreen.innerHTML = "";
+
+    showHockeyMenu();
 
 }
-
 
 function openHistoricalMatch(
     matchId
 ) {
 
-    const history =
-        JSON.parse(
-            localStorage.getItem(
-                "matchHistory"
-            ) || "[]"
-        );
+    console.log(
+        "Opening match:",
+        matchId
+    );
 
     const match =
-        history.find(
-            m =>
-                m.id === matchId
+        getHistoricalMatch(
+            matchId
         );
+
+    console.log(
+        "Match found:",
+        match
+    );
 
     if (!match) {
 
@@ -2335,7 +2331,21 @@ function openHistoricalMatch(
     }
 
     App.currentMatch =
-        match;
+        structuredClone(
+            match
+        );
+
+    if (!App.timer) {
+
+        App.timer = {
+            seconds: 0,
+            running: false
+        };
+
+    }
+
+    App.timer.seconds =
+        match.elapsedSeconds || 0;
 
     document
         .getElementById(
@@ -2345,11 +2355,54 @@ function openHistoricalMatch(
             "hidden"
         );
 
+    document
+        .getElementById(
+            "liveMatchScreen"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
     renderMatchSummary();
 
 }
+  
 
 function showHockeyMenu() {
+
+
+    const historyScreen =
+        document.getElementById(
+            "historyScreen"
+        );
+
+    historyScreen.classList.add(
+        "hidden"
+    );
+
+    document
+        .getElementById(
+            "historyScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "liveMatchScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "setupScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
 
     document
         .getElementById(
@@ -2370,7 +2423,7 @@ function showHockeyMenu() {
 
     screen.innerHTML = `
 
-        <div class="card">
+        <div class="card hockey-menu-card">
 
             <button
                 class="action-button secondary-button"
@@ -2383,17 +2436,14 @@ function showHockeyMenu() {
                 🏑 Field Hockey
             </h1>
 
-            
             <div class="hockey-menu-buttons">
 
-                
                 <button
                     class="sport-button hockey"
                     onclick="showHockeySetup()"
                 >
                     ▶ New Match
                 </button>
-
 
                 <button
                     class="sport-button history"
@@ -2403,7 +2453,6 @@ function showHockeyMenu() {
                 </button>
 
             </div>
-
 
         </div>
 
