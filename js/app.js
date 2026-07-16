@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 app.js
-Version: 0.8.7
+Version: 0.9.9
 =========================================================
 */
 
@@ -19,10 +19,6 @@ APPLICATION STARTUP
 */
 
 function initialiseApp() {
-
-    console.log(
-        `🏑 ${MatchIQ.app.name} v${MatchIQ.app.version}`
-    );
 
     App.app.loaded = true;
 

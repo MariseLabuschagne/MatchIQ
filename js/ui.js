@@ -3,11 +3,13 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 0.5.0
+Version: 0.9.9
 =========================================================
 */
 
 function renderLiveMatch() {
+
+    hideAllScreens();
 
     const setupScreen =
         document.getElementById(
@@ -2332,6 +2334,7 @@ function recordPCConceded(
 
 function renderMatchHistory() {
 
+    hideAllScreens();
     
     const history =
         getMatchHistory();
@@ -2359,6 +2362,11 @@ function renderMatchHistory() {
 
         <button
             class="action-button secondary-button
+            
+            console.log(
+                "Hockey Screen button clicked"
+            );
+
             onclick="closeMatchHistory()"
         >
             ← Hockey Screen
@@ -2481,6 +2489,7 @@ function renderMatchHistory() {
 
 }
 
+
 function closeMatchHistory() {
 
     const historyScreen =
@@ -2567,6 +2576,37 @@ function openHistoricalMatch(
 
 function showHockeyMenu() {
 
+    hideAllScreens();
+    
+    document
+        .getElementById(
+            "historyScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "historyScreen"
+        )
+        .innerHTML = "";
+
+    document
+        .getElementById(
+            "setupScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "liveMatchScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
 
     const historyScreen =
         document.getElementById(
@@ -2659,6 +2699,8 @@ function showHockeyMenu() {
 
 function returnToHomeScreen() {
 
+    hideAllScreens();
+
     document
         .getElementById(
             "hockeyMenuScreen"
@@ -2680,6 +2722,8 @@ function returnToHomeScreen() {
 
 function showHockeySetup() {
 
+    hideAllScreens();
+    
     document
         .getElementById(
             "hockeyMenuScreen"
@@ -2742,5 +2786,31 @@ function returnToHockeyHome() {
         );
 
     showHockeyMenu();
+
+}
+
+
+function hideAllScreens() {
+
+    [
+        "homeScreen",
+        "setupScreen",
+        "hockeyMenuScreen",
+        "liveMatchScreen",
+        "historyScreen"
+    ].forEach(id => {
+
+        const screen =
+            document.getElementById(id);
+
+        if (screen) {
+
+            screen.classList.add(
+                "hidden"
+            );
+
+        }
+
+    });
 
 }
