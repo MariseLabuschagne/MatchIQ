@@ -48,6 +48,12 @@ Version: 0.7.0
 }
 
 body {
+      
+    padding-top:
+            max(
+                env(safe-area-inset-top),
+                12px
+            );
 
     font-family:
         Inter,
@@ -61,7 +67,6 @@ body {
 
     min-height: 100vh;
 
-    padding: 16px;
 }
 
 #app {
@@ -74,6 +79,25 @@ body {
 /* =====================================================
 HEADER
 ===================================================== */
+
+
+#appHeader {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    padding-top:
+        calc(
+            env(safe-area-inset-top)
+            + 6px
+        );
+
+    padding-bottom: 6px;
+
+}
 
 .app-header {
 
@@ -875,16 +899,29 @@ MATCH SUMMARY
 
 }
 
-.summary-score {
+.match-summary-score {
 
     text-align: center;
 
-    font-size: 24px;
+    font-size: 1.5rem;
 
     font-weight: 800;
+    margin: 2px 0;
+
 
     color: #35C6FF;
 }
+
+.match-summary-team {
+
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 1px;
+    font-weight: 700;
+    color: #35C6FF;
+
+}
+
 
 .summary-section {
 
@@ -981,6 +1018,28 @@ MATCH SUMMARY
 
     border: 1px solid rgba(22,163,74,0.35);
 }
+
+
+.insight-item {
+
+    background: rgba(
+        53,
+        198,
+        255,
+        0.08
+    );
+
+    border-left: 4px solid
+        #35C6FF;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    margin-bottom: 10px;
+
+}
+
 
 .summary-actions {
 
@@ -1282,8 +1341,13 @@ MOBILE
 @media (max-width: 640px) {
 
     body {
+       
+        padding-top:
+            max(
+                env(safe-area-inset-top),
+                12px
+            );
 
-        padding: 10px;
     }
 
     .app-header h1 {

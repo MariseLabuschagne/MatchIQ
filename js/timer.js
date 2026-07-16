@@ -48,11 +48,6 @@ TICK
 
 function tickTimer() {
     
-    console.log(
-        "tick",
-        App.timer.seconds
-    );
-
     App.timer.seconds++;
 
     persistTimer();

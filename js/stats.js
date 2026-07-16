@@ -138,7 +138,11 @@ function getAttackStats() {
                 "turnoverDefensive25"
             ),
 
-
+         fieldGoals:
+            getEventCount(
+                "goalScored"
+            ),
+                    
         pcGoals:
             getEventCount(
                 "pcGoal"
@@ -186,9 +190,8 @@ function getAttackStats() {
 
             getEventCount(
                 "entryTurnoverLost"
-            )
-
-
+            )      
+    
     };
 }
 
@@ -373,12 +376,12 @@ function getAttackingEffectiveness() {
                 attacksWithShots,
                 attack.circleEntries
             ),
-
-        shotToGoalConversion:
+            
+        fieldGoalConversion:
 
             calculatePercentage(
-                attack.goalsScored,
-                attack.shots
+                attack.fieldGoals,
+                attack.shotsOnTarget
             ),
 
         entryToGoalConversion:

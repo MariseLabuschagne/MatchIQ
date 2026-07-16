@@ -19,7 +19,6 @@ function renderLiveMatch() {
             "liveMatchScreen"
         );
     
-    
     const header =
         document.getElementById(
             "appHeader"
@@ -32,7 +31,6 @@ function renderLiveMatch() {
         );
 
     }
-
 
     setupScreen.classList.add(
         "hidden"
@@ -637,14 +635,29 @@ function renderMatchSummary() {
                 <div class="summary-title">
                     🏑 Match Summary
                 </div>
+                
+                <div class="match-summary-header">
 
-                <div class="summary-score">
-                    ${App.currentMatch.ourTeam}
-                    ${score.our}
-                    -
-                    ${score.opposition}
-                    ${App.currentMatch.opponent}
+                    <div class="match-summary-team">
+
+                        ${App.currentMatch.ourTeam}
+
+                    </div>
+
+                    <div class="match-summary-score">
+
+                        ${score.our} - ${score.opposition}
+
+                    </div>
+
+                    <div class="match-summary-team">
+
+                        ${App.currentMatch.opponent}
+
+                    </div>
+
                 </div>
+
 
             </div>
             
@@ -777,12 +790,21 @@ function renderMatchSummary() {
                     "Turnovers Lost",
                     stats.attack.entryTurnoversLost
                 )}
-
+                
                 ${renderSummaryStat(
                     "Goals Scored",
                     stats.attack.goalsScored
                 )}
 
+                ${renderSummarySubStat(
+                    "Field Goals",
+                    stats.attack.fieldGoals
+                )}
+
+                ${renderSummarySubStat(
+                    "PC Goals",
+                    stats.attack.pcGoals
+                )}
                 
                 ${renderSummaryStat(
                     "Turnovers Won",
@@ -817,10 +839,10 @@ function renderMatchSummary() {
                     "Entries Producing Shot %",
                     stats.effectiveness.entryToShotConversion + "%"
                 )}
-
+               
                 ${renderSummaryStat(
-                    "Shot → Goal %",
-                    stats.effectiveness.shotToGoalConversion + "%"
+                    "Field Goal Conversion %",
+                    stats.effectiveness.fieldGoalConversion + "%"
                 )}
 
                 ${renderSummaryStat(
@@ -967,7 +989,9 @@ function renderMatchSummary() {
 
             <div class="card summary-section">
 
-                <h3>Highlights</h3>
+                <h3>
+                    🏑 Coach Insights
+                </h3>
 
                 <div class="highlights">
 
@@ -1117,82 +1141,182 @@ function renderFunnelStep(
 }
 
 
+
 function buildHighlights() {
 
-    const highlights = [];
+    const insights = [];
 
     const attack =
         getAttackStats();
 
     const defence =
         getDefenceStats();
+    
+    const effectiveness =
+        getMatchStatistics()
+            .effectiveness;
 
-    const turnoverDiff =
-        getTurnoverDifferential();
+
+    /*
+    =========================================
+    POSITIVE INSIGHTS
+    =========================================
+    */
 
     if (
-        turnoverDiff > 0
+        effectiveness.shotAccuracy >= 70
     ) {
 
-        highlights.push(
-            `
-            <div class="summary-highlight">
-                ✅ Positive Turnover Differential
-                (+${turnoverDiff})
-            </div>
-            `
+        insights.push(
+            "✅ Shot accuracy above 70%"
         );
 
     }
 
     if (
-        attack.penaltyCornersWon >
-        defence.penaltyCornersConceded
+        effectiveness.entryToShotConversion >= 60
     ) {
 
-        highlights.push(
-            `
-            <div class="summary-highlight">
-                ✅ More Penalty Corners Won than Conceded
-            </div>
-            `
+        insights.push(
+            "✅ Strong circle entry conversion into shots"
         );
 
     }
 
     if (
-        defence.goalkeeperSaves >= 5
+        defence.penaltyCornersConceded > 0
+        &&
+        defence.pcGoalConceded /
+        defence.penaltyCornersConceded <= 0.25
     ) {
 
-        highlights.push(
-            `
-            <div class="summary-highlight">
-                ✅ Strong Goalkeeping Performance
-                (${defence.goalkeeperSaves} saves)
-            </div>
-            `
+        insights.push(
+            "✅ Strong defensive penalty corner unit"
+        );
+
+    }
+
+    /*
+    =========================================
+    WARNING INSIGHTS
+    =========================================
+    */
+
+    if (
+        defence.turnoverDefensive25Lost >= 5
+    ) {
+
+        insights.push(
+            "⚠ High number of turnovers in Defensive 25"
         );
 
     }
 
     if (
-        highlights.length === 0
+        defence.circleEntriesAgainst >= 10
     ) {
 
-        highlights.push(
-            `
-            <div class="summary-highlight">
-                📊 Match summary available.
-            </div>
-            `
+        insights.push(
+            "⚠ Opposition achieved many circle entries"
         );
 
     }
 
-    return highlights.join("");
+    if (
+        effectiveness.shotAccuracy > 0
+        &&
+        effectiveness.shotAccuracy < 40
+    ) {
+
+        insights.push(
+            "⚠ Shot accuracy below 40%"
+        );
+
+    }
+
+    /*
+    =========================================
+    TACTICAL INSIGHTS
+    =========================================
+    */
+
+    const totalEntries =
+        attack.entryLeft
+        +
+        attack.entryTopD
+        +
+        attack.entryRight;
+
+    if (
+        totalEntries > 0
+    ) {
+
+        const rightPct =
+            Math.round(
+                attack.entryRight
+                /
+                totalEntries
+                * 100
+            );
+
+        const leftPct =
+            Math.round(
+                attack.entryLeft
+                /
+                totalEntries
+                * 100
+            );
+
+        if (
+            rightPct >= 60
+        ) {
+
+            insights.push(
+                `📊 ${rightPct}% of entries came from the Right`
+            );
+
+        }
+
+        if (
+            leftPct >= 60
+        ) {
+
+            insights.push(
+                `📊 ${leftPct}% of entries came from the Left`
+            );
+
+        }
+
+    }
+
+    /*
+    =========================================
+    DEFAULT
+    =========================================
+    */
+
+    if (
+        insights.length === 0
+    ) {
+
+        insights.push(
+            "📊 No significant trends identified."
+        );
+
+    }
+
+    return insights
+        .map(
+            item =>
+                `
+                <div class="insight-item">
+                    ${item}
+                </div>
+                `
+        )
+        .join("");
 
 }
-
 
 function showShotOutcomeOptions() {
 
@@ -1923,32 +2047,62 @@ function recordEntryOutcome(
 }
 
 
-
 function recordAttackAction(
     outcome
 ) {
+
+    if (
+        outcome === "goalScored"
+    ) {
+
+        const currentAttackId =
+            App.currentMatch
+                .activeAttackId;
+
+        const shotAlreadyCaptured =
+            App.currentMatch.events.some(
+                event =>
+
+                    event.attackId ===
+                        currentAttackId
+
+                    &&
+
+                    event.eventType ===
+                        "shotOnTarget"
+            );
+
+        if (
+            !shotAlreadyCaptured
+        ) {
+
+            recordEvent(
+                "shotOnTarget"
+            );
+
+        }
+
+    }
 
     recordEvent(
         outcome
     );
 
     if (
-        outcome ===
-            "goalScored" ||
-
-        outcome ===
-            "entryTurnoverLost"
+        outcome === "goalScored"
+        ||
+        outcome === "entryTurnoverLost"
     ) {
-        
-        App.currentMatch.activeAttackId =
-                null;
 
+        App.currentMatch.activeAttackId =
+            null;
 
         removeOutcomePanel();
 
     }
 
 }
+
 
 function recordEntryPenaltyCorner() {
 
