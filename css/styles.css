@@ -961,11 +961,14 @@ MATCH SUMMARY
 }
 
 
+
 .action-button {
 
     min-height: 44px;
 
-    min-width: 110px;
+    min-width: 95px;
+
+    padding: 8px 14px;
 
     font-size: 0.95rem;
 
@@ -973,9 +976,8 @@ MATCH SUMMARY
 
     border-radius: 10px;
 
-    padding: 8px 14px;
-
 }
+
 
 
 

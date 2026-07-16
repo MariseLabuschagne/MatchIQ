@@ -2164,7 +2164,7 @@ function renderMatchHistory() {
     screen.innerHTML = `
 
         <button
-            class="secondary-button"
+            class="action-button secondary-button
             onclick="closeMatchHistory()"
         >
             ← Back
@@ -2302,7 +2302,7 @@ function renderMatchHistory() {
                     </p>
                     
                     <button
-                        class="history-open-button  action-button"
+                        class="history-open-button action-button"
                         onclick="
                             openHistoricalMatch(
                                 '${match.id}'
@@ -2313,7 +2313,7 @@ function renderMatchHistory() {
                     </button>
                     
                     <button
-                        class="history-delete-button  action-button"
+                        class="history-delete-button action-button"
                         onclick="
                             deleteHistoricalMatch('${match.id}');
                             renderMatchHistory();
