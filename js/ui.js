@@ -2302,7 +2302,7 @@ function renderMatchHistory() {
                     </p>
                     
                     <button
-                        class="history-open-button"
+                        class="history-open-button  action-button"
                         onclick="
                             openHistoricalMatch(
                                 '${match.id}'
@@ -2313,7 +2313,7 @@ function renderMatchHistory() {
                     </button>
                     
                     <button
-                        class="history-delete-button"
+                        class="history-delete-button  action-button"
                         onclick="
                             deleteHistoricalMatch('${match.id}');
                             renderMatchHistory();
@@ -2419,7 +2419,7 @@ function showHockeyMenu() {
         <div class="card">
 
             <button
-                class="secondary-button"
+                class="action-button secondary-button"
                 onclick="returnToHomeScreen()"
             >
                 ← Back
