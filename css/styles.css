@@ -954,6 +954,39 @@ MATCH SUMMARY
 }
 
 
+.history-open-button {
+
+    min-height: 54px;
+
+    min-width: 120px;
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    border-radius: 12px;
+
+    margin: 6px;
+
+}
+.history-delete-button {
+
+    min-height: 54px;
+
+    min-width: 120px;
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    border-radius: 12px;
+
+    margin: 6px;
+
+}
+
+
+
 /* =====================================================
 OUTCOME PANELS
 ===================================================== */

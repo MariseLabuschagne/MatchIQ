@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 storage.js
-Version: 0.3.0
+Version: 0.9.7
 Persistence Layer
 =========================================================
 */
@@ -221,5 +221,55 @@ function saveMatchToHistory(
             history
         )
     );
+
+}
+
+function deleteHistoricalMatch(
+    matchId
+) {
+
+    const history =
+        JSON.parse(
+            localStorage.getItem(
+                "matchHistory"
+            ) || "[]"
+        );
+
+    const filtered =
+        history.filter(
+            match =>
+                match.id !== matchId
+        );
+
+    localStorage.setItem(
+        "matchHistory",
+        JSON.stringify(
+            filtered
+        )
+    );
+
+}
+
+
+function getMatchHistory() {
+
+    return JSON.parse(
+        localStorage.getItem(
+            "matchHistory"
+        ) || "[]"
+    );
+
+}
+
+function getHistoricalMatch(
+    matchId
+) {
+
+    return getMatchHistory()
+        .find(
+            match =>
+                match.id ===
+                matchId
+        );
 
 }

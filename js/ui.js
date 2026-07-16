@@ -2138,12 +2138,10 @@ function recordPCConceded(
 
 function renderMatchHistory() {
 
+    
     const history =
-        JSON.parse(
-            localStorage.getItem(
-                "matchHistory"
-            ) || "[]"
-        );
+        getMatchHistory();
+
 
     document
         .getElementById(
@@ -2302,21 +2300,28 @@ function renderMatchHistory() {
                         ${matchEvents.length}
 
                     </p>
-
                     
                     <button
                         class="history-open-button"
-                        data-match-id="${match.id}"
+                        onclick="
+                            openHistoricalMatch(
+                                '${match.id}'
+                            )
+                        "
                     >
                         📂 Open
                     </button>
-
+                    
                     <button
                         class="history-delete-button"
-                        data-match-id="${match.id}"
+                        onclick="
+                            deleteHistoricalMatch('${match.id}');
+                            renderMatchHistory();
+                        "
                     >
                         🗑 Delete
                     </button>
+
 
 
                 </div>
@@ -2347,6 +2352,7 @@ function closeMatchHistory() {
 
 }
 
+
 function openHistoricalMatch(
     matchId
 ) {
@@ -2361,11 +2367,14 @@ function openHistoricalMatch(
     const match =
         history.find(
             m =>
-                m.id ===
-                matchId
+                m.id === matchId
         );
 
     if (!match) {
+
+        alert(
+            "Match not found."
+        );
 
         return;
 
@@ -2374,8 +2383,7 @@ function openHistoricalMatch(
     App.currentMatch =
         match;
 
-    
-   document
+    document
         .getElementById(
             "historyScreen"
         )
@@ -2383,39 +2391,9 @@ function openHistoricalMatch(
             "hidden"
         );
 
-
     renderMatchSummary();
 
 }
-
-function deleteHistoricalMatch(
-    matchId
-) {
-
-    const history =
-        JSON.parse(
-            localStorage.getItem(
-                "matchHistory"
-            ) || "[]"
-        );
-
-    const filtered =
-        history.filter(
-            m =>
-                m.id !==
-                matchId
-        );
-
-    localStorage.setItem(
-        "matchHistory",
-        JSON.stringify(
-            filtered
-        )
-    );
-
-}
-
-
 
 function showHockeyMenu() {
 
