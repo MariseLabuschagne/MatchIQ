@@ -44,8 +44,7 @@ function renderLiveMatch() {
 
     liveScreen.innerHTML = `
 
-        <div class="card scoreboard">
-
+        <div class="card sticky-scoreboard">
             <div class="score-row">
 
                 <div class="score-team">
@@ -84,40 +83,39 @@ function renderLiveMatch() {
                     )}
                 </div>
 
-            </div>
+            </div>              
 
+        </div>
+        
+        <div class="card match-controls">
 
-            <div class="match-controls">
+            <button
+                id="pauseButton"
+                class="control-button"
+            >
+                ⏸ Pause
+            </button>
 
-                <button
-                    id="pauseButton"
-                    class="control-button"
-                >
-                    ⏸ Pause
-                </button>
+            <button
+                id="resetButton"
+                class="control-button"
+            >
+                Reset
+            </button>
 
-                <button
-                    id="resetButton"
-                    class="control-button"
-                >
-                    Reset
-                </button>
+            <button
+                id="nextPeriodButton"
+                class="period-button"
+            >
+                ⏭ Next Period
+            </button>
 
-                <button
-                    id="nextPeriodButton"
-                    class="period-button"
-                >
-                    ⏭ Next Period
-                </button>
-
-                <button
-                    id="endMatchButton"
-                    class="end-button"
-                >
-                    End Match
-                </button>
-
-            </div>
+            <button
+                id="endMatchButton"
+                class="end-button"
+            >
+                End Match
+            </button>
 
         </div>
 
@@ -572,8 +570,12 @@ function updatePeriodDisplay() {
         return;
     }
 
+    
     periodDisplay.textContent =
-        App.currentMatch.period;
+        getPeriodLabel(
+            App.currentMatch.period
+        );
+
 }
 
 function undoLastEvent() {
