@@ -64,20 +64,28 @@ function renderLiveMatch() {
                 </div>
 
             </div>
+        
+            
+            <div class="timer-pill">
 
-            <div
-                id="matchTimer"
-                class="timer"
-            >
-                00:00
+                <div
+                    id="timerDisplay"
+                    class="timer"
+                >
+                    00:00
+                </div>
+
+                <div
+                    id="periodDisplay"
+                    class="period-label"
+                >
+                    ${getPeriodLabel(
+                        App.currentMatch.period
+                    )}
+                </div>
+
             </div>
 
-            <div
-                id="periodDisplay"
-                class="period"
-            >
-                ${App.currentMatch.period}
-            </div>
 
             <div class="match-controls">
 
@@ -92,7 +100,7 @@ function renderLiveMatch() {
                     id="resetButton"
                     class="control-button"
                 >
-                    🔄 Reset
+                    Reset
                 </button>
 
                 <button
@@ -106,7 +114,7 @@ function renderLiveMatch() {
                     id="endMatchButton"
                     class="end-button"
                 >
-                    ✅ End Match
+                    End Match
                 </button>
 
             </div>
@@ -361,6 +369,39 @@ function updateScoreboard() {
     scoreDisplay.textContent =
         `${score.our} - ${score.opposition}`;
 }
+
+
+function getPeriodLabel(
+    period
+) {
+
+    switch (period) {
+
+        case "H1":
+            return "First Half";
+
+        case "H2":
+            return "Second Half";
+
+        case "Q1":
+            return "First Quarter";
+
+        case "Q2":
+            return "Second Quarter";
+
+        case "Q3":
+            return "Third Quarter";
+
+        case "Q4":
+            return "Fourth Quarter";
+
+        default:
+            return period;
+
+    }
+
+}
+
 
 function renderTimeline() {
 
@@ -2498,6 +2539,36 @@ function showHockeySetup() {
         .classList.remove(
             "hidden"
         );
+    
+    
+const teamInput =
+    document.getElementById(
+        "ourTeam"
+    );
+
+    if (teamInput) {
+
+        teamInput.value =
+            localStorage.getItem(
+                "defaultTeam"
+            ) || "";
+
+    }
+
+    const competitionInput =
+        document.getElementById(
+            "competition"
+        );
+
+    if (competitionInput) {
+
+        competitionInput.value =
+            localStorage.getItem(
+                "defaultCompetition"
+            ) || "";
+
+    }
+
 
 }
 

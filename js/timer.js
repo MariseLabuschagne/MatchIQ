@@ -15,6 +15,15 @@ START
 
 function startTimer() {
 
+    
+console.log(
+    "startTimer called"
+);
+
+console.log(
+    App.timer
+);
+
     if (App.timer.running) {
         return;
     }
@@ -29,6 +38,8 @@ function startTimer() {
 
 }
 
+
+
 /*
 =========================================================
 TICK
@@ -36,6 +47,11 @@ TICK
 */
 
 function tickTimer() {
+    
+    console.log(
+        "tick",
+        App.timer.seconds
+    );
 
     App.timer.seconds++;
 
@@ -169,11 +185,12 @@ DISPLAY
 =========================================================
 */
 
+
 function updateTimerDisplay() {
 
     const timerElement =
         document.getElementById(
-            "matchTimer"
+            "timerDisplay"
         );
 
     if (!timerElement) {
@@ -186,6 +203,7 @@ function updateTimerDisplay() {
         );
 
 }
+
 
 /*
 =========================================================

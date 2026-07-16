@@ -273,3 +273,22 @@ function getHistoricalMatch(
         );
 
 }
+
+function saveDefaultCompetition(
+    competition
+) {
+
+    localStorage.setItem(
+        "defaultCompetition",
+        competition || ""
+    );
+
+}
+
+function getDefaultCompetition() {
+
+    return localStorage.getItem(
+        "defaultCompetition"
+    ) || "";
+
+}

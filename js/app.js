@@ -169,11 +169,41 @@ function startMatch() {
 
     }
 
-
     localStorage.setItem(
         "defaultTeam",
         ourTeam
     );
+    
+    localStorage.setItem(
+        "defaultCompetition",
+        competition
+    );
+
+    const savedCompetition =
+        localStorage.getItem(
+            "defaultCompetition"
+        );
+
+    if (
+        savedCompetition
+    ) {
+
+    const competitionInput =
+        document.getElementById(
+            "competition"
+        );
+
+    if (
+        competitionInput
+    ) {
+
+        competitionInput.value =
+            savedCompetition;
+
+    }
+
+}
+
 
 
     const venue =
@@ -359,11 +389,22 @@ function startNewMatch() {
         localStorage.getItem(
             "defaultTeam"
         );
+        
+    const savedCompetition =
+        localStorage.getItem(
+            "defaultCompetition"
+        );
 
     const teamInput =
         document.getElementById(
             "ourTeam"
         );
+    
+    const competitionInput =
+        document.getElementById(
+            "competition"
+        );
+
 
     if (
         teamInput &&
@@ -372,6 +413,16 @@ function startNewMatch() {
 
         teamInput.value =
             savedTeam;
+
+    }
+    
+    if (
+        competitionInput &&
+        savedCompetition
+    ) {
+
+        competitionInput.value =
+            savedCompetition;
 
     }
 
