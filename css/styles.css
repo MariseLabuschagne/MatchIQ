@@ -21,17 +21,17 @@ Version: 0.9.9
 
     --accent: #38bdf8;
 
-    --attack: #5b7db1;
-    --attack-dark: #476692;
+    --attack: #4987ea; 
+    --attack-dark: #437ad1;
 
-    --defence: #f59e0b;
-    --defence-dark: #d97706;
+    --defence: #24b9ad;
+    --defence-dark: #188177;
 
-    --discipline: #dc2626;
-    --discipline-dark: #b91c1c;
+    --discipline:#D97706;
+    --discipline-dark: #a95c04;
 
-    --control: #475569;
-    --control-dark: #334155;
+    --control: #a1a6ac;
+    --control-dark: #898e94;
 
     --success: #16a34a;
     --success-dark: #15803d;
@@ -765,12 +765,30 @@ EVENT BUTTONS
 
 .event-button.discipline {
 
+    
+    min-height: 70px;
+
+    font-size: 0.95rem;
+
+    padding: 12px;
+
     background:
         linear-gradient(
             135deg,
             var(--discipline),
             var(--discipline-dark)
         );
+}
+
+.event-grid.discipline {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
 }
 
 
@@ -811,8 +829,8 @@ TIMELINE
     background:
         linear-gradient(
             135deg,
-            #64748b,
-            #475569
+            #a1a6ac,
+            #898e94
         );
 
     padding: 10px 16px;
@@ -1041,22 +1059,39 @@ MATCH SUMMARY
 }
 
 
+
 .summary-actions {
 
     display: flex;
 
+    flex-direction: column;
+
+    align-items: center;
+
     gap: 12px;
 
-    justify-content: center;
+    margin-top: 20px;
 
-    flex-wrap: wrap;
+    padding-bottom: 24px;
+
 }
+
+
 
 .summary-button {
 
-    min-width: 180px;
+    width: 100%;
 
-    height: 54px;
+    max-width: 320px;
+
+    min-height: 56px;
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    border-radius: 12px;
+
 }
 
 .summary-button.export {

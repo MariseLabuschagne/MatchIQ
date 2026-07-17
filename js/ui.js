@@ -145,7 +145,7 @@ function renderLiveMatch() {
                         id="exportButton"
                         class="control-button"
                     >
-                        ⬇ Export Match
+                        Export Match
                     </button>
 
                     <button
@@ -247,13 +247,15 @@ function renderEventSections() {
                 heading
             );
 
+            
             const grid =
                 document.createElement(
                     "div"
                 );
 
             grid.className =
-                "event-grid";
+                `event-grid ${category.id}`;
+
 
             MatchIQ.events
                 .filter(
@@ -1010,7 +1012,7 @@ function renderMatchSummary() {
                     id="summaryExportButton"
                     class="summary-button export"
                 >
-                    ⬇ Export Match
+                    Export Match
                 </button>
 
                 <button
