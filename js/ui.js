@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 0.9.9
+Version: 1.0.1
 =========================================================
 */
 
@@ -483,7 +483,7 @@ function getTimelineText(
     ) {
 
         return `
-            ⏭ Period Changed: ${event.value}
+            ⏭ Period Changed: ${getPeriodLabel(event.value)}
         `;
 
     }
@@ -2092,11 +2092,15 @@ function recordAttackAction(
         outcome
     );
 
+    
     if (
         outcome === "goalScored"
         ||
         outcome === "entryTurnoverLost"
-    ) {
+        ||
+        outcome === "longCorner"
+    )
+    {
 
         App.currentMatch.activeAttackId =
             null;

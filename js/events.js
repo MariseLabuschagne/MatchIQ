@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 events.js
-Version: 0.3.0
+Version: 1.0.1
 Event Engine
 =========================================================
 */
@@ -131,26 +131,33 @@ function recordEvent(
         return null;
 
     }
-
     
-        
     const event = {
 
-        id: crypto.randomUUID(),
+        id:
+                crypto.randomUUID(),
 
-        timestamp:
-            new Date()
-                .toISOString(),
+            timestamp:
+                new Date()
+                    .toISOString(),
 
-        matchSecond:
-            App.timer.seconds,
-        
-        period:
-            App.currentMatch.period,
-    
-        eventType:
-            eventType,
-        
+            matchSecond:
+                App.timer.seconds,
+
+            period:
+                App.currentMatch.period,
+
+            eventType:
+                eventType,
+            
+            scoreAtEvent:
+                `${getScore().our}-${getScore().opposition}`,
+
+            
+            context:
+                getCurrentContext(),
+
+       
         attackId:
             App.currentMatch
                 ? App.currentMatch.activeAttackId
@@ -178,6 +185,39 @@ function recordEvent(
     return event;
 
 }
+
+
+function getEventPhase(
+    eventType
+) {
+
+    const event =
+        MatchIQ.events.find(
+            e =>
+                e.id === eventType
+        );
+
+    return event
+        ? event.category
+        : "system";
+
+}
+
+
+function getCurrentContext() {
+
+    if (
+        App.currentMatch.activeAttackId
+    ) {
+
+        return "Circle Entry";
+
+    }
+
+    return "General Play";
+
+}
+
 
 /*
 =========================================================

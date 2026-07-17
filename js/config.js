@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 config.js
-Version: 0.9.9
+Version: 1.0.1
 =========================================================
 */
 
@@ -51,6 +51,19 @@ const MatchIQ = {
             id: "attackStart",
             name: "Circle Entry",
             icon: "⭕",
+            category: "attack"
+        },
+
+        {
+            id: "longCorner",
+            name: "Long Corner",
+            icon: "🚩",
+            category: "attack"
+        },
+        {
+            id: "restart16",
+            name: "16",
+            icon: "▶",
             category: "attack"
         },
 
@@ -256,7 +269,19 @@ const MatchIQ = {
             icon: "⭕",
             category: "defence"
         },
-
+        
+        {
+            id: "longCornerAgainst",
+            name: "Long Corner Against",
+            icon: "🚩",
+            category: "defence"
+        },
+        {
+            id: "restart16Against",
+            name: "16 Against",
+            icon: "▶",
+            category: "defence"
+        },
         
         {
             id: "defenceEntryLeft",

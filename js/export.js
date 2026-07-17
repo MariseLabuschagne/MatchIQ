@@ -47,7 +47,10 @@ function exportMatch() {
         "Period",
         "Attack ID",
         "Event Type",
-        "Event Value"
+        "Event Value",
+        "Score",
+        "Phase",
+        "Context"
 
     ]);
 
@@ -92,6 +95,7 @@ function exportMatch() {
                     : event.eventType,
 
                 event.value || ""
+                
 
             ]);
 
@@ -159,6 +163,10 @@ function exportMatch() {
     URL.revokeObjectURL(
         url
     );
+    
+    event.scoreAtEvent,
+    event.phase,
+    event.context
 
     alert(
         `Match exported successfully:\n${fileName}`
