@@ -88,14 +88,19 @@ function exportMatch() {
 
                 event.period,
 
-                event.attackId || "",,
+                event.attackId || "",
 
                 eventDefinition
                     ? eventDefinition.name
                     : event.eventType,
 
-                event.value || ""
+                event.value || "",
                 
+                event.scoreAtEvent || "",
+
+                event.phase || "",
+
+                event.context || ""
 
             ]);
 
@@ -164,10 +169,6 @@ function exportMatch() {
         url
     );
     
-    event.scoreAtEvent,
-    event.phase,
-    event.context
-
     alert(
         `Match exported successfully:\n${fileName}`
     );
