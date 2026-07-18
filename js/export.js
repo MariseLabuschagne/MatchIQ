@@ -39,15 +39,25 @@ async function saveSummaryImage() {
             "a"
         );
 
-    link.download =
-        `MatchIQ-Summary-${Date.now()}.png`;
-
-    link.href =
+    
+    const imageData =
         canvas.toDataURL(
             "image/png"
         );
 
-    link.click();
+    const newWindow =
+        window.open();
+
+    newWindow.document.write(
+        `<img
+            src="${imageData}"
+            style="
+                width:100%;
+                height:auto;
+            "
+        >`
+    );
+
 
 }     
 
