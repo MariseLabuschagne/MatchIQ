@@ -152,8 +152,12 @@ function recordEvent(
             
             scoreAtEvent:
                 `${getScore().our}-${getScore().opposition}`,
-
             
+            phase:
+                getEventPhase(
+                    eventType
+                ),
+
             context:
                 getCurrentContext(),
 
@@ -313,7 +317,7 @@ MATCH EVENT SUMMARY
 =========================================================
 */
 
-function getEventSummary() {
+ function getEventSummary() {
 
     const summary = {};
 

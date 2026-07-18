@@ -631,402 +631,413 @@ function renderMatchSummary() {
         stats.score;
 
     liveScreen.innerHTML = `
+        
+        <div id="summaryCapture">
 
-        <div class="summary-screen">
+            <div class="summary-screen">
 
-            <div class="card">
+                <div class="card">
 
-                <div class="summary-title">
-                    🏑 Match Summary
-                </div>
-                
-                <div class="match-summary-header">
+                    <div class="summary-title">
+                        🏑 Match Summary
+                    </div>
+                    
+                    <div class="match-summary-header">
 
-                    <div class="match-summary-team">
+                        <div class="match-summary-team">
 
-                        ${App.currentMatch.ourTeam}
+                            ${App.currentMatch.ourTeam}
+
+                        </div>
+
+                        <div class="match-summary-score">
+
+                            ${score.our} - ${score.opposition}
+
+                        </div>
+
+                        <div class="match-summary-team">
+
+                            ${App.currentMatch.opponent}
+
+                        </div>
 
                     </div>
 
-                    <div class="match-summary-score">
 
-                        ${score.our} - ${score.opposition}
+                </div>
+                
+                <div class="card summary-section">
 
-                    </div>
+                    <h3>
+                        Attack Journey
+                    </h3>
 
-                    <div class="match-summary-team">
+                    ${renderSummaryStat(
+                        "Circle Entries",
+                        stats.attack.circleEntries
+                    )}
 
-                        ${App.currentMatch.opponent}
+                    ${renderSummarySubStat(
+                        "Shots",
+                        stats.attack.shots
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Penalty Corners",
+                        stats.attack.penaltyCornersWon
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Long Corners",
+                        stats.attack.entryLongCorners
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Turnovers Lost",
+                        stats.attack.entryTurnoversLost
+                    )}
+
+                    ${renderSummaryStat(
+                        "Goals",
+                        stats.attack.goalsScored
+                    )}
+
+                </div>
+
+
+
+                <div class="card summary-section">
+
+                    <h3>Attack</h3>
+
+                    ${renderSummaryStat(
+                        "Circle Entries",
+                        stats.attack.circleEntries
+                    )}
+                    
+                    ${renderSummarySubStat(
+                        "Left",
+                        stats.attack.entryLeft
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Top D",
+                        stats.attack.entryTopD
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Right",
+                        stats.attack.entryRight
+                    )}
+
+                    ${renderSummaryStat(
+                        "Shots",
+                        stats.attack.shots
+                    )}
+
+                    ${renderSummarySubStat(
+                        "On Target",
+                        stats.attack.shotsOnTarget
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Off Target",
+                        stats.attack.shotsOffTarget
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Blocked",
+                        stats.attack.shotsBlocked
+                    )}
+
+                    ${renderSummaryStat(
+                        "Attack Outcomes",
+                        ""
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Penalty Corners",
+                        stats.attack.penaltyCornersWon
+                    )}
+
+                    ${renderSummarySubSubStat(
+                        "Converted",
+                        stats.attack.pcGoals
+                    )}
+
+                    ${renderSummarySubSubStat(
+                        "Saved",
+                        stats.attack.pcSaved
+                    )}
+
+                    ${renderSummarySubSubStat(
+                        "Missed",
+                        stats.attack.pcMissed
+                    )}
+
+                    ${renderSummarySubSubStat(
+                        "Broken Down",
+                        stats.attack.pcBrokenDown
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Long Corners",
+                        stats.attack.entryLongCorners
+                    )}
+                    
+                    ${renderSummarySubStat(
+                        "Penalty Strokes",
+                        stats.attack.penaltyStrokesWon
+                    )}
+
+
+                    ${renderSummarySubStat(
+                        "Turnovers Lost",
+                        stats.attack.entryTurnoversLost
+                    )}
+                    
+                    ${renderSummaryStat(
+                        "Goals Scored",
+                        stats.attack.goalsScored
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Field Goals",
+                        stats.attack.fieldGoals
+                    )}
+
+                    ${renderSummarySubStat(
+                        "PC Goals",
+                        stats.attack.pcGoals
+                    )}
+                    
+                    ${renderSummaryStat(
+                        "Turnovers Won",
+                        ""
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Attacking 25",
+                        stats.attack.turnoversAttacking25
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Midfield",
+                        stats.attack.turnoversMidfield
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Defensive 25",
+                        stats.attack.turnoversDefensive25
+                    )}                 
+
+                </div>
+
+                
+                <div class="card summary-section">
+
+                    <h3>
+                        Attacking Effectiveness
+                    </h3>
+
+                    ${renderSummaryStat(
+                        "Entries Producing Shot %",
+                        stats.effectiveness.entryToShotConversion + "%"
+                    )}
+                
+                    ${renderSummaryStat(
+                        "Field Goal Conversion %",
+                        stats.effectiveness.fieldGoalConversion + "%"
+                    )}
+
+                    ${renderSummaryStat(
+                        "Entry → Goal %",
+                        stats.effectiveness.entryToGoalConversion + "%"
+                    )}
+
+                    ${renderSummaryStat(
+                        "Shot Accuracy %",
+                        stats.effectiveness.shotAccuracy + "%"
+                    )}
+
+                    ${renderSummaryStat(
+                        "PC Conversion %",
+                        stats.effectiveness.pcConversion + "%"
+                    )}
+
+                </div>
+
+                
+                <div class="card summary-section">
+
+                    <h3>Defence</h3>
+
+                    
+                    ${renderSummaryStat(
+                        "Circle Entries Against",
+                        stats.defence.circleEntriesAgainst
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Left",
+                        stats.defence.defenceEntryLeft
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Top D",
+                        stats.defence.defenceEntryTopD
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Right",
+                        stats.defence.defenceEntryRight
+                    )}
+
+                    ${renderSummaryStat(
+                        "Goals Conceded",
+                        stats.defence.goalsConceded
+                    )}
+
+                    ${renderSummaryStat(
+                        "Goalkeeper Saves",
+                        stats.defence.goalkeeperSaves
+                    )}
+
+                    ${renderSummaryStat(
+                        "Turnovers Lost",
+                        ""
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Attacking 25",
+                        stats.defence.turnoverAttacking25Lost
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Midfield",
+                        stats.defence.turnoverMidfieldLost
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Defensive 25",
+                        stats.defence.turnoverDefensive25Lost
+                    )}
+
+                                    
+                    ${renderSummaryStat(
+                        "Penalty Corners Conceded",
+                        stats.defence.penaltyCornersConceded
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Goals",
+                        stats.defence.pcGoalConceded
+                    )}
+
+                    ${renderSummarySubStat(
+                        "First Wave Saves",
+                        stats.defence.pcFirstWaveSave
+                    )}
+
+                    ${renderSummarySubStat(
+                        "GK Saves",
+                        stats.defence.pcGoalkeeperSave
+                    )}
+
+                    ${renderSummarySubStat(
+                        "Second Wave Saves",
+                        stats.defence.pcSecondWaveSave
+                    )}
+
+
+
+                </div>
+
+                <div class="card summary-section">
+
+                    <h3>Discipline</h3>
+
+                    ${renderSummaryStat(
+                        "Green Cards",
+                        stats.discipline.greenCards
+                    )}
+
+                    ${renderSummaryStat(
+                        "Yellow Cards",
+                        stats.discipline.yellowCards
+                    )}
+
+                    ${renderSummaryStat(
+                        "Red Cards",
+                        stats.discipline.redCards
+                    )}
+
+                </div>
+
+                <div class="card summary-section">
+
+                    <h3>Match Information</h3>
+
+                    ${renderSummaryStat(
+                        "Events Recorded",
+                        stats.totalEvents
+                    )}
+
+                    ${renderSummaryStat(
+                        "Match Duration",
+                        formatTime(
+                            App.timer.seconds
+                        )
+                    )}
+
+                </div>
+
+                <div class="card summary-section">
+
+                    <h3>
+                        🏑 Coach Insights
+                    </h3>
+
+                    <div class="highlights">
+
+                        ${buildHighlights()}
 
                     </div>
 
                 </div>
 
 
-            </div>
-            
-            <div class="card summary-section">
-
-                <h3>
-                    Attack Journey
-                </h3>
-
-                ${renderSummaryStat(
-                    "Circle Entries",
-                    stats.attack.circleEntries
-                )}
-
-                ${renderSummarySubStat(
-                    "Shots",
-                    stats.attack.shots
-                )}
-
-                ${renderSummarySubStat(
-                    "Penalty Corners",
-                    stats.attack.penaltyCornersWon
-                )}
-
-                ${renderSummarySubStat(
-                    "Long Corners",
-                    stats.attack.entryLongCorners
-                )}
-
-                ${renderSummarySubStat(
-                    "Turnovers Lost",
-                    stats.attack.entryTurnoversLost
-                )}
-
-                ${renderSummaryStat(
-                    "Goals",
-                    stats.attack.goalsScored
-                )}
-
-            </div>
-
-
-
-            <div class="card summary-section">
-
-                <h3>Attack</h3>
-
-                ${renderSummaryStat(
-                    "Circle Entries",
-                    stats.attack.circleEntries
-                )}
-                
-                ${renderSummarySubStat(
-                    "Left",
-                    stats.attack.entryLeft
-                )}
-
-                ${renderSummarySubStat(
-                    "Top D",
-                    stats.attack.entryTopD
-                )}
-
-                ${renderSummarySubStat(
-                    "Right",
-                    stats.attack.entryRight
-                )}
-
-                ${renderSummaryStat(
-                    "Shots",
-                    stats.attack.shots
-                )}
-
-                ${renderSummarySubStat(
-                    "On Target",
-                    stats.attack.shotsOnTarget
-                )}
-
-                ${renderSummarySubStat(
-                    "Off Target",
-                    stats.attack.shotsOffTarget
-                )}
-
-                ${renderSummarySubStat(
-                    "Blocked",
-                    stats.attack.shotsBlocked
-                )}
-
-                ${renderSummaryStat(
-                    "Attack Outcomes",
-                    ""
-                )}
-
-                ${renderSummarySubStat(
-                    "Penalty Corners",
-                    stats.attack.penaltyCornersWon
-                )}
-
-                ${renderSummarySubSubStat(
-                    "Converted",
-                    stats.attack.pcGoals
-                )}
-
-                ${renderSummarySubSubStat(
-                    "Saved",
-                    stats.attack.pcSaved
-                )}
-
-                ${renderSummarySubSubStat(
-                    "Missed",
-                    stats.attack.pcMissed
-                )}
-
-                ${renderSummarySubSubStat(
-                    "Broken Down",
-                    stats.attack.pcBrokenDown
-                )}
-
-                ${renderSummarySubStat(
-                    "Long Corners",
-                    stats.attack.entryLongCorners
-                )}
-                
-                ${renderSummarySubStat(
-                    "Penalty Strokes",
-                    stats.attack.penaltyStrokesWon
-                )}
-
-
-                ${renderSummarySubStat(
-                    "Turnovers Lost",
-                    stats.attack.entryTurnoversLost
-                )}
-                
-                ${renderSummaryStat(
-                    "Goals Scored",
-                    stats.attack.goalsScored
-                )}
-
-                ${renderSummarySubStat(
-                    "Field Goals",
-                    stats.attack.fieldGoals
-                )}
-
-                ${renderSummarySubStat(
-                    "PC Goals",
-                    stats.attack.pcGoals
-                )}
-                
-                ${renderSummaryStat(
-                    "Turnovers Won",
-                    ""
-                )}
-
-                ${renderSummarySubStat(
-                    "Attacking 25",
-                    stats.attack.turnoversAttacking25
-                )}
-
-                ${renderSummarySubStat(
-                    "Midfield",
-                    stats.attack.turnoversMidfield
-                )}
-
-                ${renderSummarySubStat(
-                    "Defensive 25",
-                    stats.attack.turnoversDefensive25
-                )}                 
-
-            </div>
-
-            
-            <div class="card summary-section">
-
-                <h3>
-                    Attacking Effectiveness
-                </h3>
-
-                ${renderSummaryStat(
-                    "Entries Producing Shot %",
-                    stats.effectiveness.entryToShotConversion + "%"
-                )}
-               
-                ${renderSummaryStat(
-                    "Field Goal Conversion %",
-                    stats.effectiveness.fieldGoalConversion + "%"
-                )}
-
-                ${renderSummaryStat(
-                    "Entry → Goal %",
-                    stats.effectiveness.entryToGoalConversion + "%"
-                )}
-
-                ${renderSummaryStat(
-                    "Shot Accuracy %",
-                    stats.effectiveness.shotAccuracy + "%"
-                )}
-
-                ${renderSummaryStat(
-                    "PC Conversion %",
-                    stats.effectiveness.pcConversion + "%"
-                )}
-
-            </div>
-
-            
-            <div class="card summary-section">
-
-                <h3>Defence</h3>
-
-                
-                ${renderSummaryStat(
-                    "Circle Entries Against",
-                    stats.defence.circleEntriesAgainst
-                )}
-
-                ${renderSummarySubStat(
-                    "Left",
-                    stats.defence.defenceEntryLeft
-                )}
-
-                ${renderSummarySubStat(
-                    "Top D",
-                    stats.defence.defenceEntryTopD
-                )}
-
-                ${renderSummarySubStat(
-                    "Right",
-                    stats.defence.defenceEntryRight
-                )}
-
-                ${renderSummaryStat(
-                    "Goals Conceded",
-                    stats.defence.goalsConceded
-                )}
-
-                ${renderSummaryStat(
-                    "Goalkeeper Saves",
-                    stats.defence.goalkeeperSaves
-                )}
-
-                ${renderSummaryStat(
-                    "Turnovers Lost",
-                    ""
-                )}
-
-                ${renderSummarySubStat(
-                    "Attacking 25",
-                    stats.defence.turnoverAttacking25Lost
-                )}
-
-                ${renderSummarySubStat(
-                    "Midfield",
-                    stats.defence.turnoverMidfieldLost
-                )}
-
-                ${renderSummarySubStat(
-                    "Defensive 25",
-                    stats.defence.turnoverDefensive25Lost
-                )}
-
-                                
-                ${renderSummaryStat(
-                    "Penalty Corners Conceded",
-                    stats.defence.penaltyCornersConceded
-                )}
-
-                ${renderSummarySubStat(
-                    "Goals",
-                    stats.defence.pcGoalConceded
-                )}
-
-                ${renderSummarySubStat(
-                    "First Wave Saves",
-                    stats.defence.pcFirstWaveSave
-                )}
-
-                ${renderSummarySubStat(
-                    "GK Saves",
-                    stats.defence.pcGoalkeeperSave
-                )}
-
-                ${renderSummarySubStat(
-                    "Second Wave Saves",
-                    stats.defence.pcSecondWaveSave
-                )}
-
-
-
-            </div>
-
-            <div class="card summary-section">
-
-                <h3>Discipline</h3>
-
-                ${renderSummaryStat(
-                    "Green Cards",
-                    stats.discipline.greenCards
-                )}
-
-                ${renderSummaryStat(
-                    "Yellow Cards",
-                    stats.discipline.yellowCards
-                )}
-
-                ${renderSummaryStat(
-                    "Red Cards",
-                    stats.discipline.redCards
-                )}
-
-            </div>
-
-            <div class="card summary-section">
-
-                <h3>Match Information</h3>
-
-                ${renderSummaryStat(
-                    "Events Recorded",
-                    stats.totalEvents
-                )}
-
-                ${renderSummaryStat(
-                    "Match Duration",
-                    formatTime(
-                        App.timer.seconds
-                    )
-                )}
-
-            </div>
-
-            <div class="card summary-section">
-
-                <h3>
-                    🏑 Coach Insights
-                </h3>
-
-                <div class="highlights">
-
-                    ${buildHighlights()}
+                <div class="summary-actions">
+
+                    <button
+                        id="summaryExportButton"
+                        class="summary-button export"
+                    >
+                        Export Match
+                    </button>
+                   
+                    
+                    <button
+                        id="saveImageButton"
+                        class="summary-button export"
+                    >
+                        📸 Save Image
+                    </button>
+
+
+                    <button
+                        id="newMatchButton"
+                        class="summary-button new-match"
+                    >
+                        🏑 Hockey Home
+                    </button>
 
                 </div>
-
-            </div>
-
-
-            <div class="summary-actions">
-
-                <button
-                    id="summaryExportButton"
-                    class="summary-button export"
-                >
-                    Export Match
-                </button>
-
-                <button
-                    id="newMatchButton"
-                    class="summary-button new-match"
-                >
-                    🏑 Hockey Home Screen
-                </button>
-
-            </div>
-
+            </div>        
         </div>
 
-    `;
+    `;           
 
     document
         .getElementById(
@@ -1038,14 +1049,23 @@ function renderMatchSummary() {
         );
 
     
-document
-    .getElementById(
-        "newMatchButton"
-    )
-    .addEventListener(
-        "click",
-        returnToHockeyHome
-    );
+    document
+        .getElementById(
+            "saveImageButton"
+        )
+        .addEventListener(
+            "click",
+            saveSummaryImage
+        );
+        
+    document
+        .getElementById(
+            "newMatchButton"
+        )
+        .addEventListener(
+            "click",
+            returnToHockeyHome
+        );
 
 
 }

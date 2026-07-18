@@ -7,6 +7,50 @@ Version: 0.9.9
 =========================================================
 */
 
+async function saveSummaryImage() {
+
+    const element =
+        document.getElementById(
+            "summaryCapture"
+        );
+
+    if (!element) {
+
+        alert(
+            "Summary capture area not found."
+        );
+
+        return;
+
+    }
+
+    const canvas =
+        await html2canvas(
+            element,
+            {
+                backgroundColor:
+                    "#020617",
+                scale: 2
+            }
+        );
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+    link.download =
+        `MatchIQ-Summary-${Date.now()}.png`;
+
+    link.href =
+        canvas.toDataURL(
+            "image/png"
+        );
+
+    link.click();
+
+}     
+
 function exportMatch() {
 
     if (!App.currentMatch) {

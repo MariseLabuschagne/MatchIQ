@@ -33,8 +33,8 @@ Version: 0.9.9
     --control: #a1a6ac;
     --control-dark: #898e94;
 
-    --success: #16a34a;
-    --success-dark: #15803d;
+    --success: #4e956b;
+    --success-dark: #3a7555;
 
     --radius: 18px;
 }
@@ -1094,14 +1094,18 @@ MATCH SUMMARY
 
 }
 
-.summary-button.export {
 
-    background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #1d4ed8
-        );
+.summary-button.export
+ {
+
+    background: linear-gradient(
+        135deg,
+        #4B6B8A,
+        #3A5875
+    );
+
+    color: white;
+
 }
 
 .summary-button.new-match {
