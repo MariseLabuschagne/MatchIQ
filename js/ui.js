@@ -832,6 +832,10 @@ function renderMatchSummary() {
                         stats.attack.turnoversDefensive25
                     )}                 
 
+                    ${renderSummarySubStat(
+                        "Long Corners",
+                        stats.attack.longCorners
+                    )}
                 </div>
 
                 
@@ -924,7 +928,11 @@ function renderMatchSummary() {
                         stats.defence.turnoverDefensive25Lost
                     )}
 
-                                    
+                    ${renderSummarySubStat(
+                        "Long Corners",
+                        stats.defence.longCornersAgainst
+                    )}
+
                     ${renderSummaryStat(
                         "Penalty Corners Conceded",
                         stats.defence.penaltyCornersConceded
@@ -1019,10 +1027,11 @@ function renderMatchSummary() {
                    
                     
                     <button
-                        id="saveImageButton"
-                        class="summary-button export"
+                        id="exportPdfButton"
+                        class="summary-button exportPDF"
+                        disabled
                     >
-                        📸 Save Image
+                        📸 Export to PDF
                     </button>
 
 
@@ -1038,6 +1047,14 @@ function renderMatchSummary() {
         </div>
 
     `;           
+        
+    console.log(
+        document.getElementById("summaryExportButton")
+    );
+
+    console.log(
+        document.getElementById("exportPdfButton")
+    );
 
     document
         .getElementById(
@@ -1049,14 +1066,20 @@ function renderMatchSummary() {
         );
 
     
-    document
-        .getElementById(
-            "saveImageButton"
-        )
-        .addEventListener(
-            "click",
-            saveSummaryImage
+    const exportPdfButton =
+        document.getElementById(
+            "exportPdfButton"
         );
+
+    if (exportPdfButton) {
+        
+        exportPdfButton.disabled = true;
+        exportPdfButton.addEventListener(
+            "click",
+            exportSummaryPdf
+        );
+    }
+        
         
     document
         .getElementById(
@@ -1413,6 +1436,7 @@ function showShotOutcomeOptions() {
     container.prepend(
         panel
     );
+    focusOutcomePanel();
 
 }
 
@@ -1513,7 +1537,7 @@ function showPenaltyCornerOutcomeOptions() {
     container.prepend(
         panel
     );
-
+    focusOutcomePanel();
 }
 
 
@@ -1588,7 +1612,7 @@ function showCircleEntryLocationOptions() {
     container.prepend(
         panel
     );
-
+    focusOutcomePanel();
 }
 
 function showDefenceEntryLocationOptions() {
@@ -1662,7 +1686,7 @@ function showDefenceEntryLocationOptions() {
     container.prepend(
         panel
     );
-
+    focusOutcomePanel();
 }
 
 function recordEntryLocation(
@@ -2013,6 +2037,11 @@ function recordDefencePenaltyCornerOutcome(
         outcome
     );
 
+    
+    if (outcome === "pcGoalConceded") {
+            recordEvent("goalConceded");
+   }
+
     if (
 
         outcome ===
@@ -2212,26 +2241,53 @@ function showAttackPenaltyCornerOutcomeOptions() {
 
 }
 
-function recordAttackPenaltyCornerOutcome(
-    outcome
-) {
 
-    recordEvent(
-        outcome
-    );
+function recordAttackPenaltyCornerOutcome( outcome ) {
 
-    if (
-        outcome ===
-        "pcGoal"
-    ) {
-
-        recordEvent(
-            "goalScored"
-        );
-
+    if ( outcome === "shotOnTarget" ) {
+        recordEvent( "shotOnTarget" );
+        removeOutcomePanel();
+        return;
     }
 
-    removeOutcomePanel();
+    if ( outcome === "shotOffTarget" ) {
+        recordEvent( "shotOffTarget" );
+        removeOutcomePanel();
+        return;
+    }
+
+    if ( outcome === "shotBlocked" ) {
+        recordEvent( "shotBlocked" );
+        removeOutcomePanel();
+        return;
+    }
+
+    recordEvent( outcome );
+
+    if ( outcome === "pcGoal" ) {
+        recordEvent( "goalScored" );
+    }
+        
+    if ( outcome === "pcReAwarded" ) {
+
+        recordEvent( "pcReAwarded" );
+
+        recordEvent( "entryPenaltyCorner" );
+
+        showAttackPenaltyCornerOutcomeOptions();
+
+        return;
+    }
+
+    if (
+        outcome === "pcGoal"
+    ) {
+        App.currentMatch.activeAttackId =
+            null;
+        
+        removeOutcomePanel();
+        return;
+    }
 
 }
 
@@ -2275,86 +2331,6 @@ function removeOutcomePanel() {
         panel.remove();
 
     }
-
-}
-
-
-function showPenaltyCornerConcededOptions() {
-
-    removeOutcomePanel();
-
-    const container =
-        document.getElementById(
-            "eventSections"
-        );
-
-    const panel =
-        document.createElement(
-            "div"
-        );
-
-    panel.id =
-        "outcomePanel";
-
-    panel.className =
-        "card outcome-panel";
-
-    panel.innerHTML = `
-
-        <h3 class="outcome-title">
-            🚩 SELECT PC TYPE
-        </h3>
-
-        <div class="event-grid">
-
-            <button
-                class="event-button defence"
-                onclick="recordPCConceded('pcConcededLow')"
-            >
-                ⬇️<br>
-                Low Flying
-            </button>
-
-            <button
-                class="event-button defence"
-                onclick="recordPCConceded('pcConcededHigh')"
-            >
-                ⬆️<br>
-                High Flying
-            </button>
-
-            <button
-                class="event-button outcome-cancel"
-                onclick="removeOutcomePanel()"
-            >
-                ✖<br>
-                Cancel
-            </button>
-
-        </div>
-
-    `;
-
-    container.prepend(
-        panel
-    );
-
-}
-
-
-function recordPCConceded(
-    outcome
-) {
-
-    recordEvent(
-        "pcConceded"
-    );
-
-    recordEvent(
-        outcome
-    );
-
-    removeOutcomePanel();
 
 }
 
@@ -2839,4 +2815,20 @@ function hideAllScreens() {
 
     });
 
+}
+
+function focusOutcomePanel() {
+    const panel =
+        document.getElementById(
+            "outcomePanel"
+        );
+
+    if (!panel) {
+        return;
+    }
+
+    panel.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 }

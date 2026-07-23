@@ -13,7 +13,7 @@ const MatchIQ = {
 
         name: "MatchIQ",
 
-        version: "0.8.0",
+        version: "1.1.0",
 
         company: "MatchIQ"
 
@@ -172,6 +172,14 @@ const MatchIQ = {
             category: "system"
         },
             
+        
+        {
+            id: "pcRepeated",
+            name: "Penalty Corner Re-awarded",
+            icon: "🚩",
+            category: "system"
+        },
+
 
         /*
         =====================================================
@@ -199,7 +207,7 @@ const MatchIQ = {
             icon: "🛑",
             category: "system"
         },
-
+        
         {
             id: "pcGoal",
             name: "PC Goal",
@@ -227,6 +235,14 @@ const MatchIQ = {
             icon: "⚠️",
             category: "system"
         },
+        
+        {
+            id: "pcReAwarded",
+            name: "PC Re-Awarded",
+            icon: "🚩",
+            category: "system"
+        },
+        
 
         
         /*

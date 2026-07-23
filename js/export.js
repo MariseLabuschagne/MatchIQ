@@ -7,59 +7,152 @@ Version: 0.9.9
 =========================================================
 */
 
-async function saveSummaryImage() {
 
-    const element =
-        document.getElementById(
-            "summaryCapture"
+
+async function exportSummaryPdf() {
+
+    const { jsPDF } =
+        window.jspdf;
+
+    const pdf =
+        new jsPDF(
+            "p",
+            "mm",
+            "a4"
         );
 
-    if (!element) {
+    const stats =
+        getMatchStatistics();
 
-        alert(
-            "Summary capture area not found."
-        );
+    const score =
+        getScore();
 
-        return;
+    let y = 20;
 
-    }
+    pdf.setFontSize(18);
 
-    const canvas =
-        await html2canvas(
-            element,
-            {
-                backgroundColor:
-                    "#020617",
-                scale: 2
-            }
-        );
-
-    const link =
-        document.createElement(
-            "a"
-        );
-
-    
-    const imageData =
-        canvas.toDataURL(
-            "image/png"
-        );
-
-    const newWindow =
-        window.open();
-
-    newWindow.document.write(
-        `<img
-            src="${imageData}"
-            style="
-                width:100%;
-                height:auto;
-            "
-        >`
+    pdf.text(
+        "MatchIQ Match Summary",
+        15,
+        y
     );
 
+    y += 12;
 
-}     
+    pdf.setFontSize(12);
+
+    pdf.text(
+        `Competition: ${
+            App.currentMatch.competition
+        }`,
+        15,
+        y
+    );
+
+    y += 8;
+
+    pdf.text(
+        `${App.currentMatch.ourTeam} ${score.our} - ${score.opposition} ${App.currentMatch.opponent}`,
+        15,
+        y
+    );
+
+    y += 12;
+
+    pdf.setFontSize(14);
+
+    pdf.text(
+        "Attack Statistics",
+        15,
+        y
+    );
+
+    y += 8;
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        `Circle Entries: ${stats.attack.circleEntries}`,
+        20,
+        y
+    );
+
+    y += 7;
+
+    pdf.text(
+        `Goals: ${stats.attack.goalsScored}`,
+        20,
+        y
+    );
+
+    y += 7;
+
+    pdf.text(
+        `Penalty Corners Won: ${stats.attack.penaltyCornersWon}`,
+        20,
+        y
+    );
+
+    y += 12;
+
+    pdf.setFontSize(14);
+
+    pdf.text(
+        "Defence Statistics",
+        15,
+        y
+    );
+
+    y += 8;
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        `Circle Entries Against: ${stats.defence.circleEntriesAgainst}`,
+        20,
+        y
+    );
+
+    y += 7;
+
+    pdf.text(
+        `Penalty Corners Conceded: ${stats.defence.penaltyCornersConceded}`,
+        20,
+        y
+    );
+
+    y += 12;
+
+    pdf.setFontSize(14);
+
+    pdf.text(
+        "Coach Insights",
+        15,
+        y
+    );
+
+    y += 8;
+
+    const insights =
+        buildHighlights()
+            .replace(/<[^>]*>/g, "")
+            .split("✅")
+            .join("\n✅");
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        insights,
+        20,
+        y
+    );
+
+    pdf.save(
+        `MatchIQ-${App.currentMatch.ourTeam}-${App.currentMatch.opponent}.pdf`
+    );
+
+}
+
 
 function exportMatch() {
 

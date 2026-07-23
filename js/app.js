@@ -200,8 +200,6 @@ function startMatch() {
 
 }
 
-
-
     const venue =
         document.querySelector(
             "input[name='venue']:checked"
@@ -298,7 +296,6 @@ function createMatchObject(
         attackCounter: 0,
 
         activeAttackId: null
-
 
     };
 }
