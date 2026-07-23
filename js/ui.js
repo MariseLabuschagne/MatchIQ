@@ -526,9 +526,9 @@ function advancePeriod() {
 
     updatePeriodDisplay();
 
-    alert(
+   /* alert(
         `Period advanced to ${nextPeriod}`
-    );
+    );*/
 }
 
 function getNextPeriod() {
@@ -594,11 +594,11 @@ function undoLastEvent() {
         return;
     }
 
-    if (
+    /*if (
         confirm(
             "Remove the last captured event?"
         )
-    ) {
+    ) */{
 
         removeLastEvent();
 
@@ -832,9 +832,9 @@ function renderMatchSummary() {
                         stats.attack.turnoversDefensive25
                     )}                 
 
-                    ${renderSummarySubStat(
+                    ${renderSummaryStat(
                         "Long Corners",
-                        stats.attack.longCorners
+                        stats.attack.entryLongCorners
                     )}
                 </div>
 
@@ -2037,11 +2037,6 @@ function recordDefencePenaltyCornerOutcome(
         outcome
     );
 
-    
-    if (outcome === "pcGoalConceded") {
-            recordEvent("goalConceded");
-   }
-
     if (
 
         outcome ===
@@ -2228,6 +2223,30 @@ function showAttackPenaltyCornerOutcomeOptions() {
             </button>
 
             <button
+                class="event-button attack"
+                onclick="recordAttackPenaltyCornerOutcome('shotOnTarget')"
+            >
+                🎯<br>
+                Shot On Target
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackPenaltyCornerOutcome('shotOffTarget')"
+            >
+                ⚪<br>
+                Shot Off Target
+            </button>
+
+            <button
+                class="event-button attack"
+                onclick="recordAttackPenaltyCornerOutcome('pcReAwarded')"
+            >
+                🚩<br>
+                Penalty Corner
+            </button>
+
+            <button
                 class="event-button outcome-cancel"
                 onclick="removeOutcomePanel()"
             >
@@ -2246,31 +2265,25 @@ function recordAttackPenaltyCornerOutcome( outcome ) {
 
     if ( outcome === "shotOnTarget" ) {
         recordEvent( "shotOnTarget" );
-        removeOutcomePanel();
+        showAttackPenaltyCornerOutcomeOptions();
         return;
     }
 
     if ( outcome === "shotOffTarget" ) {
         recordEvent( "shotOffTarget" );
-        removeOutcomePanel();
+        showAttackPenaltyCornerOutcomeOptions();
         return;
     }
 
     if ( outcome === "shotBlocked" ) {
         recordEvent( "shotBlocked" );
-        removeOutcomePanel();
+        showAttackPenaltyCornerOutcomeOptions();
         return;
     }
-
-    recordEvent( outcome );
-
-    if ( outcome === "pcGoal" ) {
-        recordEvent( "goalScored" );
-    }
-        
+       
     if ( outcome === "pcReAwarded" ) {
 
-        recordEvent( "pcReAwarded" );
+        //recordEvent( "pcReAwarded" );
 
         recordEvent( "entryPenaltyCorner" );
 
@@ -2278,6 +2291,8 @@ function recordAttackPenaltyCornerOutcome( outcome ) {
 
         return;
     }
+
+    recordEvent( outcome );
 
     if (
         outcome === "pcGoal"
@@ -2818,17 +2833,62 @@ function hideAllScreens() {
 }
 
 function focusOutcomePanel() {
-    const panel =
-        document.getElementById(
-            "outcomePanel"
-        );
 
-    if (!panel) {
-        return;
-    }
+    setTimeout(() => {
 
-    panel.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
+        const panel =
+            document.getElementById(
+                "outcomePanel"
+            );
+
+        if (!panel) {
+            return;
+        }
+
+        const rect =
+            panel.getBoundingClientRect();
+
+        const scrollTop =
+            window.pageYOffset;
+
+        const stickyHeaderHeight =
+            220; // adjust if needed
+
+        window.scrollTo({
+
+            top:
+                rect.top +
+                scrollTop -
+                stickyHeaderHeight,
+
+            behavior: "smooth"
+
+        });
+
+    }, 100);
+
+}
+
+function getGoalsConceded() {
+
+    return (
+
+        getEventCount(
+            "goalConceded"
+        )
+
+        +
+
+        getEventCount(
+            "pcGoalConceded"
+        )
+
+        +
+
+        getEventCount(
+            "psGoalConceded"
+        )
+
+    );
+
 }

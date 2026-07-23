@@ -33,13 +33,27 @@ function getScore() {
     return {
 
         our:
+
             getEventCount(
                 "goalScored"
+            )
+
+            +
+
+            getEventCount(
+                "pcGoal"
             ),
 
         opposition:
+
             getEventCount(
                 "goalConceded"
+            )
+
+            +
+
+            getEventCount(
+                "pcGoalConceded"
             )
 
     };
@@ -56,8 +70,15 @@ function getAttackStats() {
     return {
 
         goalsScored:
+
             getEventCount(
                 "goalScored"
+            )
+
+            +
+
+            getEventCount(
+                "pcGoal"
             ),
 
         
@@ -190,7 +211,12 @@ function getAttackStats() {
 
             getEventCount(
                 "entryTurnoverLost"
-            )      
+            ),
+        
+        longCorners:
+            getEventCount(
+                "longCorner"
+            ),
     
     };
 }
@@ -242,8 +268,15 @@ function getDefenceStats() {
 
         
         goalsConceded:
+
             getEventCount(
                 "goalConceded"
+            )
+
+            +
+
+            getEventCount(
+                "pcGoalConceded"
             ),
 
         goalkeeperSaves:

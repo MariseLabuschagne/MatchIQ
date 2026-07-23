@@ -181,11 +181,6 @@ function recordEvent(
 
     renderTimeline();
 
-    console.log(
-        "EVENT RECORDED",
-        event
-    );
-
     return event;
 
 }
