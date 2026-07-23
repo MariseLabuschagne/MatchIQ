@@ -1117,10 +1117,6 @@ MATCH SUMMARY
 
     color: white;
     
-    button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
 }
 
 .summary-button.new-match {
@@ -1437,11 +1433,6 @@ MOBILE
     .timer {
 
         font-size: 60px;
-    }
-
-    .event-grid {
-
-        grid-template-columns: 1fr;
     }
 
     .timeline-header {
