@@ -3392,6 +3392,35 @@ function getEffectivenessByPeriod(
     period
 ) {
 
+    if (
+        period === "ALL"
+    ) {
+
+        const effectiveness =
+            getMatchStatistics()
+                .effectiveness;
+
+        return {
+
+            entryToShot:
+                effectiveness.entryToShotConversion,
+
+            fieldGoalConversion:
+                effectiveness.fieldGoalConversion,
+
+            entryToGoal:
+                effectiveness.entryToGoalConversion,
+
+            shotAccuracy:
+                effectiveness.shotAccuracy,
+
+            pcConversion:
+                effectiveness.pcConversion
+
+        };
+
+    }
+
     const entries =
 
         getEventCountByPeriod(
