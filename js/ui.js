@@ -7,6 +7,9 @@ Version: 1.0.1
 =========================================================
 */
 
+let highlightedButton = null;
+let highlightTimeout = null;
+
 function renderLiveMatch() {
 
     hideAllScreens();
@@ -215,6 +218,53 @@ function renderLiveMatch() {
 
     renderTimeline();
 }
+function highlightEventButton(button) {
+
+    button.classList.add(
+        "event-button-highlight"
+    );
+
+    if (highlightTimeout) {
+
+        clearTimeout(
+            highlightTimeout
+        );
+
+    }
+
+    if (
+        highlightedButton &&
+        highlightedButton !== button
+    ) {
+
+        highlightedButton.classList.remove(
+            "event-button-highlight"
+        );
+
+    }
+
+    highlightedButton = button;
+
+    highlightTimeout = setTimeout(
+        () => {
+
+            button.classList.remove(
+                "event-button-highlight"
+            );
+
+            if (
+                highlightedButton === button
+            ) {
+
+                highlightedButton = null;
+
+            }
+
+        },
+        2000
+    );
+
+}
 
 function renderEventSections() {
 
@@ -281,7 +331,10 @@ function renderEventSections() {
                         "click",
                         () => {
 
-                                                                                    
+                            highlightEventButton(
+                                button
+                            );
+
                             if (
                                 event.id === "attackStart"
                             ) {
@@ -929,6 +982,11 @@ function renderMatchSummary() {
                     )}
 
                     ${renderSummarySubStat(
+                        "Long Corners",
+                        stats.defence.longCornersAgainst
+                    )}
+
+                    ${renderSummaryStat(
                         "Long Corners",
                         stats.defence.longCornersAgainst
                     )}

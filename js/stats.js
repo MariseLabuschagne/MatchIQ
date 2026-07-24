@@ -215,7 +215,7 @@ function getAttackStats() {
         
         longCorners:
             getEventCount(
-                "longCorner"
+                "entryLongCorner"
             ),
     
     };
@@ -349,7 +349,12 @@ function getDefenceStats() {
         pcSecondWaveSave:
             getEventCount(
                 "pcSecondWaveSave"
-            )
+            ),
+        
+        longCorners:
+            getEventCount(
+                "longCornersAgainst"
+            ),
     
 
     };
