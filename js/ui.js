@@ -218,6 +218,7 @@ function renderLiveMatch() {
 
     renderTimeline();
 }
+
 function highlightEventButton(button) {
 
     button.classList.add(
@@ -261,7 +262,27 @@ function highlightEventButton(button) {
             }
 
         },
-        2000
+        1000
+    );
+
+}
+
+function highlightAndExecute(
+    button,
+    callback
+) {
+
+    button.classList.add(
+        "event-button-highlight"
+    );
+
+    setTimeout(
+        () => {
+
+            callback();
+
+        },
+        250
     );
 
 }
@@ -925,12 +946,12 @@ function renderMatchSummary() {
 
                 </div>
 
-                
+                <!-- ${renderPeriodBreakdown()}-->
+
                 <div class="card summary-section">
 
                     <h3>Defence</h3>
 
-                    
                     ${renderSummaryStat(
                         "Circle Entries Against",
                         stats.defence.circleEntriesAgainst
@@ -1060,7 +1081,7 @@ function renderMatchSummary() {
                 </div>
 
                 <div class="card summary-section">
-
+                    
                     <h3>
                         🏑 Coach Insights
                     </h3>
@@ -2305,6 +2326,14 @@ function showAttackPenaltyCornerOutcomeOptions() {
             </button>
 
             <button
+                class="event-button attack"
+                onclick="recordAttackPenaltyCornerOutcome('entryTurnoverLost')"
+            >
+                ❌<br>
+                Turnover Lost
+            </button>
+
+            <button
                 class="event-button outcome-cancel"
                 onclick="removeOutcomePanel()"
             >
@@ -2354,11 +2383,15 @@ function recordAttackPenaltyCornerOutcome( outcome ) {
 
     if (
         outcome === "pcGoal"
+        ||
+        outcome === "entryTurnoverLost"
     ) {
+
         App.currentMatch.activeAttackId =
             null;
-        
+
         removeOutcomePanel();
+
         return;
     }
 
@@ -2948,5 +2981,106 @@ function getGoalsConceded() {
         )
 
     );
+
+}
+document.addEventListener(
+    "click",
+    (e) => {
+
+        const button =
+            e.target.closest(
+                ".event-button"
+            );
+
+        if (button) {
+
+            highlightEventButton(
+                button
+            );
+
+        }
+
+    }
+);
+
+function renderPeriodBreakdown() {
+
+    const periods =
+        App.currentMatch.format === "4"
+            ? ["Q1","Q2","Q3","Q4"]
+            : ["H1","H2"];
+
+    const headers =
+        periods
+            .map(
+                p => `<th>${p}</th>`
+            )
+            .join("");
+
+    const entryCounts =
+        periods.map(
+            period =>
+
+                getEventCountByPeriod(
+                    "entryLeft",
+                    period
+                )
+
+                +
+
+                getEventCountByPeriod(
+                    "entryTopD",
+                    period
+                )
+
+                +
+
+                getEventCountByPeriod(
+                    "entryRight",
+                    period
+                )
+        );
+
+    return `
+
+        <div class="card summary-section">
+
+            <h3>
+                📊 Period Breakdown
+            </h3>
+
+            <table class="period-table">
+
+                <tr>
+                    <th>Metric</th>
+                    ${headers}
+                    <th>Total</th>
+                </tr>
+
+                <tr>
+
+                    <td>Circle Entries</td>
+
+                    ${entryCounts
+                        .map(
+                            c => `<td>${c}</td>`
+                        )
+                        .join("")
+                    }
+
+                    <td>
+                        ${entryCounts.reduce(
+                            (a,b) => a + b,
+                            0
+                        )}
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    `;
 
 }

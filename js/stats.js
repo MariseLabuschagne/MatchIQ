@@ -351,7 +351,7 @@ function getDefenceStats() {
                 "pcSecondWaveSave"
             ),
         
-        longCorners:
+        longCornersAgainst:
             getEventCount(
                 "longCornersAgainst"
             ),
@@ -657,5 +657,32 @@ function calculatePercentage(
         ).toFixed(1)
 
     );
+
+}
+
+function getEventCountByPeriod(
+    eventId,
+    period
+) {
+
+    if (
+        !App.currentMatch ||
+        !App.currentMatch.events
+    ) {
+
+        return 0;
+
+    }
+
+    return App.currentMatch.events.filter(
+        event =>
+
+            event.eventType === eventId
+
+            &&
+
+            event.period === period
+
+    ).length;
 
 }
