@@ -699,8 +699,8 @@ EVENT CATEGORIES
         );
 
     transition:
-        border 0.15s ease,
-        box-shadow 0.15s ease;
+        border 0.10s ease,
+        box-shadow 0.10s ease;
 
 }
 .event-category {
