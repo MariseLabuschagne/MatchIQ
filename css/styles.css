@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 styles.css
-Version: 0.9.9
+Version: 1.1.1
 =========================================================
 */
 
@@ -1073,8 +1073,141 @@ MATCH SUMMARY
 
 }
 
+.period-table {
+
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+}
+.period-table th {
+
+    color: #ffffff;
+    border-bottom: 2px solid rgba(255,255,255,0.15);
+
+}
+
+.period-table tr {
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+
+}
+
+.period-table th,
+.period-table td {
+
+    padding: 8px 12px;
+
+}
+
+.period-table th {
+
+    font-weight: 700;
+
+}
+
+.period-table th:first-child,
+.period-table td:first-child {
+
+    text-align: left;
+    width: 50%;
+
+}
+
+.period-table th:not(:first-child),
+.period-table td:not(:first-child) {
+
+    text-align: right;
+    width: auto;
+
+}
+.period-table th:last-child,
+.period-table td:last-child {
+
+    font-weight: 700;
+    color: #4fc3ff;
+
+}
+
+.period-parent-row {
+
+    border-top: 2px solid rgba(
+        255,
+        255,
+        255,
+        0.10
+    );
+
+}
+.period-parent-row td {
+
+    font-weight: 700;
+    color: #ffffff;
+
+}
+
+.period-child-row td {
+
+    font-weight: 500;
+    color: #ffffff;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.03
+        );
+
+}
+
+.period-grandchild-row td {
+    
+    font-weight: 400;
+    background:
+         rgba(
+            255,
+            255,
+            255,
+            0.055
+        );
+    color:#ffffff
+    
+}
+/*.period-grandchild-row td:first-child {
+
+    background:
+        rgba(43, 104, 140, 0.015);
+    color:
+        #ffffff
 
 
+}*/
+
+.attack-table h3 {
+    color: #4fc3ff;
+}
+
+.defence-table h3 {
+    color: #ff8a65;
+}
+
+.discipline-table h3 {
+    color: #ffd54f;
+}
+.period-indent-1 {
+
+    padding-left: 24px !important;
+    color: rgba(255,255,255,0.9);
+
+}
+
+.period-indent-2 {
+
+    padding-left: 40px !important;
+    color: rgba(255,255,255,0.8);
+
+}
 .summary-actions {
 
     display: flex;

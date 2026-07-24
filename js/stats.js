@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 stats.js
-Version: 0.9.9
+Version: 1.1.1
 =========================================================
 */
 
@@ -144,17 +144,17 @@ function getAttackStats() {
             ),
 
         
-        turnoversAttacking25:
+        turnoverAttacking25:
             getEventCount(
                 "turnoverAttacking25"
             ),
 
-        turnoversMidfield:
+        turnoverMidfield:
             getEventCount(
                 "turnoverMidfield"
             ),
 
-        turnoversDefensive25:
+        turnoverDefensive25:
             getEventCount(
                 "turnoverDefensive25"
             ),
@@ -684,5 +684,134 @@ function getEventCountByPeriod(
             event.period === period
 
     ).length;
+
+}
+
+function getPeriods() {
+
+    if (
+        App.currentMatch.format === "4"
+    ) {
+
+        return [
+            "Q1",
+            "Q2",
+            "Q3",
+            "Q4"
+        ];
+
+    }
+
+    return [
+        "H1",
+        "H2"
+    ];
+
+}
+function getAttackJourneysByPeriod(
+    period
+) {
+
+    if (
+        !App.currentMatch
+    ) {
+
+        return [];
+
+    }
+
+    const attacks = {};
+
+    App.currentMatch.events
+        .filter(
+            event =>
+                event.period === period
+        )
+        .forEach(
+            event => {
+
+                if (
+                    !event.attackId
+                ) {
+
+                    return;
+
+                }
+
+                if (
+                    !attacks[
+                        event.attackId
+                    ]
+                ) {
+
+                    attacks[
+                        event.attackId
+                    ] = [];
+
+                }
+
+                attacks[
+                    event.attackId
+                ].push(
+                    event
+                );
+
+            }
+        );
+
+    return Object.values(
+        attacks
+    );
+
+}
+function getAttacksWithShotsByPeriod(
+    period
+) {
+
+    return getAttackJourneysByPeriod(
+        period
+    )
+        .filter(
+            attack =>
+
+                attack.some(
+                    event =>
+
+                        event.eventType ===
+                            "shotOnTarget"
+
+                        ||
+
+                        event.eventType ===
+                            "shotOffTarget"
+
+                        ||
+
+                        event.eventType ===
+                            "shotBlocked"
+                )
+        )
+        .length;
+
+}
+
+function getAttacksWithGoalsByPeriod(
+    period
+) {
+
+    return getAttackJourneysByPeriod(
+        period
+    )
+        .filter(
+            attack =>
+
+                attack.some(
+                    event =>
+
+                        event.eventType ===
+                            "goalScored"
+                )
+        )
+        .length;
 
 }

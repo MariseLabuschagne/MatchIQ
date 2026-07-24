@@ -741,344 +741,19 @@ function renderMatchSummary() {
 
                 </div>
                 
-                <div class="card summary-section">
+                ${renderAttackJourneyTable()}
 
-                    <h3>
-                        Attack Journey
-                    </h3>
+                ${renderAttackAnalysisTable()}
+               
+                ${renderEffectivenessTable()}
 
-                    ${renderSummaryStat(
-                        "Circle Entries",
-                        stats.attack.circleEntries
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Shots",
-                        stats.attack.shots
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Penalty Corners",
-                        stats.attack.penaltyCornersWon
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Long Corners",
-                        stats.attack.entryLongCorners
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Turnovers Lost",
-                        stats.attack.entryTurnoversLost
-                    )}
-
-                    ${renderSummaryStat(
-                        "Goals",
-                        stats.attack.goalsScored
-                    )}
+                ${renderDefenceAnalysisTable()}
 
                 </div>
 
+                ${renderDisciplineTable()}
 
-
-                <div class="card summary-section">
-
-                    <h3>Attack</h3>
-
-                    ${renderSummaryStat(
-                        "Circle Entries",
-                        stats.attack.circleEntries
-                    )}
-                    
-                    ${renderSummarySubStat(
-                        "Left",
-                        stats.attack.entryLeft
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Top D",
-                        stats.attack.entryTopD
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Right",
-                        stats.attack.entryRight
-                    )}
-
-                    ${renderSummaryStat(
-                        "Shots",
-                        stats.attack.shots
-                    )}
-
-                    ${renderSummarySubStat(
-                        "On Target",
-                        stats.attack.shotsOnTarget
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Off Target",
-                        stats.attack.shotsOffTarget
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Blocked",
-                        stats.attack.shotsBlocked
-                    )}
-
-                    ${renderSummaryStat(
-                        "Attack Outcomes",
-                        ""
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Penalty Corners",
-                        stats.attack.penaltyCornersWon
-                    )}
-
-                    ${renderSummarySubSubStat(
-                        "Converted",
-                        stats.attack.pcGoals
-                    )}
-
-                    ${renderSummarySubSubStat(
-                        "Saved",
-                        stats.attack.pcSaved
-                    )}
-
-                    ${renderSummarySubSubStat(
-                        "Missed",
-                        stats.attack.pcMissed
-                    )}
-
-                    ${renderSummarySubSubStat(
-                        "Broken Down",
-                        stats.attack.pcBrokenDown
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Long Corners",
-                        stats.attack.entryLongCorners
-                    )}
-                    
-                    ${renderSummarySubStat(
-                        "Penalty Strokes",
-                        stats.attack.penaltyStrokesWon
-                    )}
-
-
-                    ${renderSummarySubStat(
-                        "Turnovers Lost",
-                        stats.attack.entryTurnoversLost
-                    )}
-                    
-                    ${renderSummaryStat(
-                        "Goals Scored",
-                        stats.attack.goalsScored
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Field Goals",
-                        stats.attack.fieldGoals
-                    )}
-
-                    ${renderSummarySubStat(
-                        "PC Goals",
-                        stats.attack.pcGoals
-                    )}
-                    
-                    ${renderSummaryStat(
-                        "Turnovers Won",
-                        ""
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Attacking 25",
-                        stats.attack.turnoversAttacking25
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Midfield",
-                        stats.attack.turnoversMidfield
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Defensive 25",
-                        stats.attack.turnoversDefensive25
-                    )}                 
-
-                    ${renderSummaryStat(
-                        "Long Corners",
-                        stats.attack.entryLongCorners
-                    )}
-                </div>
-
-                
-                <div class="card summary-section">
-
-                    <h3>
-                        Attacking Effectiveness
-                    </h3>
-
-                    ${renderSummaryStat(
-                        "Entries Producing Shot %",
-                        stats.effectiveness.entryToShotConversion + "%"
-                    )}
-                
-                    ${renderSummaryStat(
-                        "Field Goal Conversion %",
-                        stats.effectiveness.fieldGoalConversion + "%"
-                    )}
-
-                    ${renderSummaryStat(
-                        "Entry → Goal %",
-                        stats.effectiveness.entryToGoalConversion + "%"
-                    )}
-
-                    ${renderSummaryStat(
-                        "Shot Accuracy %",
-                        stats.effectiveness.shotAccuracy + "%"
-                    )}
-
-                    ${renderSummaryStat(
-                        "PC Conversion %",
-                        stats.effectiveness.pcConversion + "%"
-                    )}
-
-                </div>
-
-                <!-- ${renderPeriodBreakdown()}-->
-
-                <div class="card summary-section">
-
-                    <h3>Defence</h3>
-
-                    ${renderSummaryStat(
-                        "Circle Entries Against",
-                        stats.defence.circleEntriesAgainst
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Left",
-                        stats.defence.defenceEntryLeft
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Top D",
-                        stats.defence.defenceEntryTopD
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Right",
-                        stats.defence.defenceEntryRight
-                    )}
-
-                    ${renderSummaryStat(
-                        "Goals Conceded",
-                        stats.defence.goalsConceded
-                    )}
-
-                    ${renderSummaryStat(
-                        "Goalkeeper Saves",
-                        stats.defence.goalkeeperSaves
-                    )}
-
-                    ${renderSummaryStat(
-                        "Turnovers Lost",
-                        ""
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Attacking 25",
-                        stats.defence.turnoverAttacking25Lost
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Midfield",
-                        stats.defence.turnoverMidfieldLost
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Defensive 25",
-                        stats.defence.turnoverDefensive25Lost
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Long Corners",
-                        stats.defence.longCornersAgainst
-                    )}
-
-                    ${renderSummaryStat(
-                        "Long Corners",
-                        stats.defence.longCornersAgainst
-                    )}
-
-                    ${renderSummaryStat(
-                        "Penalty Corners Conceded",
-                        stats.defence.penaltyCornersConceded
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Goals",
-                        stats.defence.pcGoalConceded
-                    )}
-
-                    ${renderSummarySubStat(
-                        "First Wave Saves",
-                        stats.defence.pcFirstWaveSave
-                    )}
-
-                    ${renderSummarySubStat(
-                        "GK Saves",
-                        stats.defence.pcGoalkeeperSave
-                    )}
-
-                    ${renderSummarySubStat(
-                        "Second Wave Saves",
-                        stats.defence.pcSecondWaveSave
-                    )}
-
-
-
-                </div>
-
-                <div class="card summary-section">
-
-                    <h3>Discipline</h3>
-
-                    ${renderSummaryStat(
-                        "Green Cards",
-                        stats.discipline.greenCards
-                    )}
-
-                    ${renderSummaryStat(
-                        "Yellow Cards",
-                        stats.discipline.yellowCards
-                    )}
-
-                    ${renderSummaryStat(
-                        "Red Cards",
-                        stats.discipline.redCards
-                    )}
-
-                </div>
-
-                <div class="card summary-section">
-
-                    <h3>Match Information</h3>
-
-                    ${renderSummaryStat(
-                        "Events Recorded",
-                        stats.totalEvents
-                    )}
-
-                    ${renderSummaryStat(
-                        "Match Duration",
-                        formatTime(
-                            App.timer.seconds
-                        )
-                    )}
-
-                </div>
+                ${renderMatchInformationTable()}
 
                 <div class="card summary-section">
                     
@@ -3003,79 +2678,940 @@ document.addEventListener(
     }
 );
 
-function renderPeriodBreakdown() {
+function renderPeriodRow(
+    label,
+    eventIds,
+    indent = 0
+) {
 
     const periods =
         App.currentMatch.format === "4"
             ? ["Q1","Q2","Q3","Q4"]
             : ["H1","H2"];
 
-    const headers =
-        periods
-            .map(
-                p => `<th>${p}</th>`
-            )
-            .join("");
-
-    const entryCounts =
+    const values =
         periods.map(
             period =>
 
-                getEventCountByPeriod(
-                    "entryLeft",
-                    period
-                )
+                eventIds.reduce(
+                    (sum, eventId) =>
 
-                +
+                        sum +
 
-                getEventCountByPeriod(
-                    "entryTopD",
-                    period
-                )
+                        getEventCountByPeriod(
+                            eventId,
+                            period
+                        ),
 
-                +
-
-                getEventCountByPeriod(
-                    "entryRight",
-                    period
+                    0
                 )
         );
+
+    const total =
+        values.reduce(
+            (a,b) => a + b,
+            0
+        );
+
+    let rowClass = "";
+
+    if (indent === 0) {
+
+        rowClass =
+            "period-parent-row";
+
+    }
+    else if (indent === 1) {
+
+        rowClass =
+            "period-child-row";
+
+    }
+    else {
+
+        rowClass =
+            "period-grandchild-row";
+
+    }
+
+    return `
+
+        <tr class="${rowClass}">
+
+            <td
+                style="
+                    padding-left:${indent * 28}px;
+                "
+            >
+                ${label}
+            </td>
+
+            ${values.map(
+                value =>
+                    `<td>${value}</td>`
+            ).join("")}
+
+            <td>${total}</td>
+
+        </tr>
+
+    `;
+
+}
+
+function renderAttackJourneyTable() {
+
+    const periods =
+        getPeriods();
+
+    const headers =
+        periods
+            .map(
+                period =>
+                    `<th>${period}</th>`
+            )
+            .join("");
 
     return `
 
         <div class="card summary-section">
 
             <h3>
-                📊 Period Breakdown
+                Attack Journey
             </h3>
 
             <table class="period-table">
 
                 <tr>
-                    <th>Metric</th>
+
+                    <th>
+                        
+                    </th>
+
                     ${headers}
-                    <th>Total</th>
+
+                    <th>
+                        Total
+                    </th>
+
                 </tr>
+
+                ${renderPeriodRow(
+                    "Circle Entries",
+                    [
+                        "entryLeft",
+                        "entryTopD",
+                        "entryRight"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Shots",
+                    [
+                        "shotOnTarget",
+                        "shotOffTarget",
+                        "shotBlocked"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Penalty Corners",
+                    [
+                        "entryPenaltyCorner"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Long Corners",
+                    [
+                        "entryLongCorner"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Turnovers Lost",
+                    [
+                        "entryTurnoverLost"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Goals",
+                    [
+                        "goalScored",
+                        "pcGoal"
+                    ]
+                )}
+
+            </table>
+
+        </div>
+
+    `;
+
+}
+
+function renderAttackAnalysisTable() {
+
+    const periods =
+        getPeriods();
+
+    const headers =
+        periods
+            .map(
+                period =>
+                    `<th>${period}</th>`
+            )
+            .join("");
+
+    return `
+
+        <div class="card summary-section">
+
+            <h3>
+                Attack Analysis
+            </h3>
+
+            <table class="period-table">
 
                 <tr>
 
-                    <td>Circle Entries</td>
+                    <th>
+                        
+                    </th>
 
-                    ${entryCounts
-                        .map(
-                            c => `<td>${c}</td>`
-                        )
-                        .join("")
-                    }
+                    ${headers}
 
-                    <td>
-                        ${entryCounts.reduce(
-                            (a,b) => a + b,
-                            0
-                        )}
-                    </td>
+                    <th>
+                        Total
+                    </th>
 
                 </tr>
+
+                ${renderPeriodRow(
+                    "Circle Entries",
+                    [
+                        "entryLeft",
+                        "entryTopD",
+                        "entryRight"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Left",
+                    ["entryLeft"],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Top D",
+                    ["entryTopD"],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Right",
+                    ["entryRight"],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "Shots",
+                    [
+                        "shotOnTarget",
+                        "shotOffTarget",
+                        "shotBlocked"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "↳ On Target",
+                    ["shotOnTarget"],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Off Target",
+                    ["shotOffTarget"],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Blocked",
+                    ["shotBlocked"],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "Attack Outcomes",
+                    [],
+                    0
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Penalty Corners",
+                    [
+                        "entryPenaltyCorner"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳↳ Converted",
+                    [
+                        "pcGoal"
+                    ],
+                    2
+                )}
+
+                ${renderPeriodRow(
+                    "↳↳ Saved",
+                    [
+                        "pcSaved"
+                    ],
+                    2
+                )}
+
+                ${renderPeriodRow(
+                    "↳↳ Missed",
+                    [
+                        "pcMissed"
+                    ],
+                    2
+                )}
+
+                ${renderPeriodRow(
+                    "↳↳ Broken Down",
+                    [
+                        "pcBrokenDown"
+                    ],
+                    2
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Long Corners",
+                    [
+                        "entryLongCorner"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Penalty Strokes",
+                    [
+                        "psWon"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Turnovers Lost",
+                    [
+                        "entryTurnoverLost"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "Goals Scored",
+                    [
+                        "goalScored",
+                        "pcGoal"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Field Goals",
+                    [
+                        "goalScored"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ PC Goals",
+                    [
+                        "pcGoal"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "Turnovers Won",
+                    [],
+                    0
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Attacking 25",
+                    [
+                        "turnoverAttacking25"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Midfield",
+                    [
+                        "turnoverMidfield"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Defensive 25",
+                    [
+                        "turnoverDefensive25"
+                    ],
+                    1
+                )}
+
+            </table>
+
+        </div>
+
+    `;
+
+}
+
+function renderDefenceAnalysisTable() {
+
+    const periods =
+        getPeriods();
+
+    const headers =
+        periods
+            .map(
+                period =>
+                    `<th>${period}</th>`
+            )
+            .join("");
+
+    return `
+
+        <div class="card summary-section">
+
+            <h3>
+                Defence Analysis
+            </h3>
+
+            <table class="period-table">
+
+                <tr>
+
+                    <th></th>
+
+                    ${headers}
+
+                    <th>Total</th>
+
+                </tr>
+
+                ${renderPeriodRow(
+                    "Circle Entries Against",
+                    [
+                        "defenceEntryLeft",
+                        "defenceEntryTopD",
+                        "defenceEntryRight"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Left",
+                    [
+                        "defenceEntryLeft"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Top D",
+                    [
+                        "defenceEntryTopD"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Right",
+                    [
+                        "defenceEntryRight"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "Goals Conceded",
+                    [
+                        "goalConceded",
+                        "pcGoalConceded"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Goalkeeper Saves",
+                    [
+                        "save"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Turnovers Lost",
+                    []
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Attacking 25",
+                    [
+                        "turnoverAttacking25Lost"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Midfield",
+                    [
+                        "turnoverMidfieldLost"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Defensive 25",
+                    [
+                        "turnoverDefensive25Lost"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "Long Corners",
+                    [
+                        "longCornersAgainst"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Penalty Corners Conceded",
+                    [
+                        "pcConceded"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Goals",
+                    [
+                        "pcGoalConceded"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ First Wave Saves",
+                    [
+                        "pcFirstWaveSave"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ GK Saves",
+                    [
+                        "pcGoalkeeperSave"
+                    ],
+                    1
+                )}
+
+                ${renderPeriodRow(
+                    "↳ Second Wave Saves",
+                    [
+                        "pcSecondWaveSave"
+                    ],
+                    1
+                )}
+
+            </table>
+
+        </div>
+
+    `;
+
+}
+function renderDisciplineTable() {
+
+    const periods =
+        getPeriods();
+
+    const headers =
+        periods
+            .map(
+                period =>
+                    `<th>${period}</th>`
+            )
+            .join("");
+
+    return `
+
+        <div class="card summary-section">
+
+            <h3>
+                Discipline
+            </h3>
+
+            <table class="period-table">
+
+                <tr>
+
+                    <th></th>
+
+                    ${headers}
+
+                    <th>Total</th>
+
+                </tr>
+
+                ${renderPeriodRow(
+                    "Green Cards",
+                    [
+                        "greenCard"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Yellow Cards",
+                    [
+                        "yellowCard"
+                    ]
+                )}
+
+                ${renderPeriodRow(
+                    "Red Cards",
+                    [
+                        "redCard"
+                    ]
+                )}
+
+            </table>
+
+        </div>
+
+    `;
+
+}
+
+function renderMatchInformationTable() {
+
+    const periods =
+        getPeriods();
+
+    const headers =
+        periods
+            .map(
+                period =>
+                    `<th>${period}</th>`
+            )
+            .join("");
+
+    return `
+
+        <div class="card summary-section">
+
+            <h3>
+                Match Information
+            </h3>
+
+            <table class="period-table">
+
+                <tr>
+
+                    <th></th>
+
+                    ${headers}
+
+                    <th>Total</th>
+
+                </tr>
+
+                ${renderPeriodRow(
+                    "Events Recorded",
+                    getAllEventIds()
+                )}
+
+            </table>
+
+            <div
+                style="
+                    margin-top:16px;
+                "
+            >
+
+                ${renderSummaryStat(
+                    "Match Duration",
+                    formatTime(
+                        App.timer.seconds
+                    )
+                )}
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+function getAllEventIds() {
+
+    return MatchIQ.events.map(
+        event => event.id
+    );
+
+}
+
+function calculatePercentage(
+    numerator,
+    denominator
+) {
+
+    if (
+        denominator === 0
+    ) {
+
+        return 0;
+
+    }
+
+    return Math.round(
+        numerator /
+        denominator *
+        100
+    );
+
+}
+
+function getEffectivenessByPeriod(
+    period
+) {
+
+    const entries =
+
+        getEventCountByPeriod(
+            "entryLeft",
+            period
+        )
+
+        +
+
+        getEventCountByPeriod(
+            "entryTopD",
+            period
+        )
+
+        +
+
+        getEventCountByPeriod(
+            "entryRight",
+            period
+        );
+
+    const shotsOnTarget =
+        getEventCountByPeriod(
+            "shotOnTarget",
+            period
+        );
+
+    const shotsOffTarget =
+        getEventCountByPeriod(
+            "shotOffTarget",
+            period
+        );
+
+    const shotsBlocked =
+        getEventCountByPeriod(
+            "shotBlocked",
+            period
+        );
+
+    const shots =
+        shotsOnTarget
+        +
+        shotsOffTarget
+        +
+        shotsBlocked;
+
+    const fieldGoals =
+        getEventCountByPeriod(
+            "goalScored",
+            period
+        );
+
+    const pcGoals =
+        getEventCountByPeriod(
+            "pcGoal",
+            period
+        );
+
+    const penaltyCorners =
+        getEventCountByPeriod(
+            "entryPenaltyCorner",
+            period
+        );
+
+    const attacksWithShots =
+        getAttacksWithShotsByPeriod(
+            period
+        );
+
+    const attacksWithGoals =
+        getAttacksWithGoalsByPeriod(
+            period
+        );
+
+    return {
+
+        entryToShot:
+
+            calculatePercentage(
+                attacksWithShots,
+                entries
+            ),
+
+        fieldGoalConversion:
+
+            calculatePercentage(
+                fieldGoals,
+                shotsOnTarget
+            ),
+
+        entryToGoal:
+
+            calculatePercentage(
+                attacksWithGoals,
+                entries
+            ),
+
+        shotAccuracy:
+
+            calculatePercentage(
+                shotsOnTarget,
+                shots
+            ),
+
+        pcConversion:
+
+            calculatePercentage(
+                pcGoals,
+                penaltyCorners
+            )
+
+    };
+
+}
+
+function renderPercentageRow(
+    label,
+    property
+) {
+
+    const periods =
+        getPeriods();
+
+    const values =
+        periods.map(
+            period =>
+
+                getEffectivenessByPeriod(
+                    period
+                )[property]
+        );
+
+    const overall =
+
+        getEffectivenessByPeriod(
+            "ALL"
+        )[property];
+
+
+
+    return `
+
+        <tr>
+
+            <td>
+                ${label}
+            </td>
+
+            ${values.map(
+                value =>
+                    `<td>${value}%</td>`
+            ).join("")}
+
+            <td>
+                ${overall}%
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+function renderEffectivenessTable() {
+
+    const periods =
+        getPeriods();
+
+    const headers =
+        periods
+            .map(
+                period =>
+                    `<th>${period}</th>`
+            )
+            .join("");
+
+    return `
+
+        <div class="card summary-section">
+
+            <h3>
+                Attacking Effectiveness
+            </h3>
+
+            <table class="period-table">
+
+                <tr>
+
+                    <th></th>
+
+                    ${headers}
+
+                    <th>Total</th>
+
+                </tr>
+
+                ${renderPercentageRow(
+                    "Entry → Shot %",
+                    "entryToShot"
+                )}
+
+                ${renderPercentageRow(
+                    "Field Goal Conversion %",
+                    "fieldGoalConversion"
+                )}
+
+                ${renderPercentageRow(
+                    "Entry → Goal %",
+                    "entryToGoal"
+                )}
+
+                ${renderPercentageRow(
+                    "Shot Accuracy %",
+                    "shotAccuracy"
+                )}
+
+                ${renderPercentageRow(
+                    "PC Conversion %",
+                    "pcConversion"
+                )}
 
             </table>
 
