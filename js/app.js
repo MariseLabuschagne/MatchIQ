@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 app.js
-Version: 2.0.1
+Version: 2.0.2
 =========================================================
 */
 
@@ -205,19 +205,25 @@ function startMatch() {
             "input[name='venue']:checked"
         ).value;
 
-    const format =
-        document.querySelector(
-            "input[name='format']:checked"
-        ).value;
+    let format = "softball";
+    let periodLength = 0;
 
-    const periodLength =
-        Number(
-            document
-                .getElementById(
+    if (
+        App.selectedSport !==
+        "softball"
+    ) {
+        format =
+            document.querySelector(
+                "input[name='format']:checked"
+            ).value;
+
+        periodLength =
+            Number(
+                document.getElementById(
                     "periodLength"
-                )
-                .value
-        );
+                ).value
+            );
+    }
 
     App.currentMatch =
         createMatchObject({
@@ -323,6 +329,7 @@ function createMatchObject(
             opponent: 1
 
         },
+        currentSide: "ourBatting",
 
     };
 }
@@ -492,6 +499,42 @@ function selectSport(
     App.selectedSport =
         sport;
 
+    const formatGroup =
+        document.getElementById(
+            "matchFormatGroup"
+        );
+
+    const periodGroup =
+        document.getElementById(
+            "periodLengthGroup"
+        );
+
+    if (sport === "softball") {
+
+        if (formatGroup) {
+            formatGroup.style.display =
+                "none";
+        }
+
+        if (periodGroup) {
+            periodGroup.style.display =
+                "none";
+        }
+
+    } else {
+
+        if (formatGroup) {
+            formatGroup.style.display =
+                "block";
+        }
+
+        if (periodGroup) {
+            periodGroup.style.display =
+                "block";
+        }
+
+    }    
+
     const startButton =
         document.getElementById(
             "startMatchButton"
@@ -527,6 +570,6 @@ function selectSport(
         .classList.remove(
             "hidden"
         );
-
+    
 }
 

@@ -119,7 +119,7 @@
                        
                         <button
                             class="sport-button softball"
-                            onclick="selectSport('softball')"
+                            onclick="showSoftballMenu()"
                         >
 
                             🥎 Softball
@@ -252,8 +252,9 @@
 
                 <!-- Format -->
 
-                <div class="form-group">
-
+                <div
+                    class="form-group"
+                    id="matchFormatGroup">
                     <label>
                         Match Format
                     </label>
@@ -283,9 +284,11 @@
 
                 <!-- Period Length -->
 
-                <div class="form-group">
-
+                <div
+                    class="form-group"
+                    id="periodLengthGroup">
                     <label for="periodLength">
+                `
                         Period Length (Minutes)
                     </label>
 
@@ -323,6 +326,15 @@
                 id="hockeyMenuScreen"
                 class="hidden"
             >
+            </section>
+
+            <!-- =================================================
+                 SOFTBALL SCREEN
+            ================================================== -->
+
+            <section
+                id="softballMenuScreen"
+                class="hidden">
             </section>
             
 

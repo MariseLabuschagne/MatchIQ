@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 styles.css
-Version: 2.0.1
+Version: 2.0.2
 =========================================================
 */
 
@@ -1548,31 +1548,67 @@ ATTACK FUNNEL
 /* =====================================================
 SOFT BALL
 ===================================================== */
-.event-button.softball.strike {
-    background: #16a34a;
-    color: white;
+/* =====================================
+   SOFTBALL SCOREBOARD
+===================================== */
+
+.softball-scoreboard {
+
+    text-align: center;
+
 }
 
-.event-button.softball.ball {
-    background: #2563eb;
-    color: white;
+.softball-teams {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+
 }
 
-.event-button.softball.run {
-    background: #f59e0b;
-    color: white;
+.softball-team {
+
+    flex: 1;
+
+    font-size: 1.3rem;
+
+    font-weight: 700;
+
 }
 
-.event-button.softball.out {
-    background: #dc2626;
-    color: white;
+.softball-score {
+
+    font-size: 4rem;
+
+    font-weight: 800;
+
+    color: #35C6FF;
+
 }
 
-.event-button.softball.inning {
-    background: #7c3aed;
-    color: white;
+.softball-inning {
+
+    font-size: 1.2rem;
+
+    font-weight: 700;
+
+    margin-bottom: 16px;
+
+    color: #22c55e;
+
 }
-.softball-counts {
+
+.event-button.softball {
+
+    min-height: 90px;
+
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
+}.softball-counts {
 
     font-size: 18px;
     font-weight: 700;
@@ -1592,20 +1628,98 @@ SOFT BALL
 
 }
 
-.softball-batter {
+.softball-batting-status {
 
-    margin-top: 10px;
-    text-align: center;
-    font-size: 18px;
     font-weight: 700;
+    font-size: 1rem;
+
+    margin-bottom: 12px;
+
+}
+.home-runner {
+
+    text-align: center;
+
+    margin-top: -10px;
+
+    font-size: 1.2rem;
+
+    font-weight: 700;
+
+    color: #f59e0b;
+
+}
+
+.home-label {
+
+    text-align: center;
+
+    font-size: 0.75rem;
+
+    color: #94a3b8;
+
+}
+
+.base-runner {
+
+    position: absolute;
+
+    color: white;
+
+    font-weight: 700;
+
+    font-size: 0.9rem;
+
+}
+
+.runner-second {
+
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+.label-second {
+
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+
+.runner-third {
+
+    top: 65px;
+    left: -5px;
+
+}
+.label-third {
+
+    top: 85px;
+    left: -20px;
+
+}
+
+.runner-first {
+
+    top: 65px;
+    right: -5px;
+
+}
+.label-first {
+
+    top: 85px;
+    right: -20px;
 
 }
 
 .softball-diamond {
 
+    width: 260px;
+    margin: 16px auto;
     margin-top: 12px;
     text-align: center;
-    font-size: 24px;
+    font-size: 26px;
     line-height: 1.6;
     font-weight: 700;
 
@@ -1613,13 +1727,37 @@ SOFT BALL
 
 .softball-timer {
 
-    font-size: 2.8rem !important;
+    font-size: 2.5rem !important;
 
     line-height: 1;
 
     font-weight: 800;
 
     color: #35C6FF;
+
+}
+.event-grid.softball {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+
+}
+
+.event-button.softball {
+
+    min-height: 80px;
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    border-radius: 12px;
+    background: #475569;
+    color: white;
 
 }
 
@@ -1632,6 +1770,301 @@ SOFT BALL
 .event-button.softball.advance {
 
     background: #f59e0b;
+    color: white;
+
+}
+.event-button.softball.strike {
+
+    background: #16a34a;
+    color: white;
+
+}
+.event-button.softball.ball {
+
+    background: #2563eb;
+    color: white;
+
+}
+.event-button.softball.out {
+
+    background: #dc2626;
+    color: white;
+
+}
+.softball-second {
+
+    margin-bottom: 20px;
+
+}
+
+.softball-middle {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+
+}
+
+.softball-home {
+
+    margin-top: 10px;
+
+}
+.base-label {
+
+    position: absolute;
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+
+    color: #94a3b8;
+
+}
+
+.softball-summary-header {
+
+    text-align: center;
+
+    margin: 5px 0 20px;
+
+}
+
+.summary-team {
+
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+
+}
+.summary-score {
+
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #38bdf8;
+    margin: 2px 0;
+
+}
+.summary-screen {
+
+    text-align: center;
+
+}
+.summary-screen h2 {
+
+    font-size: 2.2rem;
+
+    font-weight: 800;
+
+    margin-bottom: 12px;
+
+}
+.sub-stat {
+
+    padding-left: 30px !important;
+
+    color: #94a3b8;
+
+}
+.softball-summary-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 15px;
+
+}
+
+.softball-summary-table th {
+
+    color: #38bdf8;
+
+    padding: 10px;
+
+    text-align: center;
+
+}
+
+.softball-summary-table td {
+
+    padding: 10px;
+
+    border-top: 1px solid rgba(255,255,255,0.08);
+
+}
+
+.softball-summary-table td:first-child {
+
+    text-align: left;
+
+}
+
+.softball-summary-table td:not(:first-child) {
+
+    text-align: center;
+
+    font-weight: 700;
+
+}
+
+
+
+/* =====================================
+   COUNT CARDS
+===================================== */
+
+.count-row {
+
+    display: flex;
+
+    gap: 12px;
+
+    justify-content: center;
+
+    margin-bottom: 24px;
+
+}
+
+.count-card {
+
+    min-width: 110px;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    color: white;
+
+}
+
+.count-card span {
+
+    display: block;
+
+    font-size: 0.8rem;
+
+    opacity: 0.9;
+
+}
+
+.count-card strong {
+
+    display: block;
+
+    font-size: 2rem;
+
+}
+
+.count-card.balls {
+
+    background: #2563eb;
+
+}
+
+.count-card.strikes {
+
+    background: #16a34a;
+
+}
+
+.count-card.outs {
+
+    background: #dc2626;
+
+}
+
+/* =====================================
+   DIAMOND
+===================================== */
+
+.diamond {
+
+    position: relative;
+
+    width: 260px;
+
+    height: 140px;
+
+    margin: 0 auto 20px;
+
+}
+
+.base {
+
+    width: 34px;
+
+    height: 34px;
+
+    background: #475569;
+
+    transform: rotate(45deg);
+
+    border-radius: 4px;
+
+    position: absolute;
+
+}
+
+.base.occupied {
+
+    background: #f59e0b;
+
+}
+
+.base.second {
+
+    top: 0;
+    left: 113px;
+
+}
+
+.base.third {
+
+    top: 50px;
+    left: 35px;
+
+}
+
+.base.first {
+
+    top: 50px;
+    right: 35px;
+
+}
+
+.base.home {
+
+    bottom: 0;
+    left: 113px;
+
+    background: #eab308;
+
+}
+/* =====================================
+   BATTER
+===================================== */
+
+.batter-card {
+
+    text-align: center;
+
+    font-weight: 700;
+
+    color: #cbd5e1;
+
+}
+
+.batter-number {
+
+    font-size: 2.2rem;
+
+    color: white;
 
 }
 

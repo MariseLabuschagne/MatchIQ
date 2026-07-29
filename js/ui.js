@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 2.0.1
+Version: 2.0.2
 =========================================================
 */
 
@@ -85,9 +85,16 @@ function renderLiveMatch() {
                     id="periodDisplay"
                     class="period-label"
                 >
-                    ${getPeriodLabel(
-                        App.currentMatch.period
-                    )}
+                    ${
+                        App.currentMatch.sport ===
+                        "softball"
+
+                            ? `INNING ${App.currentMatch.inning}`
+
+                            : getPeriodLabel(
+                                App.currentMatch.period
+                            )
+                    }
                 </div>
 
             </div>              
@@ -115,8 +122,9 @@ function renderLiveMatch() {
                 class="period-button"
             >
                 ${
-                    App.currentMatch.sport === "softball"
-                        ? "🔄 Next Inning"
+                    App.currentMatch.sport ===
+                    "softball"
+                        ? "🥎 End Inning"
                         : "⏭ Next Period"
                 }
             </button>
@@ -194,7 +202,22 @@ function renderLiveMatch() {
         .getElementById("nextPeriodButton")
         .addEventListener(
             "click",
-            advancePeriod
+            () => {
+
+                if (
+                    App.currentMatch.sport ===
+                    "softball"
+                ) {
+
+                    switchSides();
+
+                } else {
+
+                    advancePeriod();
+
+                }
+
+            }
         );
 
     document
@@ -328,8 +351,7 @@ function renderEventSections() {
             "softball"
         ];
 
-    }
-    else {
+    } else {
 
         visibleCategories = [
             "attack",
@@ -346,6 +368,10 @@ function renderEventSections() {
                 MatchIQ.categories.find(
                     c => c.id === categoryId
                 );
+
+            if (!category) {
+                return;
+            }
 
             const heading =
                 document.createElement(
@@ -373,8 +399,7 @@ function renderEventSections() {
             MatchIQ.events
                 .filter(
                     event =>
-                        event.category ===
-                        category.id
+                        event.category === category.id
                 )
                 .forEach(
                     event => {
@@ -386,8 +411,8 @@ function renderEventSections() {
 
                         button.className =
                             `event-button ${event.category}`;
-                        
-                            if (event.id === "strike") {
+
+                        if (event.id === "strike") {
                             button.classList.add("strike");
                         }
 
@@ -395,26 +420,12 @@ function renderEventSections() {
                             button.classList.add("ball");
                         }
 
-                        if (
-                            event.id === "runScored" ||
-                            event.id === "ourRun"
-                        ) {
-                            button.classList.add("run");
-                        }
-
-                        if (
-                            event.id === "runScored" ||
-                            event.id === "oppositionRun"
-                        ) {
-                            button.classList.add("run");
-                        }
-
                         if (event.id === "out") {
                             button.classList.add("out");
                         }
 
-                        if (event.id === "nextInning") {
-                            button.classList.add("inning");
+                        if (event.id === "advance") {
+                            button.classList.add("advance");
                         }
 
                         button.innerHTML =
@@ -428,114 +439,77 @@ function renderEventSections() {
                                     button
                                 );
 
+                                /* HOCKEY */
+
                                 if (
                                     event.id === "attackStart"
                                 ) {
-
                                     showCircleEntryLocationOptions();
                                     return;
-
                                 }
 
                                 if (
                                     event.id === "defenceEntry"
                                 ) {
-
                                     showDefenceEntryLocationOptions();
                                     return;
-
-                                }
-
-                                if (
-                                    event.id === "shot"
-                                ) {
-
-                                    showShotOutcomeOptions();
-                                    return;
-
                                 }
 
                                 if (
                                     event.id === "pcWon"
                                 ) {
-
                                     showPenaltyCornerOutcomeOptions();
                                     return;
-
                                 }
 
                                 if (
                                     event.id === "pcConceded"
                                 ) {
-
-                                    showPenaltyCornerConcededOptions();
+                                    showDefencePenaltyCornerOutcomeOptions();
                                     return;
-
                                 }
+
+                                /* SOFTBALL */
 
                                 if (
                                     event.id === "strike"
                                 ) {
-
                                     recordStrike();
                                     return;
-
                                 }
 
                                 if (
                                     event.id === "ball"
                                 ) {
-
                                     recordBall();
                                     return;
-
                                 }
-                                
-                                if (
-                                    event.id === "switchSides"
-                                ) {
 
-                                    switchSides();
-
-                                    return;
-
-                                }
-                                
                                 if (
                                     event.id === "advance"
                                 ) {
-
                                     advanceRunner();
-
                                     return;
-
                                 }
 
                                 if (
                                     event.id === "out"
                                 ) {
-
                                     recordOut();
                                     return;
-
                                 }
 
                                 if (
-                                    event.id === "nextInning"
+                                    event.id === "switchSides"
                                 ) {
-
-                                    advanceInning();
+                                    switchSides();
                                     return;
-
                                 }
                                 if (
-                                    event.id === "runScored"
+                                    event.id === "homeRun"
                                 ) {
-
-                                    recordRun();
-
+                                    recordHomeRun();
                                     return;
-
                                 }
 
                                 recordEvent(
@@ -580,81 +554,130 @@ function updateScoreboard() {
         App.currentMatch.sport === "softball"
     ) {
 
-       scoreDisplay.innerHTML = `
+        const score = getScore();
 
-            <div class="softball-score">
+        const battingTeam =
+            App.currentMatch.currentSide ===
+            "ourBatting"
+                ? "🟢 OUR TEAM BATTING"
+                : "🔵 OPPONENT BATTING";
 
-                <div class="softball-main-score">
-                    ${score.our} - ${score.opposition}
+        const currentBatter =
+            getCurrentBatter();
+
+        scoreDisplay.innerHTML = `
+
+            <div class="softball-scoreboard">
+
+                <div class="softball-score">
+                    ${score.our}
+                    -
+                    ${score.opposition}
                 </div>
 
-                
-                <div class="softball-status">
+                <div class="softball-batting-status">
+                    ${battingTeam}
+                </div>
 
-                    ${
-                        App.currentMatch.currentSide === "ourBatting"
-                            ? "🟢 OUR TEAM BATTING"
-                            : "🔵 OPPONENT BATTING"
-                    }
+                <div class="count-row">
+
+                    <div class="count-card balls">
+                        <span>BALLS</span>
+                        <strong>${App.currentMatch.balls}</strong>
+                    </div>
+
+                    <div class="count-card strikes">
+                        <span>STRIKES</span>
+                        <strong>${App.currentMatch.strikes}</strong>
+                    </div>
+
+                    <div class="count-card outs">
+                        <span>OUTS</span>
+                        <strong>${App.currentMatch.outs}</strong>
+                    </div>
 
                 </div>
 
-                <div class="softball-counts">
+                <div class="diamond">
 
-                    ⚪ Balls: ${App.currentMatch.balls}
+                    <div class="base-label label-second">
+                        2ND BASE
+                    </div>
 
-                    &nbsp;&nbsp;
-
-                    ✅ Strikes: ${App.currentMatch.strikes}
-
-                    &nbsp;&nbsp;
-
-                    ❌ Outs: ${App.currentMatch.outs}
-
-                </div>
-
-
-                <div class="softball-diamond">
-
-                    <div>
-
+                    <div class="base-runner runner-second">
                         ${
                             App.currentMatch.bases.second
-                                ? `🟠${App.currentMatch.bases.second}`
-                                : "⚪"
+                                ? "#" + App.currentMatch.bases.second
+                                : ""
                         }
-
                     </div>
 
-                    <div>
+                    <div class="
+                        base second
+                        ${
+                            App.currentMatch.bases.second
+                                ? "occupied"
+                                : ""
+                        }
+                    "></div>
 
+                    <div class="base-label label-third">
+                        3RD BASE
+                    </div>
+
+                    <div class="base-runner runner-third">
                         ${
                             App.currentMatch.bases.third
-                                ? `🟠${App.currentMatch.bases.third}`
-                                : "⚪"
+                                ? "#" + App.currentMatch.bases.third
+                                : ""
                         }
+                    </div>
 
-                        &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="
+                        base third
+                        ${
+                            App.currentMatch.bases.third
+                                ? "occupied"
+                                : ""
+                        }
+                    "></div>
 
+                    <div class="base-label label-first">
+                        1ST BASE
+                    </div>
+
+                    <div class="base-runner runner-first">
                         ${
                             App.currentMatch.bases.first
-                                ? `🟠${App.currentMatch.bases.first}`
-                                : "⚪"
+                                ? "#" + App.currentMatch.bases.first
+                                : ""
                         }
+                    </div>
+
+                    <div class="
+                        base first
+                        ${
+                            App.currentMatch.bases.first
+                                ? "occupied"
+                                : ""
+                        }
+                    "></div>
+
+                    <div class="base home"></div>
+
+                </div>
+
+                    <div class="home-runner">
+
+                        #${currentBatter}
 
                     </div>
 
-                    <div>
-
-                        🟡${getCurrentBatter()}
-
-                        <br>
+                    <div class="home-label">
 
                         HOME
 
                     </div>
-
-                </div>
 
             </div>
 
@@ -673,6 +696,16 @@ function updateScoreboard() {
 function getPeriodLabel(
     period
 ) {
+
+       if (
+            App.currentMatch &&
+            App.currentMatch.sport ===
+            "softball"
+        ) {
+
+            return `Inning ${App.currentMatch.inning}`;
+
+        }
 
     switch (period) {
 
@@ -697,8 +730,8 @@ function getPeriodLabel(
         default:
             return period;
 
-    }
-
+    };
+ 
 }
 
 
@@ -871,13 +904,25 @@ function updatePeriodDisplay() {
         return;
     }
 
-    
+    if (
+        App.currentMatch &&
+        App.currentMatch.sport ===
+        "softball"
+    ) {
+
+        periodDisplay.textContent =
+            `INNING ${App.currentMatch.inning}`;
+
+        return;
+    }
+
     periodDisplay.textContent =
         getPeriodLabel(
             App.currentMatch.period
         );
 
 }
+
 
 function undoLastEvent() {
 
@@ -904,15 +949,18 @@ function undoLastEvent() {
     }
 }
 
-
 function endMatch() {
-
     pauseTimer();
-
     completeMatch();
 
-    renderMatchSummary();
-
+    if (
+        App.currentMatch &&
+        App.currentMatch.sport === "softball"
+    ) {
+        renderSoftballSummary();
+    } else {
+        renderMatchSummary();
+    }
 }
 
 
@@ -2704,6 +2752,85 @@ function showHockeyMenu() {
     `;
 
 }
+function showSoftballMenu() {
+
+    hideAllScreens();
+
+    const screen =
+        document.getElementById(
+            "softballMenuScreen"
+        );
+
+    screen.classList.remove(
+        "hidden"
+    );
+
+    screen.innerHTML = `
+
+        <div class="card hockey-menu-card">
+
+            <button
+                class="action-button secondary-button"
+                onclick="returnToHomeScreen()"
+            >
+                ← Back
+            </button>
+
+            <h1>
+                🥎 Softball
+            </h1>
+
+            <div class="hockey-menu-buttons">
+
+                <button
+                    class="sport-button softball"
+                    onclick="showSoftballSetup()"
+                >
+                    ▶ New Match
+                </button>
+
+                <button
+                    class="sport-button history"
+                    onclick="renderSoftballHistory()"
+                >
+                    📊 Match History
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+function showSoftballSetup() {
+
+    hideAllScreens();
+
+    App.selectedSport =
+        "softball";
+
+    document
+        .getElementById(
+            "softballMenuScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "setupScreen"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+    selectSport(
+        "softball"
+    );
+
+}
 
 function returnToHomeScreen() {
 
@@ -2804,6 +2931,7 @@ function hideAllScreens() {
         "homeScreen",
         "setupScreen",
         "hockeyMenuScreen",
+        "softballMenuScreen",
         "liveMatchScreen",
         "historyScreen"
     ].forEach(id => {
@@ -3872,5 +4000,249 @@ function renderEffectivenessTable() {
         </div>
 
     `;
+
+}
+function renderSoftballSummary() {
+
+    const liveScreen =
+        document.getElementById(
+            "liveMatchScreen"
+        );
+
+    const score = getScore();
+
+    liveScreen.innerHTML = `
+        <div class="summary-screen">
+
+            <h2>🥎 Match Summary</h2>
+
+           <div class="softball-summary-header">
+
+                <div class="summary-team">
+                    ${App.currentMatch.ourTeam}
+                </div>
+
+                <div class="summary-score">
+                    ${score.our} - ${score.opposition}
+                </div>
+
+                <div class="summary-team">
+                    ${App.currentMatch.opponent}
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Game Statistics</h3>
+
+                <table class="softball-summary-table">
+
+                    <tr>
+                        <th></th>
+                        <th>FOR</th>
+                        <th>AGAINST</th>
+                    </tr>
+
+                    <tr>
+                        <td>Innings Completed</td>
+                        <td>${App.currentMatch.inning}</td>
+                        <td>${App.currentMatch.inning}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Runs</td>
+                        <td>${score.our}</td>
+                        <td>${score.opposition}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="sub-stat">
+                            ↳ Home Runs
+                        </td>
+
+                        <td>
+                            ${Math.min(
+                                getEventCount(
+                                    "homeRun"
+                                ),
+                                score.our
+                            )}
+                        </td>
+
+                        <td>
+                            -
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>Strikes</td>
+                        <td>${getEventCount("strike")}</td>
+                        <td>-</td>
+                    </tr>
+
+                    <tr>
+                        <td>Balls</td>
+                        <td>${getEventCount("ball")}</td>
+                        <td>-</td>
+                    </tr>
+
+                    <tr>
+                        <td>Outs</td>
+                        <td>${getEventCount("out")}</td>
+                        <td>-</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+            <div class="summary-actions">
+
+                <button
+                    id="summaryExportButton"
+                    class="summary-button export">
+                    Export Match
+                </button>
+
+                <button
+                    id="newMatchButton"
+                    class="summary-button new-match">
+                    🥎 Softball Home
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    document
+        .getElementById(
+            "summaryExportButton"
+        )
+        .addEventListener(
+            "click",
+            exportMatch
+        );
+
+    document
+        .getElementById(
+            "newMatchButton"
+        )
+        .addEventListener(
+            "click",
+            returnToSoftballHome
+        );
+}
+function returnToSoftballHome() {
+
+    App.currentMatch = null;
+
+    showSoftballMenu();
+
+}
+
+function showSoftballMenu() {
+
+    hideAllScreens();
+
+    document
+        .getElementById(
+            "setupScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "liveMatchScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "historyScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "homeScreen"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    const screen =
+        document.getElementById(
+            "softballMenuScreen"
+        );
+
+    screen.classList.remove(
+        "hidden"
+    );
+
+    screen.innerHTML = `
+
+        <div class="card hockey-menu-card">
+
+            <button
+                class="action-button secondary-button"
+                onclick="returnToHomeScreen()"
+            >
+                ← Back
+            </button>
+
+            <h1>
+                🥎 Softball
+            </h1>
+
+            <div class="hockey-menu-buttons">
+
+                <button
+                    class="sport-button softball"
+                    onclick="showSoftballSetup()"
+                >
+                    ▶ New Match
+                </button>
+
+                <button
+                    class="sport-button history"
+                    onclick="renderSoftballHistory()"
+                >
+                    📖 Match History
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+function returnHome() {
+
+    hideAllScreens();
+
+    document
+        .getElementById(
+            "homeScreen"
+        )
+        .classList.remove(
+            "hidden"
+        );
+}
+function renderSoftballHistory() {
+
+    alert(
+        "Softball Match History coming next.\n\nFor tomorrow's match please use the scoring functionality."
+    );
 
 }

@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 config.js
-Version: 2.0.1
+Version: 2.0.2
 =========================================================
 */
 
@@ -523,6 +523,12 @@ const MatchIQ = {
             icon: "➖",
             category: "system"
         },
+        {
+            id: "homeRun",
+            name: "Home Run",
+            icon: "💥",
+            category: "softball"
+        }
         /*{
             id: "nextBatter",
             name: "Next Batter",

@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 events.js
-Version: 2.0.1
+Version: 2.0.2
 Event Engine
 =========================================================
 */
@@ -390,13 +390,13 @@ function recordStrike() {
     App.currentMatch.strikes++;
 
     recordEvent("strike");
-    nextBatter();
 
     if (App.currentMatch.strikes >= 3) {
 
         App.currentMatch.outs++;
 
         recordEvent("out");
+        nextBatter();
 
         App.currentMatch.strikes = 0;
         App.currentMatch.balls = 0;
@@ -525,6 +525,7 @@ function switchSides() {
 
     saveMatch();
     updateScoreboard();
+    updatePeriodDisplay();
 
 }
 function recordRun() {
@@ -653,5 +654,25 @@ function advanceRunner() {
     saveMatch();
 
     updateScoreboard();
+
+}
+
+function recordHomeRun() {
+
+    const batter =
+        getCurrentBatter();
+
+    recordEvent(
+        "homeRun",
+        {
+            batter: batter
+        }
+    );
+
+    recordRun();
+    nextBatter();
+    saveMatch();
+    updateScoreboard();
+    renderTimeline();
 
 }

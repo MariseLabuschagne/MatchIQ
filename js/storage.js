@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 storage.js
-Version: 1.1.1
+Version: 2.0.2
 Persistence Layer
 =========================================================
 */
@@ -199,15 +199,19 @@ function storageInfo() {
 
 }
 
-
 function saveMatchToHistory(
     match
 ) {
 
+    const storageKey =
+        match.sport === "softball"
+            ? "softballHistory"
+            : "matchHistory";
+
     const history =
         JSON.parse(
             localStorage.getItem(
-                "matchHistory"
+                storageKey
             ) || "[]"
         );
 
@@ -216,12 +220,11 @@ function saveMatchToHistory(
     );
 
     localStorage.setItem(
-        "matchHistory",
+        storageKey,
         JSON.stringify(
             history
         )
     );
-
 }
 
 function deleteHistoricalMatch(
@@ -250,15 +253,20 @@ function deleteHistoricalMatch(
 
 }
 
+function getMatchHistory(
+    sport = "hockey"
+) {
 
-function getMatchHistory() {
+    const storageKey =
+        sport === "softball"
+            ? "softballHistory"
+            : "matchHistory";
 
     return JSON.parse(
         localStorage.getItem(
-            "matchHistory"
+            storageKey
         ) || "[]"
     );
-
 }
 
 function getHistoricalMatch(
