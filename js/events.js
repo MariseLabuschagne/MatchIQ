@@ -461,21 +461,177 @@ function recordBall() {
 
 function recordOut() {
 
-    App.currentMatch.outs++;
+    showOutOptions();
 
-    recordEvent("out");
+}
+function showOutOptions() {
+
+    removeOutcomePanel();
+
+    const container =
+        document.getElementById(
+            "eventSections"
+        );
+
+    const panel =
+        document.createElement(
+            "div"
+        );
+
+    panel.id =
+        "outcomePanel";
+
+    panel.className =
+        "card outcome-panel";
+
+    let buttons = "";
+
+    buttons += `
+        <button
+            class="event-button softball out"
+            onclick="recordSpecificOut('batter')"
+        >
+            ❌<br>
+            Batter
+        </button>
+    `;
 
     if (
-        App.currentMatch.outs >= 3
+        App.currentMatch.bases.first
     ) {
 
-        switchSides();
+        buttons += `
+            <button
+                class="event-button softball out"
+                onclick="recordSpecificOut('first')"
+            >
+                ❌<br>
+                1st Base
+                (#${App.currentMatch.bases.first})
+            </button>
+        `;
+    }
+
+    if (
+        App.currentMatch.bases.second
+    ) {
+
+        buttons += `
+            <button
+                class="event-button softball out"
+                onclick="recordSpecificOut('second')"
+            >
+                ❌<br>
+                2nd Base
+                (#${App.currentMatch.bases.second})
+            </button>
+        `;
+    }
+
+    if (
+        App.currentMatch.bases.third
+    ) {
+
+        buttons += `
+            <button
+                class="event-button softball out"
+                onclick="recordSpecificOut('third')"
+            >
+                ❌<br>
+                3rd Base
+                (#${App.currentMatch.bases.third})
+            </button>
+        `;
+    }
+
+    panel.innerHTML = `
+
+        <h3 class="outcome-title">
+
+            SELECT OUT
+
+        </h3>
+
+        <div class="event-grid">
+
+            ${buttons}
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+
+    `;
+
+    container.prepend(
+        panel
+    );
+
+}
+function recordSpecificOut(
+    position
+) {
+
+    if (
+        position === "first"
+    ) {
+
+        App.currentMatch.bases.first =
+            null;
 
     }
+
+    if (
+        position === "second"
+    ) {
+
+        App.currentMatch.bases.second =
+            null;
+
+    }
+
+    if (
+        position === "third"
+    ) {
+
+        App.currentMatch.bases.third =
+            null;
+
+    }
+
+    if (
+        position === "batter"
+    ) {
+
+        const side =
+            App.currentMatch.currentSide ===
+            "ourBatting"
+                ? "ourTeam"
+                : "opponent";
+
+        App.currentMatch.currentBatter[
+            side
+        ]++;
+    }
+
+    App.currentMatch.outs++;
+
+    recordEvent(
+        "out"
+    );
 
     saveMatch();
 
     updateScoreboard();
+
+    renderTimeline();
+
+    removeOutcomePanel();
 
 }
 
@@ -492,8 +648,30 @@ function advanceInning() {
     saveMatch();
     updateScoreboard();
 }
+
 function switchSides() {
 
+    const battingSide =
+        App.currentMatch.currentSide ===
+        "ourBatting"
+            ? "ourTeam"
+            : "opponent";
+    
+        App.currentMatch.currentBatter[
+            battingSide
+        ]++;
+
+    if (
+        App.currentMatch.currentBatter[
+            battingSide
+        ] > 9
+    ) {
+
+        App.currentMatch.currentBatter[
+            battingSide
+        ] = 1;
+
+    }        
     if (
         App.currentMatch.currentSide ===
         "ourBatting"
@@ -522,6 +700,7 @@ function switchSides() {
     App.currentMatch.balls = 0;
     App.currentMatch.strikes = 0;
     App.currentMatch.outs = 0;
+
 
     saveMatch();
     updateScoreboard();
@@ -590,6 +769,13 @@ function nextBatter() {
 
 function advanceRunner() {
 
+    recordEvent(
+        "advance",
+        {
+            batter:
+                getCurrentBatter()
+        }
+    );
     const match =
         App.currentMatch;
 
@@ -650,9 +836,11 @@ function advanceRunner() {
         match.currentBatter = 1;
 
     }
+    
+    App.currentMatch.balls = 0;
+    App.currentMatch.strikes = 0;
 
     saveMatch();
-
     updateScoreboard();
 
 }
@@ -671,6 +859,10 @@ function recordHomeRun() {
 
     recordRun();
     nextBatter();
+    
+    App.currentMatch.balls = 0;
+    App.currentMatch.strikes = 0;
+
     saveMatch();
     updateScoreboard();
     renderTimeline();
