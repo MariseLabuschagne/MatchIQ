@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 config.js
-Version: 1.1.1
+Version: 2.0.1
 =========================================================
 */
 
@@ -34,6 +34,11 @@ const MatchIQ = {
         {
             id: "discipline",
             name: "Discipline"
+        },
+
+        {
+            id: "softball",
+            name: "Softball"
         }
 
     ],
@@ -463,7 +468,67 @@ const MatchIQ = {
             name: "Period Changed",
             icon: "⏭",
             category: "system"
+        },
+
+        /*
+        =====================================================
+        SOFTBALL EVENTS
+        =====================================================
+        */
+        {
+            id: "switchSides",
+            name: "Switch Sides",
+            icon: "🔄",
+            category: "softball"
+        },
+        {
+            id: "strike",
+            name: "Strike",
+            icon: "🥎",
+            category: "softball"
+        },
+        {
+            id: "ball",
+            name: "Ball",
+            icon: "⚪",
+            category: "softball"
+        },
+        {
+            id: "runScored",
+            name: "Run",
+            icon: "➕",
+            category: "softball"
+        },
+        {
+            id: "runFor",
+            name: "Run For",
+            icon: "➕",
+            category: "system"
+        },
+        {
+            id: "runAgainst",
+            name: "Run Against",
+            icon: "➖",
+            category: "system"
+        },
+        {
+            id: "out",
+            name: "Out",
+            icon: "❌",
+            category: "softball"
+        },
+        {
+            id: "walk",
+            name: "Walk",
+            icon: "🚶",
+            category: "system"
         }
+        /*{
+            id: "nextBatter",
+            name: "Next Batter",
+            icon: "➡️",
+            category: "softball"
+        }*/
 
     ]
 

@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 styles.css
-Version: 1.1.1
+Version: 2.0.1
 =========================================================
 */
 
@@ -379,6 +379,16 @@ HOME SCREEN
             135deg,
             #2563eb,
             #38bdf8
+        );
+}
+
+.sport-button.softball {
+
+    background:
+        linear-gradient(
+            135deg,
+            #65a30d,
+            #84cc16
         );
 }
 
@@ -1535,7 +1545,82 @@ ATTACK FUNNEL
     color: var(--success);
 }
 
+/* =====================================================
+SOFT BALL
+===================================================== */
+.event-button.softball.strike {
+    background: #16a34a;
+    color: white;
+}
 
+.event-button.softball.ball {
+    background: #2563eb;
+    color: white;
+}
+
+.event-button.softball.run {
+    background: #f59e0b;
+    color: white;
+}
+
+.event-button.softball.out {
+    background: #dc2626;
+    color: white;
+}
+
+.event-button.softball.inning {
+    background: #7c3aed;
+    color: white;
+}
+.softball-counts {
+
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 8px;
+    text-align: center;
+
+}
+.softball-status {
+
+    text-align: center;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    margin-top: 4px;
+
+}
+
+.softball-batter {
+
+    margin-top: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+
+}
+
+.softball-diamond {
+
+    margin-top: 4px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.0;
+
+}
+
+.softball-timer {
+
+    font-size: 2.8rem !important;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    color: #35C6FF;
+
+}
 
 /* =====================================================
 MOBILE

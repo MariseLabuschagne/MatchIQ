@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 ui.js
-Version: 1.0.1
+Version: 2.0.1
 =========================================================
 */
 
@@ -110,7 +110,11 @@ function renderLiveMatch() {
                 id="nextPeriodButton"
                 class="period-button"
             >
-                ⏭ Next Period
+                ${
+                    App.currentMatch.sport === "softball"
+                        ? "🔄 Next Inning"
+                        : "⏭ Next Period"
+                }
             </button>
 
             <button
@@ -289,6 +293,10 @@ function highlightAndExecute(
 
 function renderEventSections() {
 
+    console.log(
+        "RENDER EVENT SECTIONS RUNNING"
+    );
+
     const container =
         document.getElementById(
             "eventSections"
@@ -300,8 +308,40 @@ function renderEventSections() {
 
     container.innerHTML = "";
 
-    MatchIQ.categories.forEach(
-        category => {
+    console.log(
+        "Current sport:",
+        App.currentMatch?.sport
+    );
+
+    let visibleCategories = [];
+
+    if (
+        App.currentMatch &&
+        App.currentMatch.sport === "softball"
+    ) {
+
+        visibleCategories = [
+            "softball"
+        ];
+
+    }
+    else {
+
+        visibleCategories = [
+            "attack",
+            "defence",
+            "discipline"
+        ];
+
+    }
+
+    visibleCategories.forEach(
+        categoryId => {
+
+            const category =
+                MatchIQ.categories.find(
+                    c => c.id === categoryId
+                );
 
             const heading =
                 document.createElement(
@@ -318,7 +358,6 @@ function renderEventSections() {
                 heading
             );
 
-            
             const grid =
                 document.createElement(
                     "div"
@@ -327,96 +366,177 @@ function renderEventSections() {
             grid.className =
                 `event-grid ${category.id}`;
 
-
             MatchIQ.events
                 .filter(
                     event =>
                         event.category ===
                         category.id
                 )
-                .forEach(event => {
+                .forEach(
+                    event => {
 
-                    const button =
-                        document.createElement(
-                            "button"
+                        const button =
+                            document.createElement(
+                                "button"
+                            );
+
+                        button.className =
+                            `event-button ${event.category}`;
+                        
+                            if (event.id === "strike") {
+                            button.classList.add("strike");
+                        }
+
+                        if (event.id === "ball") {
+                            button.classList.add("ball");
+                        }
+
+                        if (
+                            event.id === "runScored" ||
+                            event.id === "ourRun"
+                        ) {
+                            button.classList.add("run");
+                        }
+
+                        if (
+                            event.id === "runScored" ||
+                            event.id === "oppositionRun"
+                        ) {
+                            button.classList.add("run");
+                        }
+
+                        if (event.id === "out") {
+                            button.classList.add("out");
+                        }
+
+                        if (event.id === "nextInning") {
+                            button.classList.add("inning");
+                        }
+
+                        button.innerHTML =
+                            `${event.icon}<br>${event.name}`;
+
+                        button.addEventListener(
+                            "click",
+                            () => {
+
+                                highlightEventButton(
+                                    button
+                                );
+
+                                if (
+                                    event.id === "attackStart"
+                                ) {
+
+                                    showCircleEntryLocationOptions();
+                                    return;
+
+                                }
+
+                                if (
+                                    event.id === "defenceEntry"
+                                ) {
+
+                                    showDefenceEntryLocationOptions();
+                                    return;
+
+                                }
+
+                                if (
+                                    event.id === "shot"
+                                ) {
+
+                                    showShotOutcomeOptions();
+                                    return;
+
+                                }
+
+                                if (
+                                    event.id === "pcWon"
+                                ) {
+
+                                    showPenaltyCornerOutcomeOptions();
+                                    return;
+
+                                }
+
+                                if (
+                                    event.id === "pcConceded"
+                                ) {
+
+                                    showPenaltyCornerConcededOptions();
+                                    return;
+
+                                }
+
+                                if (
+                                    event.id === "strike"
+                                ) {
+
+                                    recordStrike();
+                                    return;
+
+                                }
+
+                                if (
+                                    event.id === "ball"
+                                ) {
+
+                                    recordBall();
+                                    return;
+
+                                }
+                                
+                                if (
+                                    event.id === "switchSides"
+                                ) {
+
+                                    switchSides();
+
+                                    return;
+
+                                }
+
+                                if (
+                                    event.id === "out"
+                                ) {
+
+                                    recordOut();
+                                    return;
+
+                                }
+
+                                if (
+                                    event.id === "nextInning"
+                                ) {
+
+                                    advanceInning();
+                                    return;
+
+                                }
+                                if (
+                                    event.id === "runScored"
+                                ) {
+
+                                    recordRun();
+
+                                    return;
+
+                                }
+
+                                recordEvent(
+                                    event.id
+                                );
+
+                            }
                         );
 
-                    button.className =
-                        `event-button ${event.category}`;
+                        grid.appendChild(
+                            button
+                        );
 
-                    button.innerHTML =
-                        `${event.icon}<br>${event.name}`;
-
-                    
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            highlightEventButton(
-                                button
-                            );
-
-                            if (
-                                event.id === "attackStart"
-                            ) {
-
-                                showCircleEntryLocationOptions();
-
-                                return;
-
-                            }
-                            
-                            if (
-                                event.id === "defenceEntry"
-                            ) {
-                                showDefenceEntryLocationOptions();
-                                return;
-                            }
-
-                            if (
-                                event.id === "shot"
-                            ) {
-
-                                showShotOutcomeOptions();
-
-                                return;
-
-                            }
-
-                            if (
-                                event.id === "pcWon"
-                            ) {
-
-                                showPenaltyCornerOutcomeOptions();
-
-                                return;
-
-                            }
-
-                            
-                            if (
-                                event.id === "pcConceded"
-                            ) {
-
-                                showPenaltyCornerConcededOptions();
-
-                                return;
-
-                            }
-
-                            recordEvent(
-                                event.id
-                            );
-
-                        }
-                    );
-
-
-                    grid.appendChild(
-                        button
-                    );
-
-                });
+                    }
+                );
 
             container.appendChild(
                 grid
@@ -424,6 +544,7 @@ function renderEventSections() {
 
         }
     );
+
 }
 
 function updateScoreboard() {
@@ -440,8 +561,86 @@ function updateScoreboard() {
     const score =
         getScore();
 
+    if (
+        App.currentMatch &&
+        App.currentMatch.sport === "softball"
+    ) {
+
+       scoreDisplay.innerHTML = `
+
+            <div class="softball-score">
+
+                <div class="softball-main-score">
+                    ${score.our} - ${score.opposition}
+                </div>
+
+                
+                <div class="softball-status">
+
+                    ${
+                        App.currentMatch.currentSide === "ourBatting"
+                            ? "🟢 OUR TEAM BATTING"
+                            : "🔵 OPPONENT BATTING"
+                    }
+
+                </div>
+
+                <div class="softball-counts">
+
+                    ⚪ Balls: ${App.currentMatch.balls}
+
+                    &nbsp;&nbsp;
+
+                    ✅ Strikes: ${App.currentMatch.strikes}
+
+                    &nbsp;&nbsp;
+
+                    ❌ Outs: ${App.currentMatch.outs}
+
+                </div>
+
+
+                <div class="softball-diamond">
+
+                    <div>
+                        ${
+                            App.currentMatch.bases.second
+                                ? "🟠"
+                                : "⚪"
+                        }
+                    </div>
+
+                    <div>
+
+                        ${
+                            App.currentMatch.bases.third
+                                ? "🟠"
+                                : "⚪"
+                        }
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+
+                        ${
+                            App.currentMatch.bases.first
+                                ? "🟠"
+                                : "⚪"
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
     scoreDisplay.textContent =
         `${score.our} - ${score.opposition}`;
+
 }
 
 

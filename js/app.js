@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 app.js
-Version: 1.1.1
+Version: 2.0.1
 =========================================================
 */
 
@@ -287,15 +287,47 @@ function createMatchObject(
                 : "Q1",
 
         sport:
-            "hockey",
+            App.selectedSport || "hockey",
 
         elapsedSeconds: 0,
+
+        inning: 1,
+        balls: 0,
+        strikes: 0,
+        outs: 0,
+        currentSide: "ourBatting",
+
+            currentBatter: 1,
+
+            bases: {
+
+                first: false,
+                second: false,
+                third: false
+
+            },
         
         events: [],
 
         attackCounter: 0,
 
-        activeAttackId: null
+        activeAttackId: null,
+
+        // Softball
+        inning: 1,
+
+        strikes: 0,
+        balls: 0,
+
+        outs: 0,
+
+        bases: {
+
+            first: false,
+            second: false,
+            third: false
+
+        }
 
     };
 }
@@ -464,6 +496,26 @@ function selectSport(
 
     App.selectedSport =
         sport;
+
+    const startButton =
+        document.getElementById(
+            "startMatchButton"
+        );
+
+    if (
+        sport === "softball"
+    ) {
+
+        startButton.innerHTML =
+            "🥎 START MATCH";
+
+    }
+    else {
+
+        startButton.innerHTML =
+            "🏑 START MATCH";
+
+    }
 
     document
         .getElementById(

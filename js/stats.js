@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 stats.js
-Version: 1.1.1
+Version: 2.0.1
 =========================================================
 */
 
@@ -29,6 +29,27 @@ SCORE
 */
 
 function getScore() {
+
+    if (
+        App.currentMatch &&
+        App.currentMatch.sport === "softball"
+    ) {
+
+        return {
+
+            our:
+                getEventCount(
+                    "runFor"
+                ),
+
+            opposition:
+                getEventCount(
+                    "runAgainst"
+                )
+
+        };
+
+    }
 
     return {
 
@@ -57,6 +78,7 @@ function getScore() {
             )
 
     };
+
 }
 
 /*
