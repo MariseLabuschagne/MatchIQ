@@ -1603,10 +1603,11 @@ SOFT BALL
 
 .softball-diamond {
 
-    margin-top: 4px;
+    margin-top: 12px;
     text-align: center;
-    font-size: 12px;
-    line-height: 1.0;
+    font-size: 24px;
+    line-height: 1.6;
+    font-weight: 700;
 
 }
 
@@ -1619,6 +1620,18 @@ SOFT BALL
     font-weight: 800;
 
     color: #35C6FF;
+
+}
+
+.event-button.softball.switch {
+
+    background: #7c3aed;
+
+}
+
+.event-button.softball.advance {
+
+    background: #f59e0b;
 
 }
 

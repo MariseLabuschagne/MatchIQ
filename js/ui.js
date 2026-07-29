@@ -72,7 +72,11 @@ function renderLiveMatch() {
 
                 <div
                     id="timerDisplay"
-                    class="timer"
+                    class="${
+                        App.currentMatch?.sport === "softball"
+                            ? "timer softball-timer"
+                            : "timer"
+                    }"
                 >
                     00:00
                 </div>
@@ -496,6 +500,16 @@ function renderEventSections() {
                                     return;
 
                                 }
+                                
+                                if (
+                                    event.id === "advance"
+                                ) {
+
+                                    advanceRunner();
+
+                                    return;
+
+                                }
 
                                 if (
                                     event.id === "out"
@@ -603,18 +617,20 @@ function updateScoreboard() {
                 <div class="softball-diamond">
 
                     <div>
+
                         ${
                             App.currentMatch.bases.second
-                                ? "🟠"
+                                ? `🟠${App.currentMatch.bases.second}`
                                 : "⚪"
                         }
+
                     </div>
 
                     <div>
 
                         ${
                             App.currentMatch.bases.third
-                                ? "🟠"
+                                ? `🟠${App.currentMatch.bases.third}`
                                 : "⚪"
                         }
 
@@ -622,9 +638,19 @@ function updateScoreboard() {
 
                         ${
                             App.currentMatch.bases.first
-                                ? "🟠"
+                                ? `🟠${App.currentMatch.bases.first}`
                                 : "⚪"
                         }
+
+                    </div>
+
+                    <div>
+
+                        🟡${getCurrentBatter()}
+
+                        <br>
+
+                        HOME
 
                     </div>
 

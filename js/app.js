@@ -291,22 +291,6 @@ function createMatchObject(
 
         elapsedSeconds: 0,
 
-        inning: 1,
-        balls: 0,
-        strikes: 0,
-        outs: 0,
-        currentSide: "ourBatting",
-
-            currentBatter: 1,
-
-            bases: {
-
-                first: false,
-                second: false,
-                third: false
-
-            },
-        
         events: [],
 
         attackCounter: 0,
@@ -315,19 +299,30 @@ function createMatchObject(
 
         // Softball
         inning: 1,
-
         strikes: 0,
         balls: 0,
-
         outs: 0,
 
         bases: {
 
-            first: false,
-            second: false,
-            third: false
+            first: null,
+            second: null,
+            third: null
 
-        }
+        },
+        battingOrder: {
+
+            ourTeam: 1,
+            opponent: 1
+
+        },
+
+        currentBatter: {
+
+            ourTeam: 1,
+            opponent: 1
+
+        },
 
     };
 }

@@ -306,6 +306,55 @@ function clearEvents() {
 
 }
 
+function nextBatter() {
+
+    if (
+        App.currentMatch.currentSide ===
+        "ourBatting"
+    ) {
+
+        App.currentMatch.battingOrder.ourTeam++;
+
+        if (
+            App.currentMatch.battingOrder.ourTeam > 9
+        ) {
+
+            App.currentMatch.battingOrder.ourTeam = 1;
+
+        }
+
+    }
+    else {
+
+        App.currentMatch.battingOrder.opponent++;
+
+        if (
+            App.currentMatch.battingOrder.opponent > 9
+        ) {
+
+            App.currentMatch.battingOrder.opponent = 1;
+
+        }
+
+    }
+
+}
+
+function getCurrentBatter() {
+
+    if (
+        App.currentMatch.currentSide ===
+        "ourBatting"
+    ) {
+
+        return App.currentMatch.battingOrder.ourTeam;
+
+    }
+
+    return App.currentMatch.battingOrder.opponent;
+
+}
+
 /*
 =========================================================
 MATCH EVENT SUMMARY
@@ -341,6 +390,7 @@ function recordStrike() {
     App.currentMatch.strikes++;
 
     recordEvent("strike");
+    nextBatter();
 
     if (App.currentMatch.strikes >= 3) {
 
@@ -362,53 +412,51 @@ function recordBall() {
 
     recordEvent("ball");
 
-    if (
-    App.currentMatch.balls >= 4
-) {
-
-    const bases =
-        App.currentMatch.bases;
-
-    if (
-        !bases.first
+        if (
+        App.currentMatch.balls >= 4
     ) {
 
-        bases.first = true;
+        const bases =
+            App.currentMatch.bases;
+
+        if (
+            bases.third !== null
+        ) {
+
+            recordRun();
+
+        }
+
+        bases.third =
+            bases.second;
+
+        bases.second =
+            bases.first;
+
+        bases.first =
+            getCurrentBatter();
+        
+        App.currentMatch.currentBatter++;
+
+        if (
+            App.currentMatch.currentBatter > 9
+        ) {
+
+            App.currentMatch.currentBatter = 1;
+
+        }
+
+        App.currentMatch.balls = 0;
+        App.currentMatch.strikes = 0;
+
+        recordEvent("walk");
+        nextBatter();
+        saveMatch();
+        updateScoreboard();
+
+        return;
 
     }
-    else if (
-        !bases.second
-    ) {
-
-        bases.second = true;
-
-    }
-    else if (
-        !bases.third
-    ) {
-
-        bases.third = true;
-
-    }
-    else {
-
-        recordRun();
-
-    }
-
-    App.currentMatch.balls = 0;
-    App.currentMatch.strikes = 0;
-
-    recordEvent(
-        "walk"
-    );
-
-    saveMatch();
-    updateScoreboard();
-
-    return;
-
-}
 }
 
 function recordOut() {
@@ -463,6 +511,13 @@ function switchSides() {
         App.currentMatch.inning++;
 
     }
+    App.currentMatch.bases = {
+
+        first: null,
+        second: null,
+        third: null
+
+    };
 
     App.currentMatch.balls = 0;
     App.currentMatch.strikes = 0;
@@ -500,18 +555,103 @@ function recordRun() {
 
 function nextBatter() {
 
-    App.currentMatch.currentBatter++;
-
     if (
-        App.currentMatch.currentBatter > 9
+        App.currentMatch.currentSide ===
+        "ourBatting"
     ) {
 
-        App.currentMatch.currentBatter = 1;
+        App.currentMatch.battingOrder.ourTeam++;
+
+        if (
+            App.currentMatch.battingOrder.ourTeam > 9
+        ) {
+
+            App.currentMatch.battingOrder.ourTeam = 1;
+
+        }
+
+    }
+    else {
+
+        App.currentMatch.battingOrder.opponent++;
+
+        if (
+            App.currentMatch.battingOrder.opponent > 9
+        ) {
+
+            App.currentMatch.battingOrder.opponent = 1;
+
+        }
+
+    }
+
+}
+
+function advanceRunner() {
+
+    const match =
+        App.currentMatch;
+
+    const bases =
+        match.bases;
+
+    /*
+    Runner on 3rd scores
+    */
+
+    if (
+        bases.third !== null
+    ) {
+
+        if (
+            match.currentSide ===
+            "ourBatting"
+        ) {
+
+            recordEvent(
+                "runFor"
+            );
+
+        }
+        else {
+
+            recordEvent(
+                "runAgainst"
+            );
+
+        }
+
+    }
+
+    /*
+    Move runners forward
+    */
+
+    bases.third =
+        bases.second;
+
+    bases.second =
+        bases.first;
+
+    bases.first =
+        getCurrentBatter();
+
+    /*
+    Next batter
+    */
+
+    nextBatter();
+
+    if (
+        match.currentBatter > 9
+    ) {
+
+        match.currentBatter = 1;
 
     }
 
     saveMatch();
 
-    renderLiveMatch();
+    updateScoreboard();
 
 }

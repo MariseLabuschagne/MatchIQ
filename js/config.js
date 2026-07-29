@@ -13,7 +13,7 @@ const MatchIQ = {
 
         name: "MatchIQ",
 
-        version: "1.0.6",
+        version: "2.0.1",
 
         company: "MatchIQ"
 
@@ -494,10 +494,22 @@ const MatchIQ = {
             category: "softball"
         },
         {
-            id: "runScored",
-            name: "Run",
-            icon: "➕",
+            id: "advance",
+            name: "Advance",
+            icon: "➡️",
             category: "softball"
+        },
+        {
+            id: "out",
+            name: "Out",
+            icon: "❌",
+            category: "softball"
+        },
+        {
+            id: "walk",
+            name: "Walk",
+            icon: "🚶",
+            category: "system"
         },
         {
             id: "runFor",
@@ -511,18 +523,6 @@ const MatchIQ = {
             icon: "➖",
             category: "system"
         },
-        {
-            id: "out",
-            name: "Out",
-            icon: "❌",
-            category: "softball"
-        },
-        {
-            id: "walk",
-            name: "Walk",
-            icon: "🚶",
-            category: "system"
-        }
         /*{
             id: "nextBatter",
             name: "Next Batter",
