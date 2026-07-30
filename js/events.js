@@ -768,6 +768,263 @@ function nextBatter() {
 }
 
 function advanceRunner() {
+    removeOutcomePanel();
+
+    const container =
+        document.getElementById(
+            "eventSections"
+        );
+
+    const panel =
+        document.createElement(
+            "div"
+        );
+
+    panel.id =
+        "outcomePanel";
+
+    panel.className =
+        "card outcome-panel";
+
+    let buttons = "";
+
+    buttons += `
+        <button
+            class="event-button softball advance"
+            onclick="showAdvanceDestination('batter')"
+        >
+            🏠<br>
+            Batter (#${getCurrentBatter()})
+        </button>
+    `;
+
+    if (
+        App.currentMatch.bases.first
+    ) {
+        buttons += `
+            <button
+                class="event-button softball advance"
+                onclick="showAdvanceDestination('first')"
+            >
+                1️⃣<br>
+                Runner #${App.currentMatch.bases.first}
+            </button>
+        `;
+    }
+
+    if (
+        App.currentMatch.bases.second
+    ) {
+        buttons += `
+            <button
+                class="event-button softball advance"
+                onclick="showAdvanceDestination('second')"
+            >
+                2️⃣<br>
+                Runner #${App.currentMatch.bases.second}
+            </button>
+        `;
+    }
+
+    if (
+        App.currentMatch.bases.third
+    ) {
+        buttons += `
+            <button
+                class="event-button softball advance"
+                onclick="showAdvanceDestination('third')"
+            >
+                3️⃣<br>
+                Runner #${App.currentMatch.bases.third}
+            </button>
+        `;
+    }
+
+    panel.innerHTML = `
+        <h3 class="outcome-title">
+            SELECT RUNNER
+        </h3>
+
+        <div class="event-grid">
+            ${buttons}
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+        </div>
+    `;
+
+    container.prepend(
+        panel
+    );
+}
+
+function showAdvanceDestination(
+    runnerPosition
+) {
+    const panel =
+        document.getElementById(
+            "outcomePanel"
+        );
+
+    panel.innerHTML = `
+        <h3 class="outcome-title">
+            MOVE TO
+        </h3>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button softball advance"
+                onclick="moveRunner('${runnerPosition}','first')"
+            >
+                1️⃣<br>
+                First Base
+            </button>
+
+            <button
+                class="event-button softball advance"
+                onclick="moveRunner('${runnerPosition}','second')"
+            >
+                2️⃣<br>
+                Second Base
+            </button>
+
+            <button
+                class="event-button softball advance"
+                onclick="moveRunner('${runnerPosition}','third')"
+            >
+                3️⃣<br>
+                Third Base
+            </button>
+
+            <button
+                class="event-button softball advance"
+                onclick="moveRunner('${runnerPosition}','home')"
+            >
+                🏠<br>
+                Home
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="removeOutcomePanel()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+    `;
+}
+
+function moveRunner(
+    from,
+    to
+) {
+
+    const bases =
+        App.currentMatch.bases;
+
+    let runner = null;
+
+    /*
+    Identify runner
+    */
+
+    if (from === "batter") {
+        runner =
+            getCurrentBatter();
+    }
+    else {
+        runner =
+            bases[from];
+
+        bases[from] = null;
+    }
+
+    /*
+    Runner scores
+    */
+
+    if (to === "home") {
+
+        if (
+            App.currentMatch.currentSide ===
+            "ourBatting"
+        ) {
+            recordEvent(
+                "runFor"
+            );
+        }
+        else {
+            recordEvent(
+                "runAgainst"
+            );
+        }
+
+        if (
+            from === "batter"
+        ) {
+            nextBatter();
+        }
+
+        recordEvent(
+            "advance"
+        );
+
+        saveMatch();
+        updateScoreboard();
+        renderTimeline();
+        removeOutcomePanel();
+
+        return;
+    }
+
+    /*
+    Prevent overwriting
+    an occupied base
+    */
+
+    if (
+        bases[to] !== null
+    ) {
+        alert(
+            "Base already occupied."
+        );
+        return;
+    }
+
+    /*
+    Move runner
+    */
+
+    bases[to] = runner;
+
+    if (
+        from === "batter"
+    ) {
+        nextBatter();
+    }
+
+    App.currentMatch.balls = 0;
+    App.currentMatch.strikes = 0;
+
+    recordEvent(
+        "advance"
+    );
+
+    saveMatch();
+    updateScoreboard();
+    renderTimeline();
+    removeOutcomePanel();
+}
+
+function advanceRunnerPrev() {
 
     recordEvent(
         "advance",
@@ -847,6 +1104,9 @@ function advanceRunner() {
 
 function recordHomeRun() {
 
+    const bases =
+        App.currentMatch.bases;
+
     const batter =
         getCurrentBatter();
 
@@ -857,14 +1117,46 @@ function recordHomeRun() {
         }
     );
 
-    recordRun();
+    /*
+    Count everybody who scores:
+    Batter + all occupied bases
+    */
+    let runsScored = 1;
+
+    if (bases.first !== null) {
+        runsScored++;
+    }
+
+    if (bases.second !== null) {
+        runsScored++;
+    }
+
+    if (bases.third !== null) {
+        runsScored++;
+    }
+
+    /*
+    Record all runs
+    */
+    for (let i = 0; i < runsScored; i++) {
+        recordRun();
+    }
+
+    /*
+    Grand Slam / Home Run clears bases
+    */
+    App.currentMatch.bases = {
+        first: null,
+        second: null,
+        third: null
+    };
+
     nextBatter();
-    
+
     App.currentMatch.balls = 0;
     App.currentMatch.strikes = 0;
 
     saveMatch();
     updateScoreboard();
     renderTimeline();
-
 }
