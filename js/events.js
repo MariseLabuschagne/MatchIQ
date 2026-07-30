@@ -419,22 +419,71 @@ function recordBall() {
         const bases =
             App.currentMatch.bases;
 
+        /*
+        Bases loaded
+        */
+
         if (
+            bases.first !== null &&
+            bases.second !== null &&
             bases.third !== null
         ) {
 
             recordRun();
 
+            bases.third =
+                bases.second;
+
+            bases.second =
+                bases.first;
+
+            bases.first =
+                getCurrentBatter();
         }
 
-        bases.third =
-            bases.second;
+        /*
+        1st and 2nd occupied
+        */
 
-        bases.second =
-            bases.first;
+        else if (
+            bases.first !== null &&
+            bases.second !== null
+        ) {
 
-        bases.first =
-            getCurrentBatter();
+            bases.third =
+                bases.second;
+
+            bases.second =
+                bases.first;
+
+            bases.first =
+                getCurrentBatter();
+        }
+
+        /*
+        Only 1st occupied
+        */
+
+        else if (
+            bases.first !== null
+        ) {
+
+            bases.second =
+                bases.first;
+
+            bases.first =
+                getCurrentBatter();
+        }
+
+        /*
+        1st not occupied
+        */
+
+        else {
+
+            bases.first =
+                getCurrentBatter();
+        }
         
         App.currentMatch.currentBatter++;
 
