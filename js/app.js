@@ -224,6 +224,21 @@ function startMatch() {
                 ).value
             );
     }
+    let currentSide =
+        "ourBatting";
+
+    if (
+        App.selectedSport ===
+        "softball"
+    ) {
+
+        currentSide =
+            document.querySelector(
+                "input[name='batFirst']:checked"
+            )?.value ||
+            "ourBatting";
+
+    }
 
     App.currentMatch =
         createMatchObject({
@@ -233,7 +248,8 @@ function startMatch() {
             opponent,
             venue,
             format,
-            periodLength
+            periodLength,
+            currentSide
 
         });
 
@@ -329,7 +345,9 @@ function createMatchObject(
             opponent: 1
 
         },
-        currentSide: "ourBatting",
+        currentSide:
+            data.currentSide ||
+            "ourBatting",
 
     };
 }
@@ -509,7 +527,17 @@ function selectSport(
             "periodLengthGroup"
         );
 
+    const battingGroup =
+        document.getElementById(
+            "battingTeamGroup"
+        );
+            
     if (sport === "softball") {
+
+        if (battingGroup) {
+            battingGroup.style.display =
+                "block";
+        }
 
         if (formatGroup) {
             formatGroup.style.display =
@@ -532,6 +560,11 @@ function selectSport(
             periodGroup.style.display =
                 "block";
         }
+        if (battingGroup) {
+            battingGroup.style.display =
+                "none";
+        }
+
 
     }    
 
