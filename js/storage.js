@@ -228,13 +228,19 @@ function saveMatchToHistory(
 }
 
 function deleteHistoricalMatch(
-    matchId
+    matchId,
+    sport = "hockey"
 ) {
+
+    const storageKey =
+        sport === "softball"
+            ? "softballHistory"
+            : "matchHistory";
 
     const history =
         JSON.parse(
             localStorage.getItem(
-                "matchHistory"
+                storageKey
             ) || "[]"
         );
 
@@ -245,14 +251,13 @@ function deleteHistoricalMatch(
         );
 
     localStorage.setItem(
-        "matchHistory",
+        storageKey,
         JSON.stringify(
             filtered
         )
     );
 
 }
-
 function getMatchHistory(
     sport = "hockey"
 ) {
@@ -270,15 +275,16 @@ function getMatchHistory(
 }
 
 function getHistoricalMatch(
-    matchId
+    matchId,
+    sport = "hockey"
 ) {
 
-    return getMatchHistory()
-        .find(
-            match =>
-                match.id ===
-                matchId
-        );
+    return getMatchHistory(
+        sport
+    ).find(
+        match =>
+            match.id === matchId
+    );
 
 }
 

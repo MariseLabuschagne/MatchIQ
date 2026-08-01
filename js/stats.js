@@ -3,7 +3,7 @@
 =========================================================
 MatchIQ
 stats.js
-Version: 2.0.2
+Version: 2.0.4
 =========================================================
 */
 
@@ -835,5 +835,27 @@ function getAttacksWithGoalsByPeriod(
                 )
         )
         .length;
+
+}
+function getSoftballEventCount(
+    eventType,
+    side
+) {
+
+    if (
+        !App.currentMatch ||
+        !App.currentMatch.events
+    ) {
+
+        return 0;
+
+    }
+
+    return App.currentMatch.events.filter(
+        event =>
+            event.eventType === eventType
+            &&
+            event.battingSide === side
+    ).length;
 
 }

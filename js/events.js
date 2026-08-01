@@ -161,7 +161,11 @@ function recordEvent(
             context:
                 getCurrentContext(),
 
-       
+        battingSide:
+            App.currentMatch?.sport === "softball"
+                ? App.currentMatch.currentSide
+                : null,
+
         attackId:
             App.currentMatch
                 ? App.currentMatch.activeAttackId
@@ -705,10 +709,10 @@ function switchSides() {
         "ourBatting"
             ? "ourTeam"
             : "opponent";
-    
-        App.currentMatch.currentBatter[
-            battingSide
-        ]++;
+
+    App.currentMatch.currentBatter[
+        battingSide
+    ]++;
 
     if (
         App.currentMatch.currentBatter[
@@ -720,24 +724,31 @@ function switchSides() {
             battingSide
         ] = 1;
 
-    }        
+    }
+
     if (
-        App.currentMatch.currentSide ===
-        "ourBatting"
+        App.currentMatch.inningHalf ===
+        "top"
     ) {
 
-        App.currentMatch.currentSide =
-            "opponentBatting";
+        App.currentMatch.inningHalf =
+            "bottom";
 
-    }
-    else {
+    } else {
 
-        App.currentMatch.currentSide =
-            "ourBatting";
+        App.currentMatch.inningHalf =
+            "top";
 
         App.currentMatch.inning++;
 
     }
+
+    App.currentMatch.currentSide =
+        App.currentMatch.currentSide ===
+        "ourBatting"
+            ? "opponentBatting"
+            : "ourBatting";
+
     App.currentMatch.bases = {
 
         first: null,
@@ -750,13 +761,11 @@ function switchSides() {
     App.currentMatch.strikes = 0;
     App.currentMatch.outs = 0;
 
-
     saveMatch();
     updateScoreboard();
     updatePeriodDisplay();
 
-}
-function recordRun() {
+}function recordRun() {
 
     if (
         App.currentMatch.currentSide ===

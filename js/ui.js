@@ -9,6 +9,7 @@ Version: 2.0.2
 
 let highlightedButton = null;
 let highlightTimeout = null;
+let selectedRunner = null;
 
 function renderLiveMatch() {
 
@@ -48,26 +49,6 @@ function renderLiveMatch() {
     liveScreen.innerHTML = `
 
         <div class="card sticky-scoreboard">
-            <div class="score-row">
-
-                <div class="score-team">
-                    ${App.currentMatch.ourTeam}
-                </div>
-
-                <div
-                    id="scoreDisplay"
-                    class="score"
-                >
-                    0 - 0
-                </div>
-
-                <div class="score-team">
-                    ${App.currentMatch.opponent}
-                </div>
-
-            </div>
-        
-            
             <div class="timer-pill">
 
                 <div
@@ -95,6 +76,25 @@ function renderLiveMatch() {
                                 App.currentMatch.period
                             )
                     }
+                </div>
+
+            </div>
+
+            <div class="score-row">
+
+                <div class="score-team">
+                    ${App.currentMatch.ourTeam}
+                </div>
+
+                <div
+                    id="scoreDisplay"
+                    class="score"
+                >
+                    0 - 0
+                </div>
+
+                <div class="score-team">
+                    ${App.currentMatch.opponent}
                 </div>
 
             </div>              
@@ -554,8 +554,6 @@ function updateScoreboard() {
         App.currentMatch.sport === "softball"
     ) {
 
-        const score = getScore();
-
         const battingTeam =
             App.currentMatch.currentSide ===
             "ourBatting"
@@ -568,7 +566,6 @@ function updateScoreboard() {
         scoreDisplay.innerHTML = `
 
             <div class="softball-scoreboard">
-
                 <div class="softball-score">
                     ${score.our}
                     -
@@ -612,14 +609,34 @@ function updateScoreboard() {
                         }
                     </div>
 
-                    <div class="
-                        base second
-                        ${
-                            App.currentMatch.bases.second
-                                ? "occupied"
-                                : ""
-                        }
-                    "></div>
+                    <div
+                        onclick="
+                            if (selectedRunner) {
+
+                                moveSelectedRunner('second');
+
+                            } else if (
+                                App.currentMatch.bases.second
+                            ) {
+
+                                selectRunner('second');
+
+                            }
+                        "
+                        class="
+                            base second
+                            ${
+                                App.currentMatch.bases.second
+                                    ? 'occupied'
+                                    : ''
+                            }
+                            ${
+                                selectedRunner === 'second'
+                                    ? 'selected-base'
+                                    : ''
+                            }
+                        "
+                    ></div>
 
                     <div class="base-label label-third">
                         3RD BASE
@@ -633,14 +650,34 @@ function updateScoreboard() {
                         }
                     </div>
 
-                    <div class="
-                        base third
-                        ${
-                            App.currentMatch.bases.third
-                                ? "occupied"
-                                : ""
-                        }
-                    "></div>
+                    <div
+                        onclick="
+                            if (selectedRunner) {
+
+                                moveSelectedRunner('third');
+
+                            } else if (
+                                App.currentMatch.bases.third
+                            ) {
+
+                                selectRunner('third');
+
+                            }
+                        "
+                        class="
+                            base third
+                            ${
+                                App.currentMatch.bases.third
+                                    ? 'occupied'
+                                    : ''
+                            }
+                            ${
+                                selectedRunner === 'third'
+                                    ? 'selected-base'
+                                    : ''
+                            }
+                        "
+                    ></div>
 
                     <div class="base-label label-first">
                         1ST BASE
@@ -654,30 +691,70 @@ function updateScoreboard() {
                         }
                     </div>
 
-                    <div class="
-                        base first
-                        ${
-                            App.currentMatch.bases.first
-                                ? "occupied"
-                                : ""
-                        }
-                    "></div>
+                    <div
+                        onclick="
+                            if (selectedRunner) {
 
-                    <div class="base home"></div>
+                                moveSelectedRunner('first');
+
+                            } else if (
+                                App.currentMatch.bases.first
+                            ) {
+
+                                selectRunner('first');
+
+                            }
+                        "
+                        class="
+                            base first
+                            ${
+                                App.currentMatch.bases.first
+                                    ? 'occupied'
+                                    : ''
+                            }
+                            ${
+                                selectedRunner === 'first'
+                                    ? 'selected-base'
+                                    : ''
+                            }
+                        "
+                    ></div>
+
+                    <div
+                        class="
+                            base home
+                            ${
+                                selectedRunner === 'batter'
+                                    ? 'selected-base'
+                                    : ''
+                            }
+                        "
+                        onclick="
+                            if (selectedRunner) {
+
+                                moveSelectedRunner('home');
+
+                            } else {
+
+                                selectRunner('batter');
+
+                            }
+                        "
+                    ></div>
 
                 </div>
 
-                    <div class="home-runner">
+                <div class="home-runner">
 
-                        #${currentBatter}
+                    #${currentBatter}
 
-                    </div>
+                </div>
 
-                    <div class="home-label">
+                <div class="home-label">
 
-                        HOME
+                    HOME
 
-                    </div>
+                </div>
 
             </div>
 
@@ -691,7 +768,6 @@ function updateScoreboard() {
         `${score.our} - ${score.opposition}`;
 
 }
-
 
 function getPeriodLabel(
     period
@@ -911,7 +987,7 @@ function updatePeriodDisplay() {
     ) {
 
         periodDisplay.textContent =
-            `INNING ${App.currentMatch.inning}`;
+            `${App.currentMatch.inningHalf.toUpperCase()} ${App.currentMatch.inning}`;
 
         return;
     }
@@ -2393,7 +2469,11 @@ function renderMatchHistory() {
     hideAllScreens();
     
     const history =
-        getMatchHistory();
+        getMatchHistory(
+            App.currentMatch?.sport ||
+            App.selectedSport ||
+            "hockey"
+    );
 
 
     document
@@ -2572,10 +2652,21 @@ function openHistoricalMatch(
         matchId
     );
 
-    const match =
+    let match =
         getHistoricalMatch(
-            matchId
+            matchId,
+            "softball"
         );
+
+    if (!match) {
+
+        match =
+            getHistoricalMatch(
+                matchId,
+                "hockey"
+            );
+
+    }
 
     console.log(
         "Match found:",
@@ -2600,8 +2691,10 @@ function openHistoricalMatch(
     if (!App.timer) {
 
         App.timer = {
+
             seconds: 0,
             running: false
+
         };
 
     }
@@ -2625,10 +2718,19 @@ function openHistoricalMatch(
             "hidden"
         );
 
-    renderMatchSummary();
+    if (
+        match.sport === "softball"
+    ) {
 
-}
-  
+        renderSoftballSummary();
+
+    } else {
+
+        renderMatchSummary();
+
+    }
+
+}  
 
 function showHockeyMenu() {
 
@@ -2948,6 +3050,45 @@ function hideAllScreens() {
         }
 
     });
+
+}
+function selectRunner(position) {
+
+    if (selectedRunner === position) {
+
+        selectedRunner = null;
+
+    } else {
+
+        selectedRunner = position;
+
+    }
+
+    updateScoreboard();
+
+}
+
+function moveSelectedRunner(
+    destination
+) {
+
+    if (
+        !selectedRunner
+    ) {
+
+        return;
+
+    }
+
+    moveRunner(
+        selectedRunner,
+        destination
+    );
+
+    selectedRunner = null;
+    selectedBase = null;
+
+    updateScoreboard();
 
 }
 
@@ -4057,41 +4198,76 @@ function renderSoftballSummary() {
                     </tr>
 
                     <tr>
+
                         <td class="sub-stat">
                             ↳ Home Runs
                         </td>
 
                         <td>
-                            ${Math.min(
-                                getEventCount(
-                                    "homeRun"
-                                ),
-                                score.our
+                            ${getSoftballEventCount(
+                                "homeRun",
+                                "ourBatting"
                             )}
                         </td>
 
                         <td>
-                            -
+                            ${getSoftballEventCount(
+                                "homeRun",
+                                "opponentBatting"
+                            )}
                         </td>
 
                     </tr>
 
                     <tr>
                         <td>Strikes</td>
-                        <td>${getEventCount("strike")}</td>
-                        <td>-</td>
+                        <td>
+                            ${getSoftballEventCount(
+                                "strike",
+                                "ourBatting"
+                            )}
+                        </td>
+
+                        <td>
+                            ${getSoftballEventCount(
+                                "strike",
+                                "opponentBatting"
+                            )}
+                        </td>
                     </tr>
 
-                    <tr>
+                   <tr>
                         <td>Balls</td>
-                        <td>${getEventCount("ball")}</td>
-                        <td>-</td>
+                        <td>
+                            ${getSoftballEventCount(
+                                "ball",
+                                "ourBatting"
+                            )}
+                        </td>
+
+                        <td>
+                            ${getSoftballEventCount(
+                                "ball",
+                                "opponentBatting"
+                            )}
+                        </td>
                     </tr>
 
                     <tr>
                         <td>Outs</td>
-                        <td>${getEventCount("out")}</td>
-                        <td>-</td>
+                        <td>
+                            ${getSoftballEventCount(
+                                "out",
+                                "ourBatting"
+                            )}
+                        </td>
+
+                        <td>
+                            ${getSoftballEventCount(
+                                "out",
+                                "opponentBatting"
+                            )}
+                        </td>
                     </tr>
 
                 </table>
@@ -4241,8 +4417,125 @@ function returnHome() {
 }
 function renderSoftballHistory() {
 
-    alert(
-        "Softball Match History coming next.\n\nFor tomorrow's match please use the scoring functionality."
+    hideAllScreens();
+
+    const history =
+        getMatchHistory("softball");
+
+    const screen =
+        document.getElementById(
+            "historyScreen"
+        );
+
+    screen.classList.remove(
+        "hidden"
     );
+
+    screen.innerHTML = `
+
+        <button
+            class="action-button secondary-button"
+            onclick="showSoftballMenu()"
+        >
+            ← Softball Menu
+        </button>
+
+        <h2>
+            Softball Match History
+        </h2>
+
+    `;
+
+    if (history.length === 0) {
+
+        screen.innerHTML += `
+            <p>
+                No softball matches saved.
+            </p>
+        `;
+
+        return;
+    }
+
+    history
+        .slice()
+        .reverse()
+        .forEach(match => {
+
+            const runsFor =
+                match.events.filter(
+                    e =>
+                        e.eventType ===
+                        "runFor"
+                ).length;
+
+            const runsAgainst =
+                match.events.filter(
+                    e =>
+                        e.eventType ===
+                        "runAgainst"
+                ).length;
+
+            const matchDate =
+                (
+                    match.completedAt ||
+                    match.createdAt ||
+                    ""
+                )
+                .split("T")[0];
+
+            screen.innerHTML += `
+
+                <div class="card">
+
+                    <h3>
+                        ${match.ourTeam}
+                        vs
+                        ${match.opponent}
+                    </h3>
+
+                    <h2>
+                        ${runsFor}
+                        -
+                        ${runsAgainst}
+                    </h2>
+
+                    <p>
+                        ${matchDate}
+                    </p>
+
+                    <p class="history-events">
+                        Events:
+                        ${match.events.length}
+                    </p>
+
+                    <div class="history-actions">
+
+                        <button
+                            class="action-button"
+                            onclick="openHistoricalMatch('${match.id}')"
+                        >
+                            📂 Open
+                        </button>
+
+                        <button
+                            class="action-button"
+                            onclick="
+                                deleteHistoricalMatch(
+                                    '${match.id}',
+                                    'softball'
+                                );
+                                renderSoftballHistory();
+                            "
+                        >
+                            🗑 Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+        });
 
 }
