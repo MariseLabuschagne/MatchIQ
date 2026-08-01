@@ -101,43 +101,91 @@ function renderLiveMatch() {
 
         </div>
         
-        <div class="card match-controls">
+        ${
+    App.currentMatch.sport === "softball"
+        ? `
 
-            <button
-                id="pauseButton"
-                class="control-button"
-            >
-                ⏸ Pause
-            </button>
+            <div class="card">
 
-            <button
-                id="resetButton"
-                class="control-button"
-            >
-                Reset
-            </button>
+                <div id="eventSections"></div>
 
-            <button
-                id="nextPeriodButton"
-                class="period-button"
-            >
-                ${
-                    App.currentMatch.sport ===
-                    "softball"
-                        ? "🥎 End Inning"
-                        : "⏭ Next Period"
-                }
-            </button>
+            </div>
 
-            <button
-                id="endMatchButton"
-                class="end-button"
-            >
-                End Match
-            </button>
+            <div class="card match-controls">
 
-        </div>
+                <button
+                    id="pauseButton"
+                    class="control-button"
+                >
+                    ⏸ Pause
+                </button>
 
+                <button
+                    id="resetButton"
+                    class="control-button"
+                >
+                    Reset
+                </button>
+
+                <button
+                    id="nextPeriodButton"
+                    class="period-button"
+                >
+                    🥎 End Inning
+                </button>
+
+                <button
+                    id="endMatchButton"
+                    class="end-button"
+                >
+                    End Match
+                </button>
+
+            </div>
+
+        `
+        : `
+
+            <div class="card match-controls">
+
+                    <button
+                        id="pauseButton"
+                        class="control-button"
+                    >
+                        ⏸ Pause
+                    </button>
+
+                    <button
+                        id="resetButton"
+                        class="control-button"
+                    >
+                        Reset
+                    </button>
+
+                    <button
+                        id="nextPeriodButton"
+                        class="period-button"
+                    >
+                        ⏭ Next Period
+                    </button>
+
+                    <button
+                        id="endMatchButton"
+                        class="end-button"
+                    >
+                        End Match
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div id="eventSections"></div>
+
+                </div>
+
+            `
+    }
         <div class="card">
 
             <div id="eventSections"></div>

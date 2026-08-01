@@ -995,45 +995,69 @@ function moveRunner(
     */
 
     if (from === "batter") {
+
         runner =
             getCurrentBatter();
-    }
-    else {
+
+    } else {
+
         runner =
             bases[from];
 
-        bases[from] = null;
     }
 
     /*
-    Runner scores
+    HOME selected
     */
 
     if (to === "home") {
 
-        if (
-            App.currentMatch.currentSide ===
-            "ourBatting"
-        ) {
+        /*
+        Only runners from 3rd
+        may score.
+        */
+
+        if (from === "third") {
+
+            bases.third = null;
+
+            if (
+                App.currentMatch.currentSide ===
+                "ourBatting"
+            ) {
+
+                recordEvent(
+                    "runFor"
+                );
+
+            } else {
+
+                recordEvent(
+                    "runAgainst"
+                );
+
+            }
+
             recordEvent(
-                "runFor"
+                "advance"
             );
+
         }
         else {
-            recordEvent(
-                "runAgainst"
-            );
-        }
 
-        if (
-            from === "batter"
-        ) {
-            nextBatter();
-        }
+            /*
+            Treat as cancel /
+            correction.
+            Nothing changes.
+            */
 
-        recordEvent(
-            "advance"
-        );
+            selectedRunner = null;
+
+            updateScoreboard();
+
+            return;
+
+        }
 
         saveMatch();
         updateScoreboard();
@@ -1041,6 +1065,7 @@ function moveRunner(
         removeOutcomePanel();
 
         return;
+
     }
 
     /*
@@ -1051,10 +1076,26 @@ function moveRunner(
     if (
         bases[to] !== null
     ) {
+
         alert(
             "Base already occupied."
         );
+
         return;
+
+    }
+
+    /*
+    Remove runner from
+    original base
+    */
+
+    if (
+        from !== "batter"
+    ) {
+
+        bases[from] = null;
+
     }
 
     /*
@@ -1063,10 +1104,18 @@ function moveRunner(
 
     bases[to] = runner;
 
+    /*
+    Advance batting order
+    only when batter
+    reaches a base.
+    */
+
     if (
         from === "batter"
     ) {
+
         nextBatter();
+
     }
 
     App.currentMatch.balls = 0;
@@ -1080,8 +1129,8 @@ function moveRunner(
     updateScoreboard();
     renderTimeline();
     removeOutcomePanel();
-}
 
+}
 function advanceRunnerPrev() {
 
     recordEvent(
