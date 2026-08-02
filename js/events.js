@@ -393,21 +393,51 @@ function recordStrike() {
 
     App.currentMatch.strikes++;
 
-    recordEvent("strike");
+    recordEvent(
+        "strike"
+    );
 
-    if (App.currentMatch.strikes >= 3) {
+    /*
+    Strikeout
+    */
+
+    if (
+        App.currentMatch.strikes >= 3
+    ) {
 
         App.currentMatch.outs++;
 
-        recordEvent("out");
+        recordEvent(
+            "out"
+        );
+
         nextBatter();
 
         App.currentMatch.strikes = 0;
         App.currentMatch.balls = 0;
+
+        /*
+        Third out?
+        */
+
+        if (
+            App.currentMatch.outs >= 3
+        ) {
+
+            switchSides();
+
+            renderTimeline();
+
+            return;
+
+        }
+
     }
 
     saveMatch();
     updateScoreboard();
+    renderTimeline();
+
 }
 
 function recordBall() {
@@ -506,7 +536,8 @@ function recordBall() {
         nextBatter();
         saveMatch();
         updateScoreboard();
-
+        renderTimeline();
+        
         return;
 
     }
@@ -678,12 +709,23 @@ function recordSpecificOut(
         "out"
     );
 
+    /*
+    Three outs
+    */
+
+    if (
+        App.currentMatch.outs >= 3
+    ) {
+
+        switchSides();
+
+        return;
+
+    }
+
     saveMatch();
-
     updateScoreboard();
-
     renderTimeline();
-
     removeOutcomePanel();
 
 }
@@ -703,7 +745,9 @@ function advanceInning() {
 }
 
 function switchSides() {
-
+    
+    selectedRunner = null;
+    
     const battingSide =
         App.currentMatch.currentSide ===
         "ourBatting"
@@ -765,7 +809,9 @@ function switchSides() {
     updateScoreboard();
     updatePeriodDisplay();
 
-}function recordRun() {
+}
+
+function recordRun() {
 
     if (
         App.currentMatch.currentSide ===
@@ -1013,51 +1059,54 @@ function moveRunner(
     if (to === "home") {
 
         /*
-        Only runners from 3rd
-        may score.
+        Remove runner from base
         */
 
-        if (from === "third") {
+        if (
+            from !== "batter"
+        ) {
 
-            bases.third = null;
+            bases[from] = null;
 
-            if (
-                App.currentMatch.currentSide ===
-                "ourBatting"
-            ) {
+        }
 
-                recordEvent(
-                    "runFor"
-                );
+        /*
+        Record run
+        */
 
-            } else {
-
-                recordEvent(
-                    "runAgainst"
-                );
-
-            }
+        if (
+            App.currentMatch.currentSide ===
+            "ourBatting"
+        ) {
 
             recordEvent(
-                "advance"
+                "runFor"
+            );
+
+        } else {
+
+            recordEvent(
+                "runAgainst"
             );
 
         }
-        else {
 
-            /*
-            Treat as cancel /
-            correction.
-            Nothing changes.
-            */
+        /*
+        Advance batter only if
+        current batter scored
+        */
 
-            selectedRunner = null;
+        if (
+            from === "batter"
+        ) {
 
-            updateScoreboard();
-
-            return;
+            nextBatter();
 
         }
+
+        recordEvent(
+            "advance"
+        );
 
         saveMatch();
         updateScoreboard();
@@ -1067,7 +1116,6 @@ function moveRunner(
         return;
 
     }
-
     /*
     Prevent overwriting
     an occupied base
@@ -1267,3 +1315,6 @@ function recordHomeRun() {
     updateScoreboard();
     renderTimeline();
 }
+window.recordBall = recordBall;
+window.recordStrike = recordStrike;
+window.recordOut = recordOut;

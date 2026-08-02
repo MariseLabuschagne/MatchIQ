@@ -494,15 +494,15 @@ const MatchIQ = {
             category: "softball"
         },
         {
-            id: "advance",
-            name: "Advance",
-            icon: "➡️",
-            category: "softball"
-        },
-        {
             id: "out",
             name: "Out",
             icon: "❌",
+            category: "softball"
+        },
+        {
+            id: "advance",
+            name: "Advance",
+            icon: "➡️",
             category: "softball"
         },
         {

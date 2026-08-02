@@ -24,7 +24,7 @@ function renderLiveMatch() {
         document.getElementById(
             "liveMatchScreen"
         );
-    
+
     const header =
         document.getElementById(
             "appHeader"
@@ -49,6 +49,7 @@ function renderLiveMatch() {
     liveScreen.innerHTML = `
 
         <div class="card sticky-scoreboard">
+
             <div class="timer-pill">
 
                 <div
@@ -97,98 +98,61 @@ function renderLiveMatch() {
                     ${App.currentMatch.opponent}
                 </div>
 
-            </div>              
+            </div>
 
         </div>
-        
+
         ${
-    App.currentMatch.sport === "softball"
-        ? `
+            App.currentMatch.sport !==
+            "softball"
 
-            <div class="card">
+                ? `
 
-                <div id="eventSections"></div>
+                    <div class="card">
 
-            </div>
+                        <div id="eventSections"></div>
 
-            <div class="card match-controls">
+                    </div>
 
-                <button
-                    id="pauseButton"
-                    class="control-button"
-                >
-                    ⏸ Pause
-                </button>
+                `
 
-                <button
-                    id="resetButton"
-                    class="control-button"
-                >
-                    Reset
-                </button>
+                : ""
+        }
 
-                <button
-                    id="nextPeriodButton"
-                    class="period-button"
-                >
-                    🥎 End Inning
-                </button>
+        <div class="card match-controls">
 
-                <button
-                    id="endMatchButton"
-                    class="end-button"
-                >
-                    End Match
-                </button>
+            <button
+                id="pauseButton"
+                class="control-button"
+            >
+                ⏸ Pause
+            </button>
 
-            </div>
+            <button
+                id="resetButton"
+                class="control-button"
+            >
+                Reset
+            </button>
 
-        `
-        : `
+            <button
+                id="nextPeriodButton"
+                class="period-button"
+            >
+                ${
+                    App.currentMatch.sport ===
+                    "softball"
+                        ? "🥎 End Inning"
+                        : "⏭ Next Period"
+                }
+            </button>
 
-            <div class="card match-controls">
-
-                    <button
-                        id="pauseButton"
-                        class="control-button"
-                    >
-                        ⏸ Pause
-                    </button>
-
-                    <button
-                        id="resetButton"
-                        class="control-button"
-                    >
-                        Reset
-                    </button>
-
-                    <button
-                        id="nextPeriodButton"
-                        class="period-button"
-                    >
-                        ⏭ Next Period
-                    </button>
-
-                    <button
-                        id="endMatchButton"
-                        class="end-button"
-                    >
-                        End Match
-                    </button>
-
-                </div>
-
-                <div class="card">
-
-                    <div id="eventSections"></div>
-
-                </div>
-
-            `
-    }
-        <div class="card">
-
-            <div id="eventSections"></div>
+            <button
+                id="endMatchButton"
+                class="end-button"
+            >
+                End Match
+            </button>
 
         </div>
 
@@ -233,21 +197,27 @@ function renderLiveMatch() {
     `;
 
     document
-        .getElementById("pauseButton")
+        .getElementById(
+            "pauseButton"
+        )
         .addEventListener(
             "click",
             toggleTimer
         );
 
     document
-        .getElementById("resetButton")
+        .getElementById(
+            "resetButton"
+        )
         .addEventListener(
             "click",
             resetTimer
         );
 
     document
-        .getElementById("nextPeriodButton")
+        .getElementById(
+            "nextPeriodButton"
+        )
         .addEventListener(
             "click",
             () => {
@@ -269,33 +239,47 @@ function renderLiveMatch() {
         );
 
     document
-        .getElementById("undoButton")
+        .getElementById(
+            "undoButton"
+        )
         .addEventListener(
             "click",
             undoLastEvent
         );
 
     document
-        .getElementById("exportButton")
+        .getElementById(
+            "exportButton"
+        )
         .addEventListener(
             "click",
             exportMatch
         );
 
     document
-        .getElementById("endMatchButton")
+        .getElementById(
+            "endMatchButton"
+        )
         .addEventListener(
             "click",
             endMatch
         );
 
-    renderEventSections();
+    if (
+        App.currentMatch.sport !==
+        "softball"
+    ) {
+
+        renderEventSections();
+
+    }
 
     updateScoreboard();
 
     updateTimerDisplay();
 
     renderTimeline();
+
 }
 
 function highlightEventButton(button) {
@@ -395,9 +379,7 @@ function renderEventSections() {
         App.currentMatch.sport === "softball"
     ) {
 
-        visibleCategories = [
-            "softball"
-        ];
+        visibleCategories = [];
 
     } else {
 
@@ -626,20 +608,65 @@ function updateScoreboard() {
 
                 <div class="count-row">
 
-                    <div class="count-card balls">
+                    <div
+                        class="count-card balls"
+                        onclick="
+                            highlightEventButton(this);
+                            recordBall();
+                        "
+                    >
+
                         <span>BALLS</span>
                         <strong>${App.currentMatch.balls}</strong>
                     </div>
 
-                    <div class="count-card strikes">
+
+                    <div
+                        class="count-card strikes"
+                        onclick="
+                            highlightEventButton(this);
+                            recordStrike();
+                        "
+                    >
                         <span>STRIKES</span>
                         <strong>${App.currentMatch.strikes}</strong>
                     </div>
 
-                    <div class="count-card outs">
+                    <div
+                        class="count-card outs"
+                        onclick="
+                            highlightEventButton(this);
+                            recordOut();
+                        "
+                    >
                         <span>OUTS</span>
                         <strong>${App.currentMatch.outs}</strong>
                     </div>
+
+                </div>
+
+                <div class="softball-action-row">
+
+                    <button
+                        class="softball-mini-button switch"
+                        onclick="switchSides()"
+                    >
+                        🔄 Switch Sides
+                    </button>
+
+                    <button
+                        class="softball-mini-button advance"
+                        onclick="advanceRunner()"
+                    >
+                        ➡️ Advance
+                    </button>
+
+                    <button
+                        class="softball-mini-button homerun"
+                        onclick="recordHomeRun()"
+                    >
+                        ⭐ Home Run
+                    </button>
 
                 </div>
 
@@ -2517,10 +2544,8 @@ function renderMatchHistory() {
     hideAllScreens();
     
     const history =
-        getMatchHistory(
-            App.currentMatch?.sport ||
-            App.selectedSport ||
-            "hockey"
+    getMatchHistory(
+        "hockey"
     );
 
 
