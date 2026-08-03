@@ -357,7 +357,7 @@ HOME SCREEN
 
 .sport-button {
 
-    min-height: 55px;
+    min-height: 65px;
 
     border: none;
 
@@ -2306,5 +2306,61 @@ MOBILE
 .softball-mini-button.homerun {
 
     background: #dc2626;
+
+}
+
+.pitcher-section {
+
+    text-align: center;
+
+    margin-top: 8px;
+
+    margin-bottom: 10px;
+
+}
+
+.pitcher-buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 6px;
+
+}
+
+.pitcher-button {
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 6px 12px;
+
+    background: #334155;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+.pitcher-button.active {
+
+    background: #f59e0b;
+
+}
+
+.pitcher-name {
+
+    margin-top: 6px;
+
+    font-size: 0.9rem;
+
+    color: #d1d5db;
 
 }

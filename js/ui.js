@@ -412,7 +412,9 @@ function renderEventSections() {
                 `event-category ${category.id}`;
 
             heading.textContent =
-                category.name;
+                category.id === "defence"
+                    ? "Defence (against)"
+                    : category.name;
 
             container.appendChild(
                 heading
@@ -590,6 +592,9 @@ function updateScoreboard() {
                 ? "🟢 OUR TEAM BATTING"
                 : "🔵 OPPONENT BATTING";
 
+        const pitcherName =
+            getActivePitcherName();
+
         const currentBatter =
             getCurrentBatter();
 
@@ -604,6 +609,58 @@ function updateScoreboard() {
 
                 <div class="softball-batting-status">
                     ${battingTeam}
+                </div>
+
+                <div class="pitcher-section">
+
+                    <div class="pitcher-buttons">
+
+                        <button
+                            class="
+                                pitcher-button
+                                ${
+                                    getActivePitcherSide()
+                                        .active === 1
+                                        ? "active"
+                                        : ""
+                                }
+                            "
+                            onclick="setActivePitcher(1)"
+                        >
+                            ${
+                                getActivePitcherSide()
+                                    .pitcher1
+                                    .name || "Pitcher 1"
+                            }
+                        </button>
+
+                        <button
+                            class="
+                                pitcher-button
+                                ${
+                                    getActivePitcherSide()
+                                        .active === 2
+                                        ? "active"
+                                        : ""
+                                }
+                            "
+                            onclick="setActivePitcher(2)"
+                        >
+                            ${
+                                getActivePitcherSide()
+                                    .pitcher2
+                                    .name || "Pitcher 2"
+                            }
+                        </button>
+
+                    </div>
+
+                    <div class="pitcher-name">
+
+                        ${pitcherName}
+
+                    </div>
+
                 </div>
 
                 <div class="count-row">
@@ -1062,7 +1119,7 @@ function updatePeriodDisplay() {
     ) {
 
         periodDisplay.textContent =
-            `${App.currentMatch.inningHalf.toUpperCase()} ${App.currentMatch.inning}`;
+            `INNING ${App.currentMatch.inning}`;
 
         return;
     }
@@ -2267,7 +2324,14 @@ function recordEntryOutcome(
         return;
 
     }
+    if (
+        outcome === "entryLongCorner"
+    ) {
 
+        App.currentMatch.activeAttackId =
+            null;
+
+    }
     removeOutcomePanel();
 
 }

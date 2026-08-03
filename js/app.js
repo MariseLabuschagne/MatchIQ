@@ -205,8 +205,8 @@ function startMatch() {
             "input[name='venue']:checked"
         ).value;
 
-    let format = "softball";
-    let periodLength = 0;
+    let format = "4";
+    let periodLength = 16;
 
     if (
         App.selectedSport !==
@@ -348,6 +348,68 @@ function createMatchObject(
         currentSide:
             data.currentSide ||
             "ourBatting",
+
+        pitchers: {
+
+            ourTeam: {
+
+                active: 1,
+
+                pitcher1: {
+
+                    name:
+                        document.getElementById(
+                            "ourPitcher1"
+                        )?.value || "",
+
+                    balls: 0,
+                    strikes: 0,
+                    walks: 0,
+                    strikeouts: 0,
+                    outs: 0,
+                    runsAllowed: 0
+
+                },
+
+                pitcher2: {
+
+                    name:
+                        document.getElementById(
+                            "ourPitcher2"
+                        )?.value || "",
+
+                    balls: 0,
+                    strikes: 0,
+                    walks: 0,
+                    strikeouts: 0,
+                    outs: 0,
+                    runsAllowed: 0
+
+                }
+
+            },
+
+            opponent: {
+
+                active: 1,
+
+                pitcher1: {
+                    name:
+                        document.getElementById(
+                            "oppPitcher1"
+                        )?.value || ""
+                },
+
+                pitcher2: {
+                    name:
+                        document.getElementById(
+                            "oppPitcher2"
+                        )?.value || ""
+                }
+
+            }
+
+        }
 
     };
 }
@@ -531,6 +593,11 @@ function selectSport(
         document.getElementById(
             "battingTeamGroup"
         );
+    
+    const pitcherGroup =
+        document.getElementById(
+            "pitcherGroup"
+        );
             
     if (sport === "softball") {
 
@@ -549,6 +616,12 @@ function selectSport(
                 "none";
         }
 
+        if (pitcherGroup) {
+            pitcherGroup.style.display =
+                "block";
+
+        }
+
     } else {
 
         if (formatGroup) {
@@ -563,6 +636,11 @@ function selectSport(
         if (battingGroup) {
             battingGroup.style.display =
                 "none";
+        }
+        if (pitcherGroup) {
+            pitcherGroup.style.display =
+                "none";
+
         }
 
 

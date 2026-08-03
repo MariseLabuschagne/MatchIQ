@@ -131,49 +131,80 @@ function recordEvent(
         return null;
 
     }
-    
+
     const event = {
 
         id:
-                crypto.randomUUID(),
+            crypto.randomUUID(),
 
-            timestamp:
-                new Date()
-                    .toISOString(),
+        timestamp:
+            new Date()
+                .toISOString(),
 
-            matchSecond:
-                App.timer.seconds,
+        matchSecond:
+            App.timer.seconds,
 
-            period:
-                App.currentMatch.period,
+        period:
+            App.currentMatch.period,
 
-            eventType:
-                eventType,
-            
-            scoreAtEvent:
-                `${getScore().our}-${getScore().opposition}`,
-            
-            phase:
-                getEventPhase(
-                    eventType
-                ),
+        eventType:
+            eventType,
 
-            context:
-                getCurrentContext(),
+        scoreAtEvent:
+            `${getScore().our}-${getScore().opposition}`,
 
-        battingSide:
-            App.currentMatch?.sport === "softball"
-                ? App.currentMatch.currentSide
-                : null,
+        phase:
+            getEventPhase(
+                eventType
+            ),
+
+        context:
+            getCurrentContext(),
 
         attackId:
             App.currentMatch
                 ? App.currentMatch.activeAttackId
                 : null,
 
+        /*
+        SOFTBALL SNAPSHOT
+        */
+
+        inning:
+            App.currentMatch.inning || 1,
+
+        battingSide:
+            App.currentMatch.currentSide || "",
+
+        balls:
+            App.currentMatch.balls || 0,
+
+        strikes:
+            App.currentMatch.strikes || 0,
+
+        outs:
+            App.currentMatch.outs || 0,
+
+        runner1st:
+            App.currentMatch.bases?.first || "",
+
+        runner2nd:
+            App.currentMatch.bases?.second || "",
+
+        runner3rd:
+            App.currentMatch.bases?.third || "",
+
+        currentBatter:
+            (
+                App.currentMatch.sport ===
+                "softball" &&
+                typeof getCurrentBatter ===
+                "function"
+            )
+                ? getCurrentBatter()
+                : ""
+
     };
-
-
 
     App.currentMatch.events.push(
         event
@@ -188,7 +219,6 @@ function recordEvent(
     return event;
 
 }
-
 
 function getEventPhase(
     eventType
@@ -389,10 +419,104 @@ MATCH EVENT SUMMARY
 SOFTBALL
 =========================================================
 */
+
+function getActivePitcherSide() {
+
+    if (
+        !App.currentMatch ||
+        !App.currentMatch.pitchers
+    ) {
+
+        return null;
+
+    }
+
+    if (
+        App.currentMatch.currentSide ===
+        "ourBatting"
+    ) {
+
+        return App.currentMatch
+            .pitchers
+            .opponent;
+
+    }
+
+    return App.currentMatch
+        .pitchers
+        .ourTeam;
+
+}
+
+function getActivePitcherName() {
+
+    const side =
+        getActivePitcherSide();
+
+    return side[
+        `pitcher${side.active}`
+    ]?.name || "";
+
+}
+
+function setActivePitcher(
+    pitcherNumber
+) {
+
+    const side =
+        getActivePitcherSide();
+
+    side.active =
+        pitcherNumber;
+
+    saveMatch();
+
+    updateScoreboard();
+
+}
+
+function getActivePitcherName() {
+
+    if (
+        !App.currentMatch ||
+        !App.currentMatch.pitchers
+    ) {
+
+        return "";
+
+    }
+
+    const side =
+        getActivePitcherSide();
+
+    if (!side) {
+
+        return "";
+
+    }
+
+    return side[
+        `pitcher${side.active}`
+    ]?.name || "";
+
+}
 function recordStrike() {
 
     App.currentMatch.strikes++;
 
+    if (
+        App.currentMatch.currentSide ===
+        "opponentBatting"
+    ) {
+
+        getActivePitcher()
+            .strikes++;
+
+    }
+
+    getActivePitcher()
+        .strikes++;
+        
     recordEvent(
         "strike"
     );
@@ -406,6 +530,11 @@ function recordStrike() {
     ) {
 
         App.currentMatch.outs++;
+        getActivePitcher()
+            .strikeouts++;
+
+        getActivePitcher()
+            .outs++;
 
         recordEvent(
             "out"
@@ -443,6 +572,19 @@ function recordStrike() {
 function recordBall() {
 
     App.currentMatch.balls++;
+
+    if (
+        App.currentMatch.currentSide ===
+        "opponentBatting"
+    ) {
+
+        getActivePitcher()
+            .balls++;
+
+    }
+
+    getActivePitcher()
+        .balls++;
 
     recordEvent("ball");
 
@@ -531,7 +673,19 @@ function recordBall() {
 
         App.currentMatch.balls = 0;
         App.currentMatch.strikes = 0;
+        getActivePitcher()
+            .walks++;
 
+        if (
+            App.currentMatch.currentSide ===
+            "opponentBatting"
+        ) {
+
+            getActivePitcher()
+                .walks++;
+
+        }    
+        
         recordEvent("walk");
         nextBatter();
         saveMatch();
@@ -553,8 +707,8 @@ function showOutOptions() {
     removeOutcomePanel();
 
     const container =
-        document.getElementById(
-            "eventSections"
+        document.querySelector(
+            ".sticky-scoreboard"
         );
 
     const panel =
@@ -652,7 +806,7 @@ function showOutOptions() {
 
     `;
 
-    container.prepend(
+    container.appendChild(
         panel
     );
 
@@ -730,6 +884,7 @@ function recordSpecificOut(
 
 }
 
+
 function advanceInning() {
 
     App.currentMatch.inning++;
@@ -745,9 +900,9 @@ function advanceInning() {
 }
 
 function switchSides() {
-    
+
     selectedRunner = null;
-    
+
     const battingSide =
         App.currentMatch.currentSide ===
         "ourBatting"
@@ -770,28 +925,36 @@ function switchSides() {
 
     }
 
+    /*
+    If OUR team was batting,
+    we are changing to opponent.
+    Same inning.
+    */
+
     if (
-        App.currentMatch.inningHalf ===
-        "top"
+        App.currentMatch.currentSide ===
+        "ourBatting"
     ) {
 
-        App.currentMatch.inningHalf =
-            "bottom";
+        App.currentMatch.currentSide =
+            "opponentBatting";
 
-    } else {
+    }
 
-        App.currentMatch.inningHalf =
-            "top";
+    /*
+    If OPPONENT was batting,
+    inning completes and
+    increments.
+    */
+
+    else {
+
+        App.currentMatch.currentSide =
+            "ourBatting";
 
         App.currentMatch.inning++;
 
     }
-
-    App.currentMatch.currentSide =
-        App.currentMatch.currentSide ===
-        "ourBatting"
-            ? "opponentBatting"
-            : "ourBatting";
 
     App.currentMatch.bases = {
 
@@ -815,6 +978,16 @@ function recordRun() {
 
     if (
         App.currentMatch.currentSide ===
+        "opponentBatting"
+    ) {
+
+        getActivePitcher()
+            .runsAllowed++;
+
+    }
+
+    if (
+        App.currentMatch.currentSide ===
         "ourBatting"
     ) {
 
@@ -832,11 +1005,9 @@ function recordRun() {
     }
 
     saveMatch();
-
     updateScoreboard();
 
 }
-
 function nextBatter() {
 
     if (
@@ -1318,3 +1489,14 @@ function recordHomeRun() {
 window.recordBall = recordBall;
 window.recordStrike = recordStrike;
 window.recordOut = recordOut;
+
+function getActivePitcher() {
+
+    const side =
+        getActivePitcherSide();
+
+    return side[
+        `pitcher${side.active}`
+    ];
+
+}
