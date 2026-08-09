@@ -204,7 +204,7 @@ function saveMatchToHistory(
 ) {
 
     const storageKey =
-        match.sport === "softball"
+        isSoftballSport(match)
             ? "softballHistory"
             : "matchHistory";
 
@@ -233,7 +233,7 @@ function deleteHistoricalMatch(
 ) {
 
     const storageKey =
-        sport === "softball"
+        isSoftballSport(sport)
             ? "softballHistory"
             : "matchHistory";
 
@@ -263,7 +263,7 @@ function getMatchHistory(
 ) {
 
     const storageKey =
-        sport === "softball"
+        isSoftballSport(sport)
             ? "softballHistory"
             : "matchHistory";
 

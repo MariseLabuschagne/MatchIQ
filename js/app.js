@@ -111,6 +111,10 @@ ${savedMatch.events.length}`
     App.currentMatch =
         savedMatch;
 
+    App.selectedSport =
+        App.currentMatch.sport ||
+        "hockey";
+
     restoreMatchClock();
 
     renderLiveMatch();
@@ -120,6 +124,30 @@ ${savedMatch.events.length}`
     renderTimeline();
 
     updateTimerDisplay();
+}
+
+function getSelectedSport() {
+    return App.selectedSport || "hockey";
+}
+
+function getCurrentSport(match = App.currentMatch) {
+    return match?.sport || getSelectedSport();
+}
+
+function isSoftballSport(matchOrSport) {
+    if (typeof matchOrSport === "string") {
+        return matchOrSport === "softball";
+    }
+
+    if (!matchOrSport) {
+        return getCurrentSport() === "softball";
+    }
+
+    return matchOrSport.sport === "softball";
+}
+
+function isHockeySport(matchOrSport) {
+    return !isSoftballSport(matchOrSport);
 }
 
 /*
@@ -228,7 +256,7 @@ function startMatch() {
         "ourBatting";
 
     if (
-        App.selectedSport ===
+        getSelectedSport() ===
         "softball"
     ) {
 
@@ -240,6 +268,9 @@ function startMatch() {
 
     }
 
+    const sport =
+        getSelectedSport();
+
     App.currentMatch =
         createMatchObject({
 
@@ -249,7 +280,8 @@ function startMatch() {
             venue,
             format,
             periodLength,
-            currentSide
+            currentSide,
+            sport
 
         });
 
@@ -309,7 +341,7 @@ function createMatchObject(
                 : "Q1",
 
         sport:
-            App.selectedSport || "hockey",
+            data.sport || getSelectedSport(),
 
         elapsedSeconds: 0,
 
@@ -599,7 +631,7 @@ function selectSport(
             "pitcherGroup"
         );
             
-    if (sport === "softball") {
+    if (isSoftballSport(sport)) {
 
         if (battingGroup) {
             battingGroup.style.display =
@@ -652,7 +684,7 @@ function selectSport(
         );
 
     if (
-        sport === "softball"
+        isSoftballSport(sport)
     ) {
 
         startButton.innerHTML =

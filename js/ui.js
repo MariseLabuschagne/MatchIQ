@@ -55,7 +55,7 @@ function renderLiveMatch() {
                 <div
                     id="timerDisplay"
                     class="${
-                        App.currentMatch?.sport === "softball"
+                        isSoftballSport(App.currentMatch)
                             ? "timer softball-timer"
                             : "timer"
                     }"
@@ -68,8 +68,7 @@ function renderLiveMatch() {
                     class="period-label"
                 >
                     ${
-                        App.currentMatch.sport ===
-                        "softball"
+                        isSoftballSport(App.currentMatch)
 
                             ? `INNING ${App.currentMatch.inning}`
 
@@ -375,8 +374,7 @@ function renderEventSections() {
     let visibleCategories = [];
 
     if (
-        App.currentMatch &&
-        App.currentMatch.sport === "softball"
+        isSoftballSport(App.currentMatch)
     ) {
 
         visibleCategories = [];
@@ -582,8 +580,7 @@ function updateScoreboard() {
         getScore();
 
     if (
-        App.currentMatch &&
-        App.currentMatch.sport === "softball"
+        isSoftballSport(App.currentMatch)
     ) {
 
         const battingTeam =
@@ -911,8 +908,7 @@ function getPeriodLabel(
 
        if (
             App.currentMatch &&
-            App.currentMatch.sport ===
-            "softball"
+            isSoftballSport(App.currentMatch)
         ) {
 
             return `Inning ${App.currentMatch.inning}`;
@@ -1166,8 +1162,7 @@ function endMatch() {
     completeMatch();
 
     if (
-        App.currentMatch &&
-        App.currentMatch.sport === "softball"
+        isSoftballSport(App.currentMatch)
     ) {
         renderSoftballSummary();
     } else {
@@ -2822,6 +2817,10 @@ function openHistoricalMatch(
 
     }
 
+    App.selectedSport =
+        match.sport ||
+        "hockey";
+
     App.currentMatch =
         structuredClone(
             match
@@ -2858,7 +2857,7 @@ function openHistoricalMatch(
         );
 
     if (
-        match.sport === "softball"
+        isSoftballSport(match)
     ) {
 
         renderSoftballSummary();
@@ -3097,6 +3096,13 @@ function returnToHomeScreen() {
 
 
 function showHockeySetup() {
+
+    App.selectedSport =
+        "hockey";
+
+    selectSport(
+        "hockey"
+    );
 
     hideAllScreens();
     
@@ -4283,6 +4289,97 @@ function renderEffectivenessTable() {
 
 }
 
+function getSoftballInnings() {
+    const currentInning =
+        App.currentMatch?.inning || 1;
+
+    const innings = [];
+
+    for (let i = 1; i <= currentInning; i++) {
+        innings.push(`I${i}`);
+    }
+
+    return innings;
+}
+
+function getSoftballPitchingEventCount(
+    eventId,
+    inningLabel
+) {
+    const inningNumber =
+        Number(inningLabel.replace("I", ""));
+
+    if (
+        !App.currentMatch ||
+        !App.currentMatch.events
+    ) {
+        return 0;
+    }
+
+    return App.currentMatch.events.filter(
+        event =>
+            event.eventType === eventId &&
+            event.inning === inningNumber &&
+            event.battingSide === "opponentBatting"
+    ).length;
+}
+
+function getSoftballPitchingComment(
+    inningLabel
+) {
+    const runsAllowed =
+        getSoftballPitchingEventCount(
+            "runAgainst",
+            inningLabel
+        );
+
+    const outs =
+        getSoftballPitchingEventCount(
+            "out",
+            inningLabel
+        );
+
+    const hits =
+        getSoftballPitchingEventCount(
+            "hit",
+            inningLabel
+        );
+
+    const balls =
+        getSoftballPitchingEventCount(
+            "ball",
+            inningLabel
+        );
+
+    const strikes =
+        getSoftballPitchingEventCount(
+            "strike",
+            inningLabel
+        );
+
+    const parts = [];
+
+    if (runsAllowed) {
+        parts.push(`${runsAllowed} run${runsAllowed === 1 ? "" : "s"}`);
+    }
+
+    if (outs) {
+        parts.push(`${outs} out${outs === 1 ? "" : "s"}`);
+    }
+
+    if (balls) {
+        parts.push(`${balls} ball${balls === 1 ? "" : "s"}`);
+    }
+
+    if (strikes) {
+        parts.push(`${strikes} strike${strikes === 1 ? "" : "s"}`);
+    }
+
+    return parts.length > 0
+        ? parts.join(", ")
+        : "No pitching events recorded.";
+}
+
 function buildPitchingSummaryHtml() {
 
     const pitchers =
@@ -4292,73 +4389,222 @@ function buildPitchingSummaryHtml() {
         return "";
     }
 
+    const pitcherKeys = [
+        "pitcher1",
+        "pitcher2"
+    ];
+
+    const metrics = [
+        {
+            label: "Pitches",
+            value: pitcher =>
+                (pitcher.balls || 0) +
+                (pitcher.strikes || 0)
+        },
+        {
+            label: "Strikes",
+            value: pitcher => pitcher.strikes || 0
+        },
+        {
+            label: "Walks",
+            value: pitcher => pitcher.walks || 0
+        },
+        {
+            label: "Strikeouts",
+            value: pitcher => pitcher.strikeouts || 0
+        },
+        {
+            label: "Outs",
+            value: pitcher => pitcher.outs || 0
+        },
+        {
+            label: "Earned Runs",
+            value: pitcher => pitcher.runsAllowed || 0
+        },
+        {
+            label: "Innings Pitched",
+            value: pitcher => {
+                const outs = pitcher.outs || 0;
+                return `${Math.floor(outs / 3)}.${outs % 3}`;
+            }
+        }
+    ];
+
     let html = `
-        <div class="card">
+        <div class="card summary-section">
             <h3>Pitching Summary</h3>
+
+            <table class="period-table">
+                <tr>
+                    <th>Metric</th>
+                    ${pitcherKeys.map(key => {
+                        const pitcher = pitchers[key] || {};
+                        return `<th>${pitcher.name || key.replace(/pitcher/, "Pitcher ")}</th>`;
+                    }).join("")}
+                </tr>
     `;
 
-    ["pitcher1", "pitcher2"].forEach(key => {
-
-        const pitcher = pitchers[key];
-
-        if (
-            !pitcher ||
-            !pitcher.name
-        ) {
-            return;
-        }
-
-        const pitches =
-            (pitcher.balls || 0) +
-            (pitcher.strikes || 0);
-
-        const strikePct =
-            pitches > 0
-                ? Math.round(
-                    (pitcher.strikes || 0) /
-                    pitches * 100
-                  )
-                : 0;
-
-        const outs = pitcher.outs || 0;
-        const inningsPitched =
-            `${Math.floor(outs / 3)}.${outs % 3}`;
-
+    metrics.forEach(metric => {
         html += `
-            <div class="pitcher-summary">
-
-                <div class="pitcher-summary-name">
-                    ${pitcher.name}
-                </div>
-
-                <div>
-                    Pitches: ${pitches}
-                    | Strikes: ${pitcher.strikes || 0}
-                    (${strikePct}%)
-                </div>
-
-                <div>
-                    Strikeouts: ${pitcher.strikeouts || 0}
-                    | Walks: ${pitcher.walks || 0}
-                </div>
-
-                <div>
-                    <div>
-                        Outs: ${pitcher.outs || 0}
-                        (${inningsPitched} IP)
-                        | Runs Allowed: ${pitcher.runsAllowed || 0}
-                    </div>
-                </div>
-
-            </div>
+            <tr>
+                <td>${metric.label}</td>
+                ${pitcherKeys.map(key => {
+                    const pitcher = pitchers[key] || {};
+                    return `<td>${metric.value(pitcher)}</td>`;
+                }).join("")}
+            </tr>
         `;
     });
 
     html += `
+            </table>
+        </div>
+
+        <div class="card summary-section">
+            <h3>Pitching Comments</h3>
+
+            <table class="period-table">
+                <tr>
+                    <th>Inning</th>
+                    <th>Comment</th>
+                </tr>
+                ${getSoftballInnings().map(inning => `
+                    <tr>
+                        <td>${inning}</td>
+                        <td>${getSoftballPitchingComment(inning)}</td>
+                    </tr>
+                `).join("")}
+            </table>
         </div>
     `;
 
     return html;
+}
+
+function getSoftballRunsByInning() {
+    if (
+        !App.currentMatch ||
+        !App.currentMatch.events
+    ) {
+        return [];
+    }
+
+    const inningTotals = {};
+
+    App.currentMatch.events.forEach(event => {
+        if (
+            event.eventType !== "runFor" &&
+            event.eventType !== "runAgainst"
+        ) {
+            return;
+        }
+
+        const inning = Number(event.inning) || 1;
+
+        if (!inningTotals[inning]) {
+            inningTotals[inning] = {
+                inning,
+                our: 0,
+                opp: 0
+            };
+        }
+
+        if (event.eventType === "runFor") {
+            inningTotals[inning].our++;
+        } else {
+            inningTotals[inning].opp++;
+        }
+    });
+
+    return Object.values(inningTotals);
+}
+
+function buildSoftballMatchInsightsHtml() {
+    const score = getScore();
+    const ourName = App.currentMatch?.ourTeam || "Our Team";
+    const oppName = App.currentMatch?.opponent || "Opposition";
+    const homeRunsFor = getSoftballEventCount(
+        "homeRun",
+        "ourBatting"
+    );
+    const homeRunsAgainst = getSoftballEventCount(
+        "homeRun",
+        "opponentBatting"
+    );
+
+    let outcomeText;
+    const runDiff = score.our - score.opposition;
+
+    if (runDiff === 0) {
+        outcomeText = `The game finished tied ${score.our}-${score.opposition}.`;
+    } else if (runDiff > 0) {
+        outcomeText = `${ourName} won by ${runDiff} run${runDiff === 1 ? "" : "s"}.`;
+    } else {
+        const diff = Math.abs(runDiff);
+        outcomeText = `${oppName} won by ${diff} run${diff === 1 ? "" : "s"}.`;
+    }
+
+    const pitchers =
+        App.currentMatch?.pitchers?.ourTeam || {};
+
+    const pitcherStats = [
+        pitchers.pitcher1 || {},
+        pitchers.pitcher2 || {}
+    ];
+
+    const bestPitcher = pitcherStats.reduce((best, pitcher) => {
+        if (!best) {
+            return pitcher;
+        }
+
+        const bestOuts = best.outs || 0;
+        const pitcherOuts = pitcher.outs || 0;
+
+        if (pitcherOuts > bestOuts) {
+            return pitcher;
+        }
+
+        if (
+            pitcherOuts === bestOuts &&
+            (pitcher.runsAllowed || 0) < (best.runsAllowed || 0)
+        ) {
+            return pitcher;
+        }
+
+        return best;
+    }, null);
+
+    const bestPitcherName =
+        bestPitcher?.name || "No pitcher data";
+    const bestPitcherText = bestPitcher
+        ? `${bestPitcherName} recorded ${bestPitcher.outs || 0} out${bestPitcher.outs === 1 ? "" : "s"} and allowed ${bestPitcher.runsAllowed || 0} run${bestPitcher.runsAllowed === 1 ? "" : "s"}.`
+        : "No pitching data available.";
+
+    const inningTotals = getSoftballRunsByInning();
+    const largestInning = inningTotals.reduce(
+        (best, current) => {
+            const currentTotal = current.our + current.opp;
+            const bestTotal = best ? best.our + best.opp : 0;
+            return currentTotal > bestTotal ? current : best;
+        },
+        null
+    );
+
+    const keyInningText = largestInning
+        ? `Biggest scoring inning was I${largestInning.inning} with ${largestInning.our + largestInning.opp} run${largestInning.our + largestInning.opp === 1 ? "" : "s"}.`
+        : "No scoring innings recorded.";
+
+    return `
+        <div class="card summary-section">
+            <h3>Match Insights</h3>
+            <div class="insights-copy">
+                <p>${outcomeText}</p>
+                <p>Home runs: ${homeRunsFor} for ${ourName}, ${homeRunsAgainst} for ${oppName}.</p>
+                <p>${bestPitcherText}</p>
+                <p>${keyInningText}</p>
+            </div>
+        </div>
+    `;
 }
 
 function renderSoftballSummary() {
@@ -4390,6 +4636,8 @@ function renderSoftballSummary() {
                 </div>
 
             </div>
+
+            ${buildSoftballMatchInsightsHtml()}
 
             <div class="card">
 

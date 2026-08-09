@@ -31,8 +31,7 @@ SCORE
 function getScore() {
 
     if (
-        App.currentMatch &&
-        App.currentMatch.sport === "softball"
+        isSoftballSport(App.currentMatch)
     ) {
 
         return {
