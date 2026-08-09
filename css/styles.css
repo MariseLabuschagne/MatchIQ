@@ -2305,7 +2305,13 @@ MOBILE
 
 .softball-mini-button.homerun {
 
-    background: #dc2626;
+    background: linear-gradient(135deg,var(--attack),var(--attack-dark));
+
+}
+
+.softball-mini-button.undo {
+
+    background: linear-gradient(135deg,#a1a6ac,#898e94);
 
 }
 
@@ -2363,4 +2369,19 @@ MOBILE
 
     color: #d1d5db;
 
+}
+
+.pitcher-summary {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.pitcher-summary:last-child {
+    border-bottom: none;
+}
+
+.pitcher-summary-name {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 6px;
 }

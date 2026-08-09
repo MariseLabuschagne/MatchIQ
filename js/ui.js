@@ -712,17 +712,17 @@ function updateScoreboard() {
                     </button>
 
                     <button
-                        class="softball-mini-button advance"
-                        onclick="advanceRunner()"
-                    >
-                        ➡️ Advance
-                    </button>
-
-                    <button
                         class="softball-mini-button homerun"
                         onclick="recordHomeRun()"
                     >
                         ⭐ Home Run
+                    </button>
+
+                    <button
+                        class="softball-mini-button undo"
+                        onclick="undoLastRun()"
+                    >
+                        ↩️ Undo Run
                     </button>
 
                 </div>
@@ -864,7 +864,11 @@ function updateScoreboard() {
                         onclick="
                             if (selectedRunner) {
 
-                                moveSelectedRunner('home');
+                                if (selectedRunner === 'batter') {
+                                    alert('Batter cannot be moved directly to Home. Use Home Run.');
+                                } else {
+                                    moveSelectedRunner('home');
+                                }
 
                             } else {
 
@@ -2678,15 +2682,13 @@ function renderMatchHistory() {
             const ourGoals =
                 matchEvents.filter(
                     e =>
-                        e.eventType ===
-                        "goalScored"
+                        e.eventType === "goalScored" || e.eventType === "pcGoal"
                 ).length;
 
             const oppositionGoals =
                 matchEvents.filter(
                     e =>
-                        e.eventType ===
-                        "goalConceded"
+                        e.eventType === "goalConceded" || e.eventType === "pcGoalConceded"
                 ).length;
 
             const matchDate =
@@ -4280,6 +4282,85 @@ function renderEffectivenessTable() {
     `;
 
 }
+
+function buildPitchingSummaryHtml() {
+
+    const pitchers =
+        App.currentMatch?.pitchers?.ourTeam;
+
+    if (!pitchers) {
+        return "";
+    }
+
+    let html = `
+        <div class="card">
+            <h3>Pitching Summary</h3>
+    `;
+
+    ["pitcher1", "pitcher2"].forEach(key => {
+
+        const pitcher = pitchers[key];
+
+        if (
+            !pitcher ||
+            !pitcher.name
+        ) {
+            return;
+        }
+
+        const pitches =
+            (pitcher.balls || 0) +
+            (pitcher.strikes || 0);
+
+        const strikePct =
+            pitches > 0
+                ? Math.round(
+                    (pitcher.strikes || 0) /
+                    pitches * 100
+                  )
+                : 0;
+
+        const outs = pitcher.outs || 0;
+        const inningsPitched =
+            `${Math.floor(outs / 3)}.${outs % 3}`;
+
+        html += `
+            <div class="pitcher-summary">
+
+                <div class="pitcher-summary-name">
+                    ${pitcher.name}
+                </div>
+
+                <div>
+                    Pitches: ${pitches}
+                    | Strikes: ${pitcher.strikes || 0}
+                    (${strikePct}%)
+                </div>
+
+                <div>
+                    Strikeouts: ${pitcher.strikeouts || 0}
+                    | Walks: ${pitcher.walks || 0}
+                </div>
+
+                <div>
+                    <div>
+                        Outs: ${pitcher.outs || 0}
+                        (${inningsPitched} IP)
+                        | Runs Allowed: ${pitcher.runsAllowed || 0}
+                    </div>
+                </div>
+
+            </div>
+        `;
+    });
+
+    html += `
+        </div>
+    `;
+
+    return html;
+}
+
 function renderSoftballSummary() {
 
     const liveScreen =
@@ -4411,7 +4492,10 @@ function renderSoftballSummary() {
 
             </div>
 
+            ${buildPitchingSummaryHtml()}
+
             <div class="summary-actions">
+
 
                 <button
                     id="summaryExportButton"
@@ -4446,8 +4530,9 @@ function renderSoftballSummary() {
         .addEventListener(
             "click",
             returnToSoftballHome
-        );
+        );F
 }
+
 function returnToSoftballHome() {
 
     App.currentMatch = null;

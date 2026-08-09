@@ -1008,6 +1008,92 @@ function recordRun() {
     updateScoreboard();
 
 }
+
+function undoLastRun() {
+
+    if (!App.currentMatch || !App.currentMatch.events || App.currentMatch.events.length === 0) {
+        alert("No events to undo.");
+        return;
+    }
+
+
+    const events = App.currentMatch.events;
+
+    // Find the most recent run event (search backwards)
+    let runIndex = -1;
+    for (let i = events.length - 1; i >= 0; i--) {
+        if (events[i].eventType === "runFor" || events[i].eventType === "runAgainst") {
+            runIndex = i;
+            break;
+        }
+    }
+
+    if (runIndex === -1) {
+        alert("No run events to undo.");
+        return;
+    }
+
+    const last = events[runIndex];
+
+    // Build confirmation message
+    const when = last.matchSecond != null ? `at ${last.matchSecond}s` : last.timestamp || "";
+    const score = last.scoreAtEvent ? `score ${last.scoreAtEvent}` : "";
+    const player = last.player != null ? `Runner #${last.player}` : "";
+    const from = last.from ? `from ${last.from}` : "";
+    const pitcherAdjust = last.battingSide === "opponentBatting" ? " This will also decrement the pitcher's runs allowed." : "";
+
+    const msg = `Undo last run ${when} (${score})${player ? ' by ' + player : ''}${from ? ' ' + from : ''}?` + pitcherAdjust;
+
+    if (!confirm(msg)) {
+        return;
+    }
+
+    // Remove the found run event
+    events.splice(runIndex, 1);
+
+    // Try to restore runner to origin base if info available
+    try {
+        if (last.player != null && last.from) {
+            if (!App.currentMatch.bases) {
+                App.currentMatch.bases = { first: null, second: null, third: null };
+            }
+
+            if (last.from === "batter") {
+                // restore batting order's current batter where possible
+                if (last.battingSide === "ourBatting") {
+                    App.currentMatch.battingOrder.ourTeam = last.currentBatter || App.currentMatch.battingOrder.ourTeam;
+                } else if (last.battingSide === "opponentBatting") {
+                    App.currentMatch.battingOrder.opponent = last.currentBatter || App.currentMatch.battingOrder.opponent;
+                }
+            } else {
+                App.currentMatch.bases[last.from] = last.player;
+            }
+        }
+    } catch (e) {
+        console.error("Failed to restore runner base:", e);
+    }
+
+    // Adjust pitcher runs allowed if applicable
+    try {
+        if (last.battingSide === "opponentBatting") {
+            const pitcher = getActivePitcher();
+            if (pitcher && typeof pitcher.runsAllowed === "number") {
+                pitcher.runsAllowed = Math.max(0, pitcher.runsAllowed - 1);
+            }
+        }
+    } catch (e) {
+        console.error("Failed to adjust pitcher runsAllowed:", e);
+    }
+
+    saveMatch();
+    updateScoreboard();
+    renderTimeline();
+
+    alert("Last run undone.");
+
+}
+
+window.undoLastRun = undoLastRun;
 function nextBatter() {
 
     if (
@@ -1146,6 +1232,21 @@ function showAdvanceDestination(
             "outcomePanel"
         );
 
+    // Build buttons string and omit Home when the selected runner is the batter
+    let homeButton = "";
+
+    if (runnerPosition !== 'batter') {
+        homeButton = `
+            <button
+                class="event-button softball advance"
+                onclick="moveRunner('${runnerPosition}','home')"
+            >
+                🏠<br>
+                Home
+            </button>
+        `;
+    }
+
     panel.innerHTML = `
         <h3 class="outcome-title">
             MOVE TO
@@ -1177,13 +1278,7 @@ function showAdvanceDestination(
                 Third Base
             </button>
 
-            <button
-                class="event-button softball advance"
-                onclick="moveRunner('${runnerPosition}','home')"
-            >
-                🏠<br>
-                Home
-            </button>
+            ${homeButton}
 
             <button
                 class="event-button outcome-cancel"
@@ -1251,13 +1346,21 @@ function moveRunner(
         ) {
 
             recordEvent(
-                "runFor"
+                "runFor",
+                {
+                    player: runner,
+                    from: from
+                }
             );
 
         } else {
 
             recordEvent(
-                "runAgainst"
+                "runAgainst",
+                {
+                    player: runner,
+                    from: from
+                }
             );
 
         }
