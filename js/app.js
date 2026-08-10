@@ -285,6 +285,33 @@ function startMatch() {
 
         });
 
+    // Capture roster inputs from setup screen (if provided)
+    const roster = [];
+    for (let i = 1; i <= 9; i++) {
+        const el = document.getElementById(`roster${i}`);
+        roster.push(el?.value?.trim() || "");
+    }
+
+    App.currentMatch.roster = { ourTeam: roster };
+
+    // If pitcher radios selected, set pitcher names from roster
+    const p1 = document.querySelector("input[name='pitcher1']:checked");
+    const p2 = document.querySelector("input[name='pitcher2']:checked");
+
+    if (!App.currentMatch.pitchers) App.currentMatch.pitchers = { ourTeam: {} };
+
+    if (p1) {
+        const idx = Number(p1.value) - 1;
+        App.currentMatch.pitchers.ourTeam.pitcher1 = App.currentMatch.pitchers.ourTeam.pitcher1 || {};
+        App.currentMatch.pitchers.ourTeam.pitcher1.name = roster[idx] || `Player #${idx+1}`;
+    }
+
+    if (p2) {
+        const idx = Number(p2.value) - 1;
+        App.currentMatch.pitchers.ourTeam.pitcher2 = App.currentMatch.pitchers.ourTeam.pitcher2 || {};
+        App.currentMatch.pitchers.ourTeam.pitcher2.name = roster[idx] || `Player #${idx+1}`;
+    }
+
     App.currentAttack = null;
 
     saveMatch();

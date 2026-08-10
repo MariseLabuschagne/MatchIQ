@@ -506,6 +506,18 @@ const MatchIQ = {
             category: "softball"
         },
         {
+            id: "hit",
+            name: "Hit",
+            icon: "⚾",
+            category: "softball"
+        },
+        {
+            id: "foul",
+            name: "Foul Ball",
+            icon: "❗",
+            category: "softball"
+        },
+        {
             id: "walk",
             name: "Walk",
             icon: "🚶",

@@ -2011,6 +2011,18 @@ SOFT BALL
 
 }
 
+.count-card.hits {
+
+    background: #14b8a6;
+
+}
+
+.count-card.foul {
+
+    background: #f59e0b;
+
+}
+
 .count-card.outs {
 
     background: #dc2626;

@@ -343,6 +343,9 @@ function exportSoftballCsv() {
 
         "Event Type",
 
+        "Event Timestamp",
+        "Recorded Batter",
+
         "Our Score",
         "Opponent Score"
 
@@ -428,6 +431,10 @@ function exportSoftballCsv() {
                 eventDefinition
                     ? eventDefinition.name
                     : event.eventType,
+
+                event.timestamp || "",
+
+                event.batter ?? "",
 
                 scoreParts[0] || "0",
 

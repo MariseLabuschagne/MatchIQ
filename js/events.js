@@ -202,7 +202,9 @@ function recordEvent(
                 "function"
             )
                 ? getCurrentBatter()
-                : ""
+                : "",
+
+        ...options
 
     };
 
@@ -1531,6 +1533,44 @@ function advanceRunnerPrev() {
 
 }
 
+function recordHit() {
+    recordEvent("hit", {
+        batter: getCurrentBatter(),
+        timestamp: new Date().toISOString()
+    });
+
+    App.currentMatch.balls = 0;
+    App.currentMatch.strikes = 0;
+
+    nextBatter();
+
+    saveMatch();
+    updateScoreboard();
+    renderTimeline();
+}
+
+function recordFoul() {
+    const batter = getCurrentBatter();
+
+    recordEvent("foul", {
+        batter: batter,
+        timestamp: new Date().toISOString()
+    });
+
+    // Count foul as a strike up to 2 strikes
+    if (typeof App.currentMatch.strikes !== "number") {
+        App.currentMatch.strikes = 0;
+    }
+
+    if (App.currentMatch.strikes < 2) {
+        App.currentMatch.strikes++;
+    }
+
+    saveMatch();
+    updateScoreboard();
+    renderTimeline();
+}
+
 function recordHomeRun() {
 
     const bases =
@@ -1538,6 +1578,20 @@ function recordHomeRun() {
 
     const batter =
         getCurrentBatter();
+
+    // If a hit wasn't recorded immediately before the home run for this batter,
+    // add a hit event so batting stats include the home run as a hit.
+    const last = getLastEvent();
+    if (
+        !last ||
+        last.eventType !== "hit" ||
+        (last.batter || last.currentBatter) !== batter
+    ) {
+        recordEvent("hit", {
+            batter: batter,
+            timestamp: new Date().toISOString()
+        });
+    }
 
     recordEvent(
         "homeRun",

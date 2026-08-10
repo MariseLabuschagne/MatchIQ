@@ -536,6 +536,13 @@ function renderEventSections() {
                                     return;
                                 }
                                 if (
+                                    event.id === "hit"
+                                ) {
+                                    recordHit();
+                                    return;
+                                }
+
+                                if (
                                     event.id === "homeRun"
                                 ) {
                                     recordHomeRun();
@@ -684,6 +691,31 @@ function updateScoreboard() {
                     >
                         <span>STRIKES</span>
                         <strong>${App.currentMatch.strikes}</strong>
+                    </div>
+
+                    <div
+                        class="count-card foul"
+                        onclick="
+                            highlightEventButton(this);
+                            recordFoul();
+                        "
+                    >
+                        <span>FOUL</span>
+                        <strong>⚠️</strong>
+                    </div>
+
+                    <div
+                        class="count-card hits"
+                        onclick="
+                            highlightEventButton(this);
+                            recordHit();
+                        "
+                    >
+                        <span>HITS</span>
+                        <strong>${getSoftballEventCount(
+                            "hit",
+                            App.currentMatch.currentSide
+                        )}</strong>
                     </div>
 
                     <div
@@ -4607,6 +4639,141 @@ function buildSoftballMatchInsightsHtml() {
     `;
 }
 
+function getSoftballHitsByBatter(side) {
+    if (
+        !App.currentMatch ||
+        !App.currentMatch.events
+    ) {
+        return {};
+    }
+
+    return App.currentMatch.events
+        .filter(
+            event =>
+                event.eventType === "hit" &&
+                event.battingSide === side
+        )
+        .reduce((counts, event) => {
+            const batter =
+                event.currentBatter ||
+                "Unknown";
+
+            counts[batter] =
+                (counts[batter] || 0) + 1;
+
+            return counts;
+        }, {});
+}
+
+function buildSoftballBattingStatsHtml() {
+    const innings = getSoftballInnings();
+
+    const rows = [];
+
+    const roster = App.currentMatch?.roster?.ourTeam || [];
+
+    for (let i = 1; i <= 9; i++) {
+        const batter = i;
+        const name = roster[i - 1] || `#${i}`;
+
+        const perInning = innings.map(inningLabel => {
+            const inningNumber = Number(inningLabel.replace("I", ""));
+            const count = (App.currentMatch?.events || []).filter(e =>
+                (e.eventType === "hit") &&
+                (e.battingSide === "ourBatting") &&
+                ((e.batter || e.currentBatter) == batter) &&
+                (Number(e.inning) === inningNumber)
+            ).length;
+
+            return `<td>${count}</td>`;
+        }).join("");
+
+        const total = (App.currentMatch?.events || []).filter(e =>
+            (e.eventType === "hit") &&
+            (e.battingSide === "ourBatting") &&
+            ((e.batter || e.currentBatter) == batter)
+        ).length;
+
+        rows.push(`
+            <tr>
+                <td onclick="setRosterName(${i})" style="cursor:pointer">${name}</td>
+                ${perInning}
+                <td>${total}</td>
+            </tr>
+        `);
+    }
+
+    return `
+        <div class="card summary-section">
+            <h3>Batting Stats</h3>
+            <table class="period-table">
+                <tr>
+                    <th>Batter</th>
+                    ${innings.map(i => `<th>${i}</th>`).join("")}
+                    <th>Total</th>
+                </tr>
+                ${rows.join("")}
+            </table>
+        </div>
+    `;
+}
+
+function buildSoftballRosterHtml() {
+    const roster = App.currentMatch?.roster?.ourTeam || [];
+
+    const rows = [];
+    for (let i = 1; i <= 9; i++) {
+        const name = roster[i - 1] || `Player #${i}`;
+        rows.push(`
+            <tr>
+                <td>#${i}</td>
+                <td>${name}</td>
+                <td>
+                    <button class="primary-button" onclick="setPitcherFromRoster(${i}, 'pitcher1')">Set Pitcher 1</button>
+                </td>
+                <td>
+                    <button class="primary-button" onclick="setPitcherFromRoster(${i}, 'pitcher2')">Set Pitcher 2</button>
+                </td>
+            </tr>
+        `);
+    }
+
+    return `
+        <div class="card summary-section">
+            <h3>Roster (Our Team)</h3>
+            <table class="period-table">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th colspan="2">Pitchers</th>
+                </tr>
+                ${rows.join("")}
+            </table>
+        </div>
+    `;
+}
+
+window.setPitcherFromRoster = function(index, key) {
+    App.currentMatch.roster = App.currentMatch.roster || { ourTeam: [] };
+    const name = App.currentMatch.roster.ourTeam[index - 1] || `Player #${index}`;
+    App.currentMatch.pitchers = App.currentMatch.pitchers || { ourTeam: {} };
+    App.currentMatch.pitchers.ourTeam = App.currentMatch.pitchers.ourTeam || {};
+    App.currentMatch.pitchers.ourTeam[key] = App.currentMatch.pitchers.ourTeam[key] || {};
+    App.currentMatch.pitchers.ourTeam[key].name = name;
+    saveMatch();
+    renderSoftballSummary();
+}
+
+window.setRosterName = function(index) {
+    const name = prompt(`Enter name for player #${index}`);
+    if (name !== null) {
+        App.currentMatch.roster = App.currentMatch.roster || { ourTeam: [] };
+        App.currentMatch.roster.ourTeam[index - 1] = name;
+        saveMatch();
+        renderSoftballSummary();
+    }
+}
+
 function renderSoftballSummary() {
 
     const liveScreen =
@@ -4686,6 +4853,22 @@ function renderSoftballSummary() {
                     </tr>
 
                     <tr>
+                        <td>Hits</td>
+                        <td>
+                            ${getSoftballEventCount(
+                                "hit",
+                                "ourBatting"
+                            )}
+                        </td>
+                        <td>
+                            ${getSoftballEventCount(
+                                "hit",
+                                "opponentBatting"
+                            )}
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td>Strikes</td>
                         <td>
                             ${getSoftballEventCount(
@@ -4739,6 +4922,8 @@ function renderSoftballSummary() {
                 </table>
 
             </div>
+
+            ${buildSoftballBattingStatsHtml()}
 
             ${buildPitchingSummaryHtml()}
 
