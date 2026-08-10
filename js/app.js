@@ -298,6 +298,17 @@ function startMatch() {
     const p1 = document.querySelector("input[name='pitcher1']:checked");
     const p2 = document.querySelector("input[name='pitcher2']:checked");
 
+    if (
+        p1 &&
+        p2 &&
+        p1.value === p2.value
+    ) {
+        alert(
+            "Pitcher 1 and Pitcher 2 must be different players."
+        );
+        return;
+    }
+
     if (!App.currentMatch.pitchers) App.currentMatch.pitchers = { ourTeam: {} };
 
     if (p1) {
@@ -416,10 +427,7 @@ function createMatchObject(
 
                 pitcher1: {
 
-                    name:
-                        document.getElementById(
-                            "ourPitcher1"
-                        )?.value || "",
+                    name: "",
 
                     balls: 0,
                     strikes: 0,
@@ -432,10 +440,7 @@ function createMatchObject(
 
                 pitcher2: {
 
-                    name:
-                        document.getElementById(
-                            "ourPitcher2"
-                        )?.value || "",
+                    name: "",
 
                     balls: 0,
                     strikes: 0,
@@ -635,6 +640,8 @@ function selectSport(
     sport
 ) {
 
+    hideAllScreens();
+    
     App.selectedSport =
         sport;
 
@@ -704,11 +711,6 @@ function selectSport(
         if (battingGroup) {
             battingGroup.style.display =
                 "none";
-        }
-        if (pitcherGroup) {
-            pitcherGroup.style.display =
-                "none";
-
         }
 
 

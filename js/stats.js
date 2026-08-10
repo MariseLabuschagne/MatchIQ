@@ -858,3 +858,102 @@ function getSoftballEventCount(
     ).length;
 
 }
+
+
+function getSoftballBatterStats() {
+
+    if (
+        !App.currentMatch ||
+        !App.currentMatch.roster
+    ) {
+        return [];
+    }
+
+    const roster =
+        App.currentMatch.roster.ourTeam || [];
+
+    const stats = roster.map(
+        (name, index) => ({
+            batter: index + 1,
+            name:
+                name ||
+                `Player ${index + 1}`,
+            hits: 0,
+            runs: 0
+        })
+    );
+
+    App.currentMatch.events.forEach(
+        event => {
+
+            if (
+                event.eventType === "hit" &&
+                event.batter
+            ) {
+
+                const player =
+                    stats[event.batter - 1];
+
+                if (player) {
+                    player.hits++;
+                }
+
+            }
+
+            if (
+                event.eventType === "runFor" &&
+                event.player
+            ) {
+
+                const player =
+                    stats[event.player - 1];
+
+                if (player) {
+                    player.runs++;
+                }
+
+            }
+
+        }
+    );
+
+    return stats;
+
+}
+
+function getBatterStats() {
+
+    const stats = {};
+
+    App.currentMatch.roster.ourTeam
+        .forEach((name, index) => {
+
+            const batterNo = index + 1;
+
+            stats[batterNo] = {
+                name,
+                hits: 0,
+                runs: 0
+            };
+        });
+
+    App.currentMatch.events.forEach(event => {
+
+        if (
+            event.eventType === "hit"
+            && stats[event.batter]
+        ) {
+            stats[event.batter].hits++;
+        }
+
+        if (
+            event.eventType === "runFor"
+            && stats[event.player]
+        ) {
+            stats[event.player].runs++;
+        }
+
+    });
+
+    return stats;
+}

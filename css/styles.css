@@ -463,8 +463,7 @@ START BUTTON
 }
 
 .hidden {
-
-    display: none;
+    display: none !important;
 }
 
 /* =====================================================
@@ -2396,4 +2395,38 @@ MOBILE
     font-weight: bold;
     font-size: 1rem;
     margin-bottom: 6px;
+}
+
+.roster-header,
+.roster-row {
+    display: grid;
+    grid-template-columns:
+        30px
+        1fr
+        40px
+        40px;
+    gap: 8px;
+    align-items: center;
+}
+
+.roster-header {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.roster-row {
+    margin-bottom: 8px;
+}
+
+.roster-row input[type="text"] {
+    margin: 0;
+}
+.period-table th,
+.period-table td {
+    text-align: center;
+}
+
+.period-table th:first-child,
+.period-table td:first-child {
+    text-align: left;
 }

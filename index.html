@@ -142,7 +142,7 @@
 
                     <div class="home-version">
 
-                        Version 2.0.9
+                        Version 2.1.0
 
                     </div>
 
@@ -285,83 +285,232 @@
 
                 <!-- Our Team Roster -->
 
-                <div class="form-group" id="rosterGroup" style="display:none;">
-
-                    <label>Our Team Roster (optional)</label>
-
-                    <div class="roster-grid">
-                        <div>
-                            <input id="roster1" type="text" placeholder="Player #1">
-                            <label><input type="radio" name="pitcher1" value="1"> P1</label>
-                            <label><input type="radio" name="pitcher2" value="1"> P2</label>
-                        </div>
-                        <div>
-                            <input id="roster2" type="text" placeholder="Player #2">
-                            <label><input type="radio" name="pitcher1" value="2"> P1</label>
-                            <label><input type="radio" name="pitcher2" value="2"> P2</label>
-                        </div>
-                        <div>
-                            <input id="roster3" type="text" placeholder="Player #3">
-                            <label><input type="radio" name="pitcher1" value="3"> P1</label>
-                            <label><input type="radio" name="pitcher2" value="3"> P2</label>
-                        </div>
-                        <div>
-                            <input id="roster4" type="text" placeholder="Player #4">
-                            <label><input type="radio" name="pitcher1" value="4"> P1</label>
-                            <label><input type="radio" name="pitcher2" value="4"> P2</label>
-                        </div>
-                        <div>
-                            <input id="roster5" type="text" placeholder="Player #5">
-                            <label><input type="radio" name="pitcher1" value="5"> P1</label>
-                            <label><input type="radio" name="pitcher2" value="5"> P2</label>
-                        </div>
-                        <div>
-                            <input id="roster6" type="text" placeholder="Player #6">
-                            <label><input type="radio" name="pitcher1" value="6"> P1</label>
-                            <label><input type="radio" name="pitcher2" value="6"> P2</label>
-                        </div>
-                        <div>
-                            <input id="roster7" type="text" placeholder="Player #7">
-                            <label><input type="radio" name="pitcher1" value="7"> P1</label>
-                            <label><input type="radio" name="pitcher2" value="7"> P2</label>
-                        </div>
-                        <div>
-                            <input id="roster8" type="text" placeholder="Player #8">
-                            <label><input type="radio" name="pitcher1" value="8"> P1</label>
-                            <label><input type="radio" name="pitcher2" value="8"> P2</label>
-                        </div>
-                        <div>
-                            <input id="roster9" type="text" placeholder="Player #9">
-                            <label><input type="radio" name="pitcher1" value="9"> P1</label>
-                            <label><input type="radio" name="pitcher2" value="9"> P2</label>
-                        </div>
-                    </div>
-
-                </div>
-
                 <div
                     class="form-group"
-                    id="pitcherGroup"
+                    id="rosterGroup"
                     style="display:none;"
                 >
-
                     <label>
-                        Our Team Pitchers
+                        Batting Order & Pitchers
                     </label>
 
-                    <input
-                        id="ourPitcher1"
-                        type="text"
-                        placeholder="Pitcher 1"
-                    >
+                    <div class="roster-header">
+                        <span>#</span>
+                        <span>Player Name</span>
+                        <span>P1</span>
+                        <span>P2</span>
+                    </div>
 
-                    <input
-                        id="ourPitcher2"
-                        type="text"
-                        placeholder="Pitcher 2"
-                        style="margin-top:8px;"
-                    >
+                    <div id="rosterRows">
 
+                        <!-- Player 1 -->
+                        <div class="roster-row">
+                            <span>1</span>
+
+                            <input
+                                id="roster1"
+                                type="text"
+                                placeholder="Player 1"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher1"
+                                value="1"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher2"
+                                value="1"
+                            />
+                        </div>
+
+                        <!-- Player 2 -->
+                        <div class="roster-row">
+                            <span>2</span>
+
+                            <input
+                                id="roster2"
+                                type="text"
+                                placeholder="Player 2"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher1"
+                                value="2"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher2"
+                                value="2"
+                            />
+                        </div>
+                        <!-- Player 3 -->
+                        <div class="roster-row">
+                            <span>3</span>
+
+                            <input
+                                id="roster3"
+                                type="text"
+                                placeholder="Player 3"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher1"
+                                value="3"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher2"
+                                value="3"
+                            />
+                        </div>
+                        <!-- Player 4 -->
+                        <div class="roster-row">
+                            <span>4</span>
+
+                            <input
+                                id="roster4"
+                                type="text"
+                                placeholder="Player 4"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher1"
+                                value="4"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher2"
+                                value="4"
+                            />
+                        </div>
+                        <!-- Player 5 -->
+                        <div class="roster-row">
+                            <span>5</span>
+
+                            <input
+                                id="roster5"
+                                type="text"
+                                placeholder="Player 5"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher1"
+                                value="5"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher2"
+                                value="5"
+                            />
+                        </div>
+                        <!-- Player 6 -->
+                        <div class="roster-row">
+                            <span>6</span>
+
+                            <input
+                                id="roster6"
+                                type="text"
+                                placeholder="Player 6"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher1"
+                                value="6"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher2"
+                                value="6"
+                            />
+                        </div>
+                        <!-- Player 7 -->
+                        <div class="roster-row">
+                            <span>7</span>
+
+                            <input
+                                id="roster7"
+                                type="text"
+                                placeholder="Player 7"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher1"
+                                value="7"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher2"
+                                value="7"
+                            />
+                        </div>
+                        <!-- Player 8 -->
+                        <div class="roster-row">
+                            <span>8</span>
+
+                            <input
+                                id="roster8"
+                                type="text"
+                                placeholder="Player 8"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher1"
+                                value="8"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher2"
+                                value="8"
+                            />
+                        </div>
+                        <!-- Player 9 -->
+                        <div class="roster-row">
+                            <span>9</span>
+
+                            <input
+                                id="roster9"
+                                type="text"
+                                placeholder="Player 9"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher1"
+                                value="9"
+                            />
+
+                            <input
+                                type="radio"
+                                name="pitcher2"
+                                value="9"
+                            />
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div
+                    class="form-group"
+                    id="oppositionPitcherGroup"
+                    style="display:none;"
+                >
                     <label
                         style="margin-top:12px;display:block;"
                     >

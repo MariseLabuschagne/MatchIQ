@@ -3024,71 +3024,12 @@ function showHockeyMenu() {
     `;
 
 }
-function showSoftballMenu() {
 
-    hideAllScreens();
-
-    const screen =
-        document.getElementById(
-            "softballMenuScreen"
-        );
-
-    screen.classList.remove(
-        "hidden"
-    );
-
-    screen.innerHTML = `
-
-        <div class="card hockey-menu-card">
-
-            <button
-                class="action-button secondary-button"
-                onclick="returnToHomeScreen()"
-            >
-                ← Back
-            </button>
-
-            <h1>
-                🥎 Softball
-            </h1>
-
-            <div class="hockey-menu-buttons">
-
-                <button
-                    class="sport-button softball"
-                    onclick="showSoftballSetup()"
-                >
-                    ▶ New Match
-                </button>
-
-                <button
-                    class="sport-button history"
-                    onclick="renderSoftballHistory()"
-                >
-                    📊 Match History
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-}
 function showSoftballSetup() {
 
+    App.selectedSport = "softball";
+
     hideAllScreens();
-
-    App.selectedSport =
-        "softball";
-
-    document
-        .getElementById(
-            "softballMenuScreen"
-        )
-        .classList.add(
-            "hidden"
-        );
 
     document
         .getElementById(
@@ -4666,56 +4607,129 @@ function getSoftballHitsByBatter(side) {
 }
 
 function buildSoftballBattingStatsHtml() {
-    const innings = getSoftballInnings();
+
+    const innings =
+        getSoftballInnings();
 
     const rows = [];
 
-    const roster = App.currentMatch?.roster?.ourTeam || [];
+    const roster =
+        App.currentMatch?.roster?.ourTeam || [];
+
+    const batterStats =
+        getSoftballBatterStats();
 
     for (let i = 1; i <= 9; i++) {
+
         const batter = i;
-        const name = roster[i - 1] || `#${i}`;
 
-        const perInning = innings.map(inningLabel => {
-            const inningNumber = Number(inningLabel.replace("I", ""));
-            const count = (App.currentMatch?.events || []).filter(e =>
-                (e.eventType === "hit") &&
-                (e.battingSide === "ourBatting") &&
-                ((e.batter || e.currentBatter) == batter) &&
-                (Number(e.inning) === inningNumber)
-            ).length;
+        const name =
+            roster[i - 1] || `#${i}`;
 
-            return `<td>${count}</td>`;
-        }).join("");
+        const perInning =
+            innings.map(inningLabel => {
 
-        const total = (App.currentMatch?.events || []).filter(e =>
-            (e.eventType === "hit") &&
-            (e.battingSide === "ourBatting") &&
-            ((e.batter || e.currentBatter) == batter)
-        ).length;
+                const inningNumber =
+                    Number(
+                        inningLabel.replace(
+                            "I",
+                            ""
+                        )
+                    );
+
+                const count =
+                    (App.currentMatch?.events || [])
+                    .filter(e =>
+
+                        e.eventType === "hit" &&
+
+                        e.battingSide ===
+                            "ourBatting" &&
+
+                        (
+                            e.batter ||
+                            e.currentBatter
+                        ) == batter &&
+
+                        Number(e.inning) ===
+                            inningNumber
+
+                    ).length;
+
+                return `<td>${count}</td>`;
+
+            }).join("");
+
+        const playerStats =
+            batterStats[i - 1] || {
+                hits: 0,
+                runs: 0
+            };
 
         rows.push(`
             <tr>
-                <td onclick="setRosterName(${i})" style="cursor:pointer">${name}</td>
+
+                <td
+                    onclick="setRosterName(${i})"
+                    style="cursor:pointer"
+                >
+                    ${name}
+                </td>
+
                 ${perInning}
-                <td>${total}</td>
+
+                <td>
+                    ${playerStats.hits}
+                </td>
+
+                <td>
+                    ${playerStats.runs}
+                </td>
+
             </tr>
         `);
+
     }
 
     return `
         <div class="card summary-section">
-            <h3>Batting Stats</h3>
+
+            <h3>
+                Batting Stats
+            </h3>
+
             <table class="period-table">
+
                 <tr>
-                    <th>Batter</th>
-                    ${innings.map(i => `<th>${i}</th>`).join("")}
-                    <th>Total</th>
+
+                    <th>
+                        Batter
+                    </th>
+
+                    ${innings
+                        .map(
+                            i =>
+                            `<th>${i}</th>`
+                        )
+                        .join("")}
+
+                    <th>
+                        Total Hits
+                    </th>
+
+                    <th>
+                        Runs
+                    </th>
+
                 </tr>
+
                 ${rows.join("")}
+
             </table>
+
         </div>
     `;
+
 }
 
 function buildSoftballRosterHtml() {
@@ -4775,6 +4789,9 @@ window.setRosterName = function(index) {
 }
 
 function renderSoftballSummary() {
+
+    const battingStats =
+        getSoftballBatterStats();
 
     const liveScreen =
         document.getElementById(
