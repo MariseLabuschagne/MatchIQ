@@ -4963,7 +4963,7 @@ function renderSoftballSummary() {
         .addEventListener(
             "click",
             returnToSoftballHome
-        );F
+        );
 }
 
 function returnToSoftballHome() {
@@ -4975,6 +4975,8 @@ function returnToSoftballHome() {
 }
 
 function showSoftballMenu() {
+
+    console.log("showSoftballMenu fired");
 
     hideAllScreens();
 
@@ -5015,9 +5017,13 @@ function showSoftballMenu() {
             "softballMenuScreen"
         );
 
+    console.log("softballMenuScreen element", screen);
+
     screen.classList.remove(
         "hidden"
     );
+    screen.style.display = "block";
+    screen.style.visibility = "visible";
 
     screen.innerHTML = `
 

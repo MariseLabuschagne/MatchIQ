@@ -657,6 +657,10 @@ function selectSport(
         document.getElementById(
             "pitcherGroup"
         );
+    const rosterGroup =
+        document.getElementById(
+            "rosterGroup"
+        );
             
     if (isSoftballSport(sport)) {
 
@@ -679,6 +683,11 @@ function selectSport(
             pitcherGroup.style.display =
                 "block";
 
+        }
+
+        if (rosterGroup) {
+            rosterGroup.style.display =
+                "block";
         }
 
     } else {
