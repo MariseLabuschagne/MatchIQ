@@ -39,29 +39,30 @@ function renderSoftballSummary() {
     const score = getScore();
 
     liveScreen.innerHTML = `
-        <div class="summary-screen">
+        <div id="summaryCapture">
+            <div class="summary-screen">
 
-            <h2>🥎 Match Summary</h2>
+                <div class="card">
+                    <h2>🥎 Match Summary</h2>
 
-           <div class="softball-summary-header">
+                    <div class="softball-summary-header">
 
-                <div class="summary-team">
-                    ${App.currentMatch.ourTeam}
+                        <div class="summary-team">
+                            ${App.currentMatch.ourTeam}
+                        </div>
+
+                        <div class="summary-score">
+                            ${score.our} - ${score.opposition}
+                        </div>
+
+                        <div class="summary-team">
+                            ${App.currentMatch.opponent}
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="summary-score">
-                    ${score.our} - ${score.opposition}
-                </div>
-
-                <div class="summary-team">
-                    ${App.currentMatch.opponent}
-                </div>
-
-            </div>
-
-            ${buildSoftballMatchInsightsHtml()}
-
-            <div class="card">
+                <div class="card">
 
                 <h3>Game Statistics</h3>
 
@@ -191,6 +192,12 @@ function renderSoftballSummary() {
                 </button>
 
                 <button
+                    id="exportPdfButton"
+                    class="summary-button exportPDF">
+                    📸 Export to PDF
+                </button>
+
+                <button
                     id="newMatchButton"
                     class="summary-button new-match">
                     🥎 Softball Home
@@ -209,6 +216,18 @@ function renderSoftballSummary() {
             "click",
             exportMatch
         );
+
+    const exportPdfButton =
+        document.getElementById(
+            "exportPdfButton"
+        );
+
+    if (exportPdfButton) {
+        exportPdfButton.addEventListener(
+            "click",
+            exportSummaryPdf
+        );
+    }
 
     document
         .getElementById(
@@ -770,17 +789,6 @@ function buildSoftballMatchInsightsHtml() {
         ? `Biggest scoring inning was I${largestInning.inning} with ${largestInning.our + largestInning.opp} run${largestInning.our + largestInning.opp === 1 ? "" : "s"}.`
         : "No scoring innings recorded.";
 
-    return `
-        <div class="card summary-section">
-            <h3>Match Insights</h3>
-            <div class="insights-copy">
-                <p>${outcomeText}</p>
-                <p>Home runs: ${homeRunsFor} for ${ourName}, ${homeRunsAgainst} for ${oppName}.</p>
-                <p>${bestPitcherText}</p>
-                <p>${keyInningText}</p>
-            </div>
-        </div>
-    `;
 }
 
 function getSoftballHitsByBatter(side) {

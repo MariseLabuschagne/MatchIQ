@@ -293,21 +293,6 @@ function renderMatchSummary() {
 
                 ${renderMatchInformationTable()}
 
-                <div class="card summary-section">
-                    
-                    <h3>
-                        🏑 Coach Insights
-                    </h3>
-
-                    <div class="highlights">
-
-                        ${buildHighlights()}
-
-                    </div>
-
-                </div>
-
-
                 <div class="summary-actions">
 
                     <button
@@ -321,7 +306,6 @@ function renderMatchSummary() {
                     <button
                         id="exportPdfButton"
                         class="summary-button exportPDF"
-                        disabled
                     >
                         📸 Export to PDF
                     </button>
@@ -340,14 +324,6 @@ function renderMatchSummary() {
 
     `;           
         
-    console.log(
-        document.getElementById("summaryExportButton")
-    );
-
-    console.log(
-        document.getElementById("exportPdfButton")
-    );
-
     document
         .getElementById(
             "summaryExportButton"
@@ -357,15 +333,12 @@ function renderMatchSummary() {
             exportMatch
         );
 
-    
     const exportPdfButton =
         document.getElementById(
             "exportPdfButton"
         );
 
     if (exportPdfButton) {
-        
-        exportPdfButton.disabled = true;
         exportPdfButton.addEventListener(
             "click",
             exportSummaryPdf
@@ -479,75 +452,6 @@ function renderFunnelStep(
 }
 
 
-function buildHighlights() {
-
-    const insights = [];
-
-    const attack =
-        getAttackStats();
-
-    const defence =
-        getDefenceStats();
-    
-    const effectiveness =
-        getMatchStatistics()
-            .effectiveness;
-
-
-    /*
-    =========================================
-    POSITIVE INSIGHTS
-    =========================================
-    */
-
-    if (
-        effectiveness.shotAccuracy >= 70
-    ) {
-
-        insights.push(
-            "✅ Shot accuracy above 70%"
-        );
-
-    }
-
-    if (
-        effectiveness.entryToShotConversion >= 60
-    ) {
-
-        insights.push(
-            "✅ Strong circle entry conversion into shots"
-        );
-
-    }
-
-    if (
-        defence.penaltyCornersConceded > 0
-        &&
-        defence.pcGoalConceded /
-        defence.penaltyCornersConceded <= 0.25
-    ) {
-
-        insights.push(
-            "✅ Strong defensive penalty corner unit"
-        );
-
-    }
-
-    /*
-    =========================================
-    WARNING INSIGHTS
-    =========================================
-    */
-
-    if (
-        defence.turnoverDefensive25Lost >= 5
-    ) {
-
-        insights.push(
-            "⚠ High number of turnovers in Defensive 25"
-        );
-
-    }
 
     if (
         defence.circleEntriesAgainst >= 10

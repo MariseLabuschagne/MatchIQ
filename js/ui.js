@@ -703,10 +703,7 @@ function updateScoreboard() {
                         "
                     >
                         <span>HITS</span>
-                        <strong>${getSoftballEventCount(
-                            "hit",
-                            App.currentMatch.currentSide
-                        )}</strong>
+                        <strong>${App.currentMatch.hits || 0}</strong>
                     </div>
 
                     <div
@@ -1258,21 +1255,6 @@ function renderMatchSummary() {
 
                 ${renderMatchInformationTable()}
 
-                <div class="card summary-section">
-                    
-                    <h3>
-                        🏑 Coach Insights
-                    </h3>
-
-                    <div class="highlights">
-
-                        ${buildHighlights()}
-
-                    </div>
-
-                </div>
-
-
                 <div class="summary-actions">
 
                     <button
@@ -1286,7 +1268,6 @@ function renderMatchSummary() {
                     <button
                         id="exportPdfButton"
                         class="summary-button exportPDF"
-                        disabled
                     >
                         📸 Export to PDF
                     </button>
@@ -1329,8 +1310,6 @@ function renderMatchSummary() {
         );
 
     if (exportPdfButton) {
-        
-        exportPdfButton.disabled = true;
         exportPdfButton.addEventListener(
             "click",
             exportSummaryPdf
@@ -1446,75 +1425,6 @@ function renderFunnelStep(
 
 
 
-function buildHighlights() {
-
-    const insights = [];
-
-    const attack =
-        getAttackStats();
-
-    const defence =
-        getDefenceStats();
-    
-    const effectiveness =
-        getMatchStatistics()
-            .effectiveness;
-
-
-    /*
-    =========================================
-    POSITIVE INSIGHTS
-    =========================================
-    */
-
-    if (
-        effectiveness.shotAccuracy >= 70
-    ) {
-
-        insights.push(
-            "✅ Shot accuracy above 70%"
-        );
-
-    }
-
-    if (
-        effectiveness.entryToShotConversion >= 60
-    ) {
-
-        insights.push(
-            "✅ Strong circle entry conversion into shots"
-        );
-
-    }
-
-    if (
-        defence.penaltyCornersConceded > 0
-        &&
-        defence.pcGoalConceded /
-        defence.penaltyCornersConceded <= 0.25
-    ) {
-
-        insights.push(
-            "✅ Strong defensive penalty corner unit"
-        );
-
-    }
-
-    /*
-    =========================================
-    WARNING INSIGHTS
-    =========================================
-    */
-
-    if (
-        defence.turnoverDefensive25Lost >= 5
-    ) {
-
-        insights.push(
-            "⚠ High number of turnovers in Defensive 25"
-        );
-
-    }
 
     if (
         defence.circleEntriesAgainst >= 10
@@ -4772,29 +4682,32 @@ function renderSoftballSummary() {
     const score = getScore();
 
     liveScreen.innerHTML = `
-        <div class="summary-screen">
+        <div id="summaryCapture">
+            <div class="summary-screen">
 
-            <h2>🥎 Match Summary</h2>
+                <div class="card">
+                    <div class="summary-title">
+                        🥎 Match Summary
+                    </div>
 
-           <div class="softball-summary-header">
+                    <div class="softball-summary-header">
 
-                <div class="summary-team">
-                    ${App.currentMatch.ourTeam}
+                        <div class="summary-team">
+                            ${App.currentMatch.ourTeam}
+                        </div>
+
+                        <div class="summary-score">
+                            ${score.our} - ${score.opposition}
+                        </div>
+
+                        <div class="summary-team">
+                            ${App.currentMatch.opponent}
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="summary-score">
-                    ${score.our} - ${score.opposition}
-                </div>
-
-                <div class="summary-team">
-                    ${App.currentMatch.opponent}
-                </div>
-
-            </div>
-
-            ${buildSoftballMatchInsightsHtml()}
-
-            <div class="card">
+                <div class="card">
 
                 <h3>Game Statistics</h3>
 
@@ -4917,11 +4830,16 @@ function renderSoftballSummary() {
 
             <div class="summary-actions">
 
-
                 <button
                     id="summaryExportButton"
                     class="summary-button export">
                     Export Match
+                </button>
+
+                <button
+                    id="exportPdfButton"
+                    class="summary-button exportPDF">
+                    📸 Export to PDF
                 </button>
 
                 <button
@@ -4943,6 +4861,18 @@ function renderSoftballSummary() {
             "click",
             exportMatch
         );
+
+    const exportPdfButton =
+        document.getElementById(
+            "exportPdfButton"
+        );
+
+    if (exportPdfButton) {
+        exportPdfButton.addEventListener(
+            "click",
+            exportSummaryPdf
+        );
+    }
 
     document
         .getElementById(

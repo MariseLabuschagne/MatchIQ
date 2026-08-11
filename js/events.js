@@ -969,6 +969,7 @@ function switchSides() {
     App.currentMatch.balls = 0;
     App.currentMatch.strikes = 0;
     App.currentMatch.outs = 0;
+    App.currentMatch.hits = 0;
 
     saveMatch();
     updateScoreboard();
@@ -1541,8 +1542,7 @@ function recordHit() {
 
     App.currentMatch.balls = 0;
     App.currentMatch.strikes = 0;
-
-    nextBatter();
+    App.currentMatch.hits = (App.currentMatch.hits || 0) + 1;
 
     saveMatch();
     updateScoreboard();

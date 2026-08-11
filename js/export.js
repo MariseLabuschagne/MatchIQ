@@ -14,6 +14,93 @@ async function exportSummaryPdf() {
     const { jsPDF } =
         window.jspdf;
 
+    if (!window.html2canvas) {
+        alert(
+            "PDF export requires html2canvas. Please refresh the page."
+        );
+        return;
+    }
+
+    const summaryElement =
+        document.getElementById(
+            "summaryCapture"
+        );
+
+    const fileName =
+        `MatchIQ-${App.currentMatch.ourTeam}-${App.currentMatch.opponent}.pdf`;
+
+    showPdfLoader();
+
+    if (summaryElement) {
+        const pagePdf =
+            new jsPDF(
+                "p",
+                "mm",
+                "a4"
+            );
+
+        try {
+            const canvas =
+                await window.html2canvas(
+                    summaryElement,
+                    {
+                        scale: 2,
+                        useCORS: true,
+                        backgroundColor: null,
+                        logging: false
+                    }
+                );
+
+            const imgData =
+                canvas.toDataURL("image/png");
+
+            const pageWidth =
+                pagePdf.internal.pageSize.getWidth();
+            const pageHeight =
+                pagePdf.internal.pageSize.getHeight();
+
+            const margin = 10;
+            const availableWidth =
+                pageWidth - margin * 2;
+            const availableHeight =
+                pageHeight - margin * 2;
+
+            const imgProps =
+                pagePdf.getImageProperties(
+                    imgData
+                );
+
+            let imgWidth = availableWidth;
+            let imgHeight =
+                (imgProps.height * imgWidth) / imgProps.width;
+
+            if (imgHeight > availableHeight) {
+                imgHeight = availableHeight;
+                imgWidth =
+                    (imgProps.width * imgHeight) / imgProps.height;
+            }
+
+            const x =
+                (pageWidth - imgWidth) / 2;
+            const y =
+                (pageHeight - imgHeight) / 2;
+
+            pagePdf.addImage(
+                imgData,
+                "PNG",
+                x,
+                y,
+                imgWidth,
+                imgHeight
+            );
+
+            pagePdf.save(fileName);
+        } finally {
+            hidePdfLoader();
+        }
+        return;
+    }
+
     const pdf =
         new jsPDF(
             "p",
@@ -21,11 +108,11 @@ async function exportSummaryPdf() {
             "a4"
         );
 
-    const stats =
-        getMatchStatistics();
-
     const score =
         getScore();
+
+    const isSoftball =
+        isSoftballSport(App.currentMatch);
 
     let y = 20;
 
@@ -42,9 +129,7 @@ async function exportSummaryPdf() {
     pdf.setFontSize(12);
 
     pdf.text(
-        `Competition: ${
-            App.currentMatch.competition
-        }`,
+        `Competition: ${App.currentMatch.competition}`,
         15,
         y
     );
@@ -59,98 +144,170 @@ async function exportSummaryPdf() {
 
     y += 12;
 
-    pdf.setFontSize(14);
+    if (isSoftball) {
+        pdf.setFontSize(14);
+        pdf.text(
+            "Softball Summary",
+            15,
+            y
+        );
 
-    pdf.text(
-        "Attack Statistics",
-        15,
-        y
-    );
+        y += 8;
+        pdf.setFontSize(11);
 
-    y += 8;
+        pdf.text(
+            `Innings Completed: ${App.currentMatch.inning}`,
+            15,
+            y
+        );
 
-    pdf.setFontSize(11);
+        y += 7;
+        pdf.text(
+            `Runs For: ${score.our}`,
+            15,
+            y
+        );
 
-    pdf.text(
-        `Circle Entries: ${stats.attack.circleEntries}`,
-        20,
-        y
-    );
+        y += 7;
+        pdf.text(
+            `Runs Against: ${score.opposition}`,
+            15,
+            y
+        );
 
-    y += 7;
+        y += 10;
+        pdf.setFontSize(14);
+        pdf.text(
+            "Game Statistics",
+            15,
+            y
+        );
 
-    pdf.text(
-        `Goals: ${stats.attack.goalsScored}`,
-        20,
-        y
-    );
+        y += 8;
+        pdf.setFontSize(11);
 
-    y += 7;
+        pdf.text(
+            `Hits For: ${getSoftballEventCount("hit", "ourBatting")}`,
+            20,
+            y
+        );
 
-    pdf.text(
-        `Penalty Corners Won: ${stats.attack.penaltyCornersWon}`,
-        20,
-        y
-    );
+        y += 7;
+        pdf.text(
+            `Hits Against: ${getSoftballEventCount("hit", "opponentBatting")}`,
+            20,
+            y
+        );
 
-    y += 12;
+        y += 7;
+        pdf.text(
+            `Home Runs For: ${getSoftballEventCount("homeRun", "ourBatting")}`,
+            20,
+            y
+        );
 
-    pdf.setFontSize(14);
+        y += 7;
+        pdf.text(
+            `Home Runs Against: ${getSoftballEventCount("homeRun", "opponentBatting")}`,
+            20,
+            y
+        );
 
-    pdf.text(
-        "Defence Statistics",
-        15,
-        y
-    );
+        y += 12;
+        pdf.setFontSize(14);
+        pdf.text(
+            "Game Statistics",
+            15,
+            y
+        );
 
-    y += 8;
+        y += 8;
+        pdf.setFontSize(11);
+    } else {
+        const stats =
+            getMatchStatistics();
 
-    pdf.setFontSize(11);
+        pdf.setFontSize(14);
+        pdf.text(
+            "Attack Statistics",
+            15,
+            y
+        );
 
-    pdf.text(
-        `Circle Entries Against: ${stats.defence.circleEntriesAgainst}`,
-        20,
-        y
-    );
+        y += 8;
+        pdf.setFontSize(11);
 
-    y += 7;
+        pdf.text(
+            `Circle Entries: ${stats.attack.circleEntries}`,
+            20,
+            y
+        );
 
-    pdf.text(
-        `Penalty Corners Conceded: ${stats.defence.penaltyCornersConceded}`,
-        20,
-        y
-    );
+        y += 7;
+        pdf.text(
+            `Goals: ${stats.attack.goalsScored}`,
+            20,
+            y
+        );
 
-    y += 12;
+        y += 7;
+        pdf.text(
+            `Penalty Corners Won: ${stats.attack.penaltyCornersWon}`,
+            20,
+            y
+        );
 
-    pdf.setFontSize(14);
+        y += 12;
+        pdf.setFontSize(14);
+        pdf.text(
+            "Defence Statistics",
+            15,
+            y
+        );
 
-    pdf.text(
-        "Coach Insights",
-        15,
-        y
-    );
+        y += 8;
+        pdf.setFontSize(11);
 
-    y += 8;
+        pdf.text(
+            `Circle Entries Against: ${stats.defence.circleEntriesAgainst}`,
+            20,
+            y
+        );
 
-    const insights =
-        buildHighlights()
-            .replace(/<[^>]*>/g, "")
-            .split("✅")
-            .join("\n✅");
+        y += 7;
+        pdf.text(
+            `Penalty Corners Conceded: ${stats.defence.penaltyCornersConceded}`,
+            20,
+            y
+        );
 
-    pdf.setFontSize(11);
+    }
 
-    pdf.text(
-        insights,
-        20,
-        y
-    );
+    pdf.save(fileName);
 
-    pdf.save(
-        `MatchIQ-${App.currentMatch.ourTeam}-${App.currentMatch.opponent}.pdf`
-    );
+}
 
+function showPdfLoader() {
+    let loader = document.getElementById("pdfLoaderOverlay");
+    if (!loader) {
+        loader = document.createElement("div");
+        loader.id = "pdfLoaderOverlay";
+        loader.innerHTML = `
+            <div class="pdf-loader">
+                <div class="pdf-loader-spinner"></div>
+                <div class="pdf-loader-text">Generating PDF...</div>
+            </div>
+        `;
+        document.body.appendChild(loader);
+    }
+    loader.classList.add("visible");
+}
+
+function hidePdfLoader() {
+    const loader = document.getElementById("pdfLoaderOverlay");
+    if (loader) {
+        loader.classList.remove("visible");
+    }
 }
 
 

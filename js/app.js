@@ -418,6 +418,7 @@ function createMatchObject(
         currentSide:
             data.currentSide ||
             "ourBatting",
+        hits: 0,
 
         pitchers: {
 
