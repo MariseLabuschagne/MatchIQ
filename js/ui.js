@@ -596,9 +596,6 @@ function updateScoreboard() {
                 ? "🟢 OUR TEAM BATTING"
                 : "🔵 OPPONENT BATTING";
 
-        const pitcherName =
-            getActivePitcherName();
-
         const currentBatter =
             getCurrentBatter();
 
@@ -656,12 +653,6 @@ function updateScoreboard() {
                                     .name || "Pitcher 2"
                             }
                         </button>
-
-                    </div>
-
-                    <div class="pitcher-name">
-
-                        ${pitcherName}
 
                     </div>
 

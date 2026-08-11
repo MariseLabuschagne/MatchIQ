@@ -2363,7 +2363,13 @@ body,
 
 .pitcher-button.active {
 
-    background: #f59e0b;
+    background: linear-gradient(
+        135deg,
+        #35C6FF,
+        #0EA5E9
+    );
+
+    color: white;
 
 }
 
