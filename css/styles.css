@@ -2430,3 +2430,42 @@ MOBILE
 .period-table td:first-child {
     text-align: left;
 }
+
+@media (max-width: 640px) {
+
+    /* Count cards */
+    .count-row {
+        gap: 6px;
+    }
+
+    .count-card {
+        min-width: 0;
+        padding: 10px 4px;
+    }
+
+    .count-card span {
+        font-size: 0.8rem;
+    }
+
+    .count-card strong {
+        font-size: 2rem;
+    }
+
+    /* Action buttons row */
+    .softball-action-row {
+        gap: 6px;
+    }
+
+    .softball-mini-button,
+    .event-button.softball.switch,
+    .event-button.softball.advance {
+        font-size: 0.85rem;
+        padding: 10px 6px;
+    }
+
+    /* Pitcher buttons */
+    .pitcher-button {
+        font-size: 0.9rem;
+        padding: 8px 10px;
+    }
+}
