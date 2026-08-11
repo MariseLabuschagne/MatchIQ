@@ -1426,6 +1426,22 @@ function renderFunnelStep(
 
 
 
+function renderMatchInsights() {
+
+    const stats =
+        getMatchStatistics();
+
+    const attack =
+        stats.attack;
+
+    const defence =
+        stats.defence;
+
+    const effectiveness =
+        stats.effectiveness;
+
+    const insights = [];
+    
     if (
         defence.circleEntriesAgainst >= 10
     ) {

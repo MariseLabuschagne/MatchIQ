@@ -13,7 +13,7 @@ const MatchIQ = {
 
         name: "MatchIQ",
 
-        version: "2.0.1",
+        version: "2.1.3",
 
         company: "MatchIQ"
 

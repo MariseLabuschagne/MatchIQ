@@ -451,7 +451,27 @@ function renderFunnelStep(
 
 }
 
+function renderMatchInsights() {
 
+    const stats =
+        getMatchStatistics();
+
+    const attack =
+        stats.attack;
+
+    const defence =
+        stats.defence;
+
+    const effectiveness =
+        stats.effectiveness;
+
+    const insights = [];
+
+    /*
+    =========================================
+    PERFORMANCE INSIGHTS
+    =========================================
+    */
 
     if (
         defence.circleEntriesAgainst >= 10
@@ -464,8 +484,7 @@ function renderFunnelStep(
     }
 
     if (
-        effectiveness.shotAccuracy > 0
-        &&
+        effectiveness.shotAccuracy > 0 &&
         effectiveness.shotAccuracy < 40
     ) {
 
@@ -482,11 +501,11 @@ function renderFunnelStep(
     */
 
     const totalEntries =
-        attack.entryLeft
+        (attack.entryLeft || 0)
         +
-        attack.entryTopD
+        (attack.entryTopD || 0)
         +
-        attack.entryRight;
+        (attack.entryRight || 0);
 
     if (
         totalEntries > 0
