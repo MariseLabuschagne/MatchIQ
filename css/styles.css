@@ -1943,28 +1943,23 @@ SOFT BALL
 
 .count-row {
 
-    display: flex;
-
-    gap: 12px;
-
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    width: 100%;
     justify-content: center;
-
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 
 }
 
 .count-card {
 
-    min-width: 92px;
-    width: 92px;
-    height: 70px;
-
-    padding: 10px;
-
+    width: 100%;
+    min-width: 0;
+    height: 65px;
+    padding: 6px 2px;
     border-radius: 12px;
-
     text-align: center;
-
     color: white;
     cursor: pointer;
     transition:
@@ -1989,8 +1984,7 @@ SOFT BALL
 .count-card span {
 
     display: block;
-
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     opacity: 0.9;
 
 }
@@ -1998,8 +1992,7 @@ SOFT BALL
 .count-card strong {
 
     display: block;
-
-    font-size: 1.8rem;
+    font-size: 1.4rem;
 
 }
 
@@ -2278,7 +2271,7 @@ MOBILE
 .softball-action-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    gap: 4px;
     width: 100%;
 }
 
@@ -2288,10 +2281,19 @@ MOBILE
     border-radius: 10px;
     width: 100%;
     padding: 8px 4px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     cursor: pointer;
     color: white;
+
+}
+
+body,
+#app,
+.softball-scoreboard,
+.sticky-scoreboard {
+
+    overflow-x: hidden;
 
 }
 
