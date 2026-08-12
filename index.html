@@ -158,6 +158,13 @@
                     <div id="registerForm" style="display:none;">
 
                         <input
+                            type="text"
+                            id="registerName"
+                            placeholder="Your name"
+                            autocomplete="name"
+                        />
+
+                        <input
                             type="email"
                             id="registerEmail"
                             placeholder="Email address"
@@ -193,7 +200,6 @@
                         </button>
 
                     </div>
-
 
                     <!-- EMAIL VERIFICATION -->
 
@@ -240,7 +246,6 @@
             <!-- =================================================
                  HOME SCREEN
             ================================================== -->
-
             
             <div id="homeScreen">
 
@@ -283,6 +288,22 @@
                         </button>
 
                     </div>
+                    
+                     <div id="userProfileSummary" class="user-profile-summary">
+
+                        <div id="userWelcome"></div>
+
+                        <div id="userRole"></div>
+
+                        <button
+                            class="logout-button"
+                            onclick="MatchIQAuth.logout()"
+                        >
+                            Logout
+                        </button>
+
+                    </div>    
+
 
                     <div class="home-version">
 

@@ -2648,3 +2648,84 @@ body,
     margin-bottom: 15px;
     font-size: 14px;
 }
+
+/* =========================================================
+   MATCHIQ AUTHENTICATION - ACCESSIBLE COLOURS
+   ========================================================= */
+
+#authScreen {
+    color: #1f2937;
+}
+
+#authScreen .auth-container {
+    color: #1f2937;
+}
+
+#authScreen h2 {
+    color: #163A5F;
+}
+
+#authScreen p {
+    color: #4A5568;
+}
+
+#authScreen .auth-message {
+    color: #374151;
+}
+
+#authScreen input {
+    color: #1f2937;
+    background: #ffffff;
+}
+
+#authScreen input::placeholder {
+    color: #6B7280;
+    opacity: 1;
+}
+
+#authScreen .auth-link {
+    color: #2563EB;
+}
+
+#authScreen .auth-button {
+    color: #ffffff;
+    background: #163A5F;
+}
+
+
+/* =========================================================
+   HOME USER PROFILE
+   ========================================================= */
+
+.user-profile-summary {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#userWelcome {
+    color: #aabfd4;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+#userRole {
+    margin-top: 4px;
+    color: #6e8eac;
+    font-size: 14px;
+}
+
+.logout-button {
+    margin-top: 10px;
+    padding: 7px 16px;
+    border: 1px solid #c2d0dd;
+    border-radius: 8px;
+    background: transparent;
+    color: #aabfd4;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background: #163A5F;
+    color: #ffffff;
+}

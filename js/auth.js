@@ -12,8 +12,25 @@ import {
     reload
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 
+import {
+    doc,
+    setDoc,
+    getDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+// =========================================================
+// MATCHIQ ROLES
+// =========================================================
+
+const MATCHIQ_ROLES = {
+    ADMINISTRATOR: "administrator",
+    COACH: "coach",
+    PARENT: "parent",
+    SCORER: "scorer"
+};
 
 // =========================================================
 // ELEMENTS
@@ -100,6 +117,9 @@ async function register() {
 
     clearMessage();
 
+    const name =
+    get("registerName").value.trim();
+
     const email =
         get("registerEmail").value.trim();
 
@@ -110,7 +130,7 @@ async function register() {
         get("registerPasswordConfirm").value;
 
 
-    if (!email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmPassword) {
 
         showMessage("Please complete all fields.");
         return;
@@ -144,6 +164,27 @@ async function register() {
             );
 
         const user = userCredential.user;
+
+
+        // ---------------------------------------------------------
+        // Create MatchIQ user profile
+        // ---------------------------------------------------------
+
+        await setDoc(
+            doc(db, "users", user.uid),
+            {
+                name: name,
+                email: user.email,
+                role: MATCHIQ_ROLES.PARENT,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+            }
+        );
+
+
+        // ---------------------------------------------------------
+        // Send verification email
+        // ---------------------------------------------------------
 
         await sendEmailVerification(user);
 
@@ -412,6 +453,10 @@ async function logout() {
 
         await signOut(auth);
 
+        window.MatchIQUser = null;
+
+        showAuthScreen();
+
         showLogin();
 
     } catch (error) {
@@ -421,10 +466,133 @@ async function logout() {
             error
         );
 
+        showMessage(
+            "Unable to log out. Please try again."
+        );
+
+    }
+
+}
+// =========================================================
+// LOAD MATCHIQ USER PROFILE
+// =========================================================
+
+async function loadUserProfile(user) {
+
+    try {
+
+        const profileRef = doc(
+            db,
+            "users",
+            user.uid
+        );
+
+        const profileSnapshot =
+            await getDoc(profileRef);
+
+
+        if (!profileSnapshot.exists()) {
+
+            console.error(
+                "MatchIQ user profile does not exist."
+            );
+
+            return null;
+        }
+
+
+        const profile =
+            profileSnapshot.data();
+
+
+        console.log(
+            "MatchIQ user profile loaded:",
+            profile
+        );
+
+
+        // Store for use throughout MatchIQ
+        window.MatchIQUser = {
+
+            uid: user.uid,
+
+            email: user.email,
+
+            emailVerified: user.emailVerified,
+
+            name: profile.name,
+
+            role: profile.role
+
+        };
+
+
+        return window.MatchIQUser;
+
+
+    } catch (error) {
+
+        console.error(
+            "Unable to load MatchIQ user profile:",
+            error
+        );
+
+        return null;
+
     }
 
 }
 
+// =========================================================
+// ROLE CHECK
+// =========================================================
+
+function hasRole(role) {
+
+    return (
+        window.MatchIQUser &&
+        window.MatchIQUser.role === role
+    );
+}
+
+// =========================================================
+// DISPLAY USER PROFILE
+// =========================================================
+
+function displayUserProfile(profile) {
+
+    const welcome =
+        get("userWelcome");
+
+    const role =
+        get("userRole");
+
+
+    if (!welcome || !role) {
+        return;
+    }
+
+
+    welcome.textContent =
+        `Welcome, ${profile.name}`;
+
+
+    const roleNames = {
+
+        administrator: "Administrator",
+
+        coach: "Coach",
+
+        parent: "Parent",
+
+        scorer: "Scorer"
+
+    };
+
+
+    role.textContent =
+        roleNames[profile.role] || profile.role;
+}
 
 // =========================================================
 // AUTH STATE
@@ -434,30 +602,86 @@ onAuthStateChanged(auth, async (user) => {
 
     if (!user) {
 
+        window.MatchIQUser = null;
+
         showAuthScreen();
+
         showLogin();
 
         return;
-
     }
 
 
-    await reload(user);
+    try {
+
+        // Refresh Firebase user information
+        await reload(user);
 
 
-    if (auth.currentUser.emailVerified) {
+        // User exists but has not verified email
+        if (!auth.currentUser.emailVerified) {
+
+            showAuthScreen();
+
+            showVerificationScreen(
+                auth.currentUser
+            );
+
+            return;
+        }
+
+
+        // Load MatchIQ Firestore profile
+        const profile =
+            await loadUserProfile(
+                auth.currentUser
+            );
+
+
+        if (!profile) {
+
+            showAuthScreen();
+
+            showMessage(
+                "Unable to load your MatchIQ profile."
+            );
+
+            return;
+        }
+
+
+        // Everything is good
+        displayUserProfile(profile);
 
         showHomeScreen();
 
-    } else {
+        console.log(
+            "Welcome to MatchIQ,",
+            profile.name
+        );
+
+        console.log(
+            "MatchIQ role:",
+            profile.role
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Authentication state error:",
+            error
+        );
 
         showAuthScreen();
-        showVerificationScreen(auth.currentUser);
+
+        showMessage(
+            "Unable to load your MatchIQ account."
+        );
 
     }
 
 });
-
 
 // =========================================================
 // FIREBASE ERROR TRANSLATION
