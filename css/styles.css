@@ -2571,6 +2571,10 @@ body,
 ===================================================== */
 @media (max-width: 640px) {
 
+    .softball-pitching-table {
+        font-size: 0.8rem;
+    }
+    
     .softball-kwalk-table {
         font-size: 0.6rem;
     }
@@ -2916,7 +2920,7 @@ body,
    MOBILE - MOVE APP CONTENT HIGHER
 ========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
 
     body {
         padding-top: 0 !important;
