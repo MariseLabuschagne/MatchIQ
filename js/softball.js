@@ -76,8 +76,8 @@ function renderSoftballSummary() {
 
                     <tr>
                         <td>Innings Completed</td>
-                        <td>${App.currentMatch.inning}</td>
-                        <td>${App.currentMatch.inning}</td>
+                        <td>${getCompletedSoftballInnings()}</td>
+                        <td>${getCompletedSoftballInnings()}</td>
                     </tr>
 
                     <tr>
@@ -237,6 +237,54 @@ function renderSoftballSummary() {
             "click",
             returnToSoftballHome
         );
+}
+
+function getCompletedSoftballInnings() {
+
+    if (!App.currentMatch) {
+        return 0;
+    }
+
+    const currentInning =
+        Number(App.currentMatch.inning) || 1;
+
+    const events =
+        App.currentMatch.events || [];
+
+    // An inning is completed when both sides
+    // have recorded 3 outs.
+    let completedInnings = 0;
+
+    for (
+        let inning = 1;
+        inning < currentInning;
+        inning++
+    ) {
+
+        const ourOuts =
+            events.filter(event =>
+                Number(event.inning) === inning &&
+                event.eventType === "out" &&
+                event.battingSide === "ourBatting"
+            ).length;
+
+        const opponentOuts =
+            events.filter(event =>
+                Number(event.inning) === inning &&
+                event.eventType === "out" &&
+                event.battingSide === "opponentBatting"
+            ).length;
+
+        if (
+            ourOuts >= 3 &&
+            opponentOuts >= 3
+        ) {
+            completedInnings++;
+        }
+
+    }
+
+    return completedInnings;
 }
 
 function returnToSoftballHome() {

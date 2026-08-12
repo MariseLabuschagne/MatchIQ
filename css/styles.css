@@ -364,17 +364,13 @@ HOME SCREEN
 
     
     width: 100%;
-
     max-width: 350px;
 
     height: auto;
-
     display: block;
 
     margin: 0 auto 20px auto;
-
     background: white;
-
     padding: 12px;
 
     border-radius: 18px;
@@ -2208,8 +2204,12 @@ SOFT BALL
 MOBILE
 ===================================================== */
 
-@media (max-width: 640px) {
-
+@media (max-width: 600px) {
+    
+    #homeScreen {
+        padding-top: 10px;
+    }
+    
     body {
        
         padding-top:
@@ -2498,9 +2498,31 @@ body,
    Keep inning columns compact so totals stay visible
 ========================================================= */
 
-/* =========================================================
-   SOFTBALL BATTING TABLE
-========================================================= */
+@media (max-width: 600px) {
+
+    .softball-batting-table th:nth-child(n+2):not(:nth-last-child(-n+3)),
+    .softball-batting-table td:nth-child(n+2):not(:nth-last-child(-n+3)) {
+        display: none;
+    }
+
+}
+@media (max-width: 600px) {
+
+    .softball-batting-table {
+        font-size: 0.78rem;
+    }
+
+    .softball-batting-table th,
+    .softball-batting-table td {
+        padding: 5px 3px;
+    }
+
+    .softball-batting-table th:last-child,
+    .softball-batting-table td:last-child {
+        font-size: 0.72rem;
+    }
+
+}
 
 .softball-batting-table {
     width: 100%;
@@ -2547,6 +2569,19 @@ body,
    SOFTBALL PITCHING TABLE
    Both pitcher columns are equal
 ===================================================== */
+@media (max-width: 600px) {
+
+    .softball-kwalk-table {
+        font-size: 0.72rem;
+    }
+
+    .softball-kwalk-table th,
+    .softball-kwalk-table td {
+        padding: 4px 5px;
+    }
+
+}
+
 
 .softball-pitching-table th,
 .softball-pitching-table td {
