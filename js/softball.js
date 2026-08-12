@@ -338,12 +338,9 @@ function showSoftballMenu() {
 
 }
 
-function renderSoftballHistory() {
+async function renderSoftballHistory() {
 
     hideAllScreens();
-
-    const history =
-        getMatchHistory("softball");
 
     const screen =
         document.getElementById(
@@ -355,7 +352,6 @@ function renderSoftballHistory() {
     );
 
     screen.innerHTML = `
-
         <button
             class="action-button secondary-button"
             onclick="showSoftballMenu()"
@@ -367,7 +363,48 @@ function renderSoftballHistory() {
             Softball Match History
         </h2>
 
+        <p>
+            Loading matches...
+        </p>
     `;
+
+
+    // =====================================================
+    // LOAD MATCHES FROM FIRESTORE
+    // =====================================================
+
+    let history = [];
+
+    if (
+        window.MatchIQDatabase &&
+        window.MatchIQDatabase.getMatches
+    ) {
+
+        history =
+            await window.MatchIQDatabase.getMatches();
+
+        // Only show softball matches
+        history =
+            history.filter(
+                match =>
+                    isSoftballSport(match)
+            );
+
+    } else {
+
+        console.warn(
+            "Firestore database API unavailable. Using local history."
+        );
+
+        history =
+            getMatchHistory("softball");
+
+    }
+
+
+    // =====================================================
+    // NO MATCHES
+    // =====================================================
 
     if (history.length === 0) {
 
@@ -380,24 +417,59 @@ function renderSoftballHistory() {
         return;
     }
 
-    history
-        .slice()
-        .reverse()
-        .forEach(match => {
+
+    // =====================================================
+    // SORT NEWEST FIRST
+    // =====================================================
+
+    history.sort(
+        (a, b) => {
+
+            const dateA =
+                new Date(
+                    a.completedAt ||
+                    a.createdAt ||
+                    0
+                );
+
+            const dateB =
+                new Date(
+                    b.completedAt ||
+                    b.createdAt ||
+                    0
+                );
+
+            return dateB - dateA;
+        }
+    );
+
+
+    // =====================================================
+    // DISPLAY MATCHES
+    // =====================================================
+
+    history.forEach(
+        match => {
+
+            const events =
+                match.events || [];
+
 
             const runsFor =
-                match.events.filter(
+                events.filter(
                     e =>
                         e.eventType ===
                         "runFor"
                 ).length;
 
+
             const runsAgainst =
-                match.events.filter(
+                events.filter(
                     e =>
                         e.eventType ===
                         "runAgainst"
                 ).length;
+
 
             const matchDate =
                 (
@@ -406,6 +478,7 @@ function renderSoftballHistory() {
                     ""
                 )
                 .split("T")[0];
+
 
             screen.innerHTML += `
 
@@ -429,7 +502,7 @@ function renderSoftballHistory() {
 
                     <p class="history-events">
                         Events:
-                        ${match.events.length}
+                        ${events.length}
                     </p>
 
                     <div class="history-actions">
@@ -443,13 +516,7 @@ function renderSoftballHistory() {
 
                         <button
                             class="action-button"
-                            onclick="
-                                deleteHistoricalMatch(
-                                    '${match.id}',
-                                    'softball'
-                                );
-                                renderSoftballHistory();
-                            "
+                            onclick="deleteFirestoreHistoricalMatch('${match.id}')"
                         >
                             🗑 Delete
                         </button>
@@ -459,8 +526,54 @@ function renderSoftballHistory() {
                 </div>
 
             `;
-        });
+        }
+    );
+}
 
+async function deleteFirestoreHistoricalMatch(
+    matchId
+) {
+
+    if (
+        !confirm(
+            "Delete this match from your Match History?"
+        )
+    ) {
+        return;
+    }
+
+
+    if (
+        !window.MatchIQDatabase ||
+        !window.MatchIQDatabase.deleteMatch
+    ) {
+
+        alert(
+            "Database connection is not available."
+        );
+
+        return;
+    }
+
+
+    const success =
+        await window.MatchIQDatabase.deleteMatch(
+            matchId
+        );
+
+
+    if (!success) {
+
+        alert(
+            "Unable to delete the match."
+        );
+
+        return;
+    }
+
+
+    // Refresh the history screen
+    renderSoftballHistory();
 }
 
 window.setPitcherFromRoster = function(index, key) {

@@ -89,16 +89,16 @@ function recoverExistingMatch() {
     const restore =
         confirm(
 
-`Resume previous match?
+        `Resume previous match?
 
-${savedMatch.ourTeam}
-vs
-${savedMatch.opponent}
+        ${savedMatch.ourTeam}
+        vs
+        ${savedMatch.opponent}
 
-Events Captured:
-${savedMatch.events.length}`
+        Events Captured:
+        ${savedMatch.events.length}`
 
-        );
+    );
 
     if (!restore) {
 

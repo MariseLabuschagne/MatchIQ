@@ -875,13 +875,24 @@ function getSoftballBatterStats() {
     const stats = roster.map(
         (name, index) => ({
             batter: index + 1,
+
             name:
                 name ||
                 `Player ${index + 1}`,
+
             hits: 0,
-            runs: 0
+
+            runs: 0,
+
+            effectiveness:
+                "n/a"
         })
     );
+
+
+    // ---------------------------------------------------------
+    // CAPTURE BATTING EVENTS
+    // ---------------------------------------------------------
 
     App.currentMatch.events.forEach(
         event => {
@@ -900,6 +911,7 @@ function getSoftballBatterStats() {
 
             }
 
+
             if (
                 event.eventType === "runFor" &&
                 event.player
@@ -917,8 +929,62 @@ function getSoftballBatterStats() {
         }
     );
 
-    return stats;
 
+    // ---------------------------------------------------------
+    // CALCULATE BATTING EFFECTIVENESS
+    // ---------------------------------------------------------
+
+    stats.forEach(player => {
+
+        const hits =
+            player.hits || 0;
+
+        const runs =
+            player.runs || 0;
+
+
+        /*
+         * We only have hits and runs available at the moment,
+         * so don't pretend this is a true batting average.
+         *
+         * The rating is based on offensive contribution.
+         */
+
+        if (
+            hits >= 3 ||
+            (hits >= 2 && runs >= 1)
+        ) {
+
+            player.effectiveness =
+                "Highly Effective 🟢";
+
+        } else if (
+            hits >= 2 ||
+            (hits >= 1 && runs >= 1)
+        ) {
+
+            player.effectiveness =
+                "Effective 🟢";
+
+        } else if (
+            hits >= 1 ||
+            runs >= 1
+        ) {
+
+            player.effectiveness =
+                "Developing 🟡";
+
+        } else {
+
+            player.effectiveness =
+                "n/a";
+
+        }
+
+    });
+
+
+    return stats;
 }
 
 function getBatterStats() {

@@ -2488,9 +2488,87 @@ body,
     margin-top: 6px;
 
     font-size: 0.9rem;
-
+    font-weight: 600;
     color: #d1d5db;
 
+}
+
+/* =========================================================
+   SOFTBALL BATTING TABLE
+   Keep inning columns compact so totals stay visible
+========================================================= */
+
+/* =========================================================
+   SOFTBALL BATTING TABLE
+========================================================= */
+
+.softball-batting-table {
+    width: 100%;
+    table-layout: auto;
+}
+
+.softball-batting-table th,
+.softball-batting-table td {
+    padding: 5px 4px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Batter name */
+.softball-batting-table th:first-child,
+.softball-batting-table td:first-child {
+    text-align: left;
+    padding-left: 10px;
+}
+
+/* Inning columns */
+.softball-batting-table th:not(:first-child),
+.softball-batting-table td:not(:first-child) {
+    min-width: 38px;
+    width: 38px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+/* Runs column - create separation from Effectiveness */
+.softball-batting-table th:nth-last-child(2),
+.softball-batting-table td:nth-last-child(2) {
+    padding-right: 10px;
+}
+
+/* Effectiveness column */
+.softball-batting-table th:last-child,
+.softball-batting-table td:last-child {
+    padding-left: 10px;
+}
+
+
+/* =====================================================
+   SOFTBALL PITCHING TABLE
+   Both pitcher columns are equal
+===================================================== */
+
+.softball-pitching-table th,
+.softball-pitching-table td {
+    color: #ffffff;
+}
+
+/* Both pitcher headers */
+.softball-pitching-table th.softball-pitcher-header {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+/* Do NOT apply hockey total-column styling */
+.softball-pitching-table th:last-child,
+.softball-pitching-table td:last-child {
+    color: #ffffff !important;
+    background: transparent;
+    font-weight: normal;
+}
+
+.softball-effectiveness {
+    font-weight: 600 !important;
 }
 
 .pitcher-summary {
@@ -2532,6 +2610,74 @@ body,
 .roster-row input[type="text"] {
     margin: 0;
 }
+
+.pitching-effectiveness-note {
+    margin-top: 12px;
+    padding: 10px 12px;
+    font-size: 0.9em;
+    opacity: 0.85;
+}
+
+.pitching-effectiveness-note strong {
+    opacity: 1;
+}
+
+/* =====================================================
+   STRIKEOUTS / WALKS GUIDE
+===================================================== */
+.softball-kwalk-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.softball-kwalk-table .kwalk-scale-col {
+    width: 23%;
+}
+
+.softball-kwalk-table .kwalk-indication-col {
+    width: 25%;
+}
+
+.softball-kwalk-table .kwalk-interpretation-col {
+    width: 52%;
+}
+
+.softball-kwalk-table th,
+.softball-kwalk-table td {
+    color: #ffffff;
+}
+
+/* Scale column */
+.softball-kwalk-table td:first-child {
+    font-weight: 600;
+}
+
+/* Indication column */
+/*.softball-kwalk-table td:nth-child(2) {
+    font-weight: 600;
+    text-align: center;
+}*/
+
+.softball-kwalk-table td:nth-child(2),
+.softball-kwalk-table th:nth-child(2) {
+    text-align: center;
+}
+
+/* Interpretation must always remain white */
+.softball-kwalk-table td:nth-child(3) {
+    color: #ffffff !important;
+    font-weight: normal;
+}
+
+/* Prevent generic right-column styling from making
+   the Interpretation column blue */
+.softball-kwalk-table td:last-child,
+.softball-kwalk-table th:last-child {
+    color: #ffffff !important;
+    background: transparent;
+    
+}
+
 .period-table th,
 .period-table td {
     text-align: center;

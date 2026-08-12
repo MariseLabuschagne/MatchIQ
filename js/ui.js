@@ -1205,17 +1205,31 @@ function undoLastEvent() {
     }
 }
 
-function endMatch() {
+async function endMatch() {
+
     pauseTimer();
+
     completeMatch();
 
+    // Save completed match to Firebase
+    await saveMatchToDatabase(
+        App.currentMatch
+    );
+
     if (
-        isSoftballSport(App.currentMatch)
+        isSoftballSport(
+            App.currentMatch
+        )
     ) {
+
         renderSoftballSummary();
+
     } else {
+
         renderMatchSummary();
+
     }
+
 }
 
 
@@ -2754,36 +2768,63 @@ function closeMatchHistory() {
     showHockeyMenu();
 
 }
-
-function openHistoricalMatch(
+async function openHistoricalMatch(
     matchId
 ) {
 
     console.log(
-        "Opening match:",
+        "Opening match from Firestore:",
         matchId
     );
 
-    let match =
-        getHistoricalMatch(
-            matchId,
-            "softball"
-        );
+
+    // =====================================================
+    // LOAD MATCH FROM FIRESTORE
+    // =====================================================
+
+    let match = null;
+
+    if (
+        window.MatchIQDatabase &&
+        window.MatchIQDatabase.getMatch
+    ) {
+
+        match =
+            await window.MatchIQDatabase.getMatch(
+                matchId
+            );
+
+    }
+
+
+    // =====================================================
+    // FALLBACK TO LOCAL STORAGE
+    // =====================================================
 
     if (!match) {
+
+        console.warn(
+            "Match not found in Firestore. Checking local history..."
+        );
 
         match =
             getHistoricalMatch(
                 matchId,
-                "hockey"
+                "softball"
             );
 
     }
+
 
     console.log(
         "Match found:",
         match
     );
+
+
+    // =====================================================
+    // MATCH NOT FOUND
+    // =====================================================
 
     if (!match) {
 
@@ -2795,14 +2836,25 @@ function openHistoricalMatch(
 
     }
 
+
+    // =====================================================
+    // RESTORE MATCH
+    // =====================================================
+
     App.selectedSport =
         match.sport ||
         "hockey";
+
 
     App.currentMatch =
         structuredClone(
             match
         );
+
+
+    // =====================================================
+    // RESTORE TIMER
+    // =====================================================
 
     if (!App.timer) {
 
@@ -2815,8 +2867,18 @@ function openHistoricalMatch(
 
     }
 
+
     App.timer.seconds =
         match.elapsedSeconds || 0;
+
+
+    App.timer.running =
+        false;
+
+
+    // =====================================================
+    // SHOW MATCH
+    // =====================================================
 
     document
         .getElementById(
@@ -2826,6 +2888,7 @@ function openHistoricalMatch(
             "hidden"
         );
 
+
     document
         .getElementById(
             "liveMatchScreen"
@@ -2833,6 +2896,11 @@ function openHistoricalMatch(
         .classList.remove(
             "hidden"
         );
+
+
+    // =====================================================
+    // RENDER SUMMARY
+    // =====================================================
 
     if (
         isSoftballSport(match)
@@ -2846,7 +2914,7 @@ function openHistoricalMatch(
 
     }
 
-}  
+}
 
 function showHockeyMenu() {
 
@@ -4293,88 +4361,498 @@ function buildPitchingSummaryHtml() {
         "pitcher2"
     ];
 
+    // ---------------------------------------------------------
+    // PITCHER EFFECTIVENESS
+    // ---------------------------------------------------------
+
+    function getPitcherInsights(pitcher) {
+
+        const balls =
+            pitcher.balls || 0;
+
+        const strikes =
+            pitcher.strikes || 0;
+
+        const pitches =
+            balls + strikes;
+
+        const walks =
+            pitcher.walks || 0;
+
+        const strikeouts =
+            pitcher.strikeouts || 0;
+
+        const outs =
+            pitcher.outs || 0;
+
+        const runs =
+            pitcher.runsAllowed || 0;
+
+        const innings =
+            outs / 3;
+
+        const strikePercent =
+            pitches > 0
+                ? Math.round((strikes / pitches) * 100)
+                : 0;
+
+        const ballPercent =
+            pitches > 0
+                ? Math.round((balls / pitches) * 100)
+                : 0;
+
+        const kWalkRatio =
+            walks > 0
+                ? (strikeouts / walks).toFixed(1)
+                : strikeouts > 0
+                    ? "∞"
+                    : "0.0";
+
+        const runsPerInning =
+            innings > 0
+                ? (runs / innings).toFixed(2)
+                : "0.00";
+
+
+        // -----------------------------------------------------
+        // SIMPLE COACHING ASSESSMENT
+        // -----------------------------------------------------
+
+        let effectiveness =
+            "Not enough data";
+
+        if (pitches >= 5) {
+
+            if (
+                strikePercent >= 65 &&
+                runsPerInning <= 1 &&
+                (
+                    walks === 0 ||
+                    strikeouts >= walks * 2
+                )
+            ) {
+
+                effectiveness =
+                    "🟢 Highly Effective";
+
+            } else if (
+                strikePercent >= 60 &&
+                runsPerInning <= 1.5
+            ) {
+
+                effectiveness =
+                    "🟢 Effective";
+
+            } else if (
+                strikePercent >= 50 &&
+                runsPerInning <= 2
+            ) {
+
+                effectiveness =
+                    "🟡 Needs Improvement";
+
+            } else {
+
+                effectiveness =
+                    "🔴 Struggling";
+            }
+        }
+
+
+        return {
+            pitches,
+            balls,
+            strikes,
+            walks,
+            strikeouts,
+            outs,
+            runs,
+            innings,
+            strikePercent,
+            ballPercent,
+            kWalkRatio,
+            runsPerInning,
+            effectiveness
+        };
+    }
+
+
+    // ---------------------------------------------------------
+    // EXISTING METRICS
+    // ---------------------------------------------------------
+
     const metrics = [
+
         {
             label: "Pitches",
             value: pitcher =>
                 (pitcher.balls || 0) +
                 (pitcher.strikes || 0)
         },
+
         {
             label: "Strikes",
-            value: pitcher => pitcher.strikes || 0
+            value: pitcher =>
+                pitcher.strikes || 0
         },
+
+        {
+            label: "Strike %",
+            value: pitcher => {
+
+                const insights =
+                    getPitcherInsights(pitcher);
+
+                return `${insights.strikePercent}%`;
+            }
+        },
+
+        {
+            label: "Balls",
+            value: pitcher =>
+                pitcher.balls || 0
+        },
+
+        {
+            label: "Ball %",
+            value: pitcher => {
+
+                const insights =
+                    getPitcherInsights(pitcher);
+
+                return `${insights.ballPercent}%`;
+            }
+        },
+
         {
             label: "Walks",
-            value: pitcher => pitcher.walks || 0
+            value: pitcher =>
+                pitcher.walks || 0
         },
+
         {
             label: "Strikeouts",
-            value: pitcher => pitcher.strikeouts || 0
+            value: pitcher =>
+                pitcher.strikeouts || 0
         },
+
+        {
+            label: "Strikeouts / Walks",
+            value: pitcher => {
+
+                const insights =
+                    getPitcherInsights(pitcher);
+
+                return insights.kWalkRatio;
+            }
+        },
+
         {
             label: "Outs",
-            value: pitcher => pitcher.outs || 0
+            value: pitcher =>
+                pitcher.outs || 0
         },
+
         {
-            label: "Earned Runs",
-            value: pitcher => pitcher.runsAllowed || 0
+            label: "Runs Allowed",
+            value: pitcher =>
+                pitcher.runsAllowed || 0
         },
+
         {
             label: "Innings Pitched",
             value: pitcher => {
-                const outs = pitcher.outs || 0;
+
+                const outs =
+                    pitcher.outs || 0;
+
                 return `${Math.floor(outs / 3)}.${outs % 3}`;
+            }
+        },
+
+        {
+            label: "Runs / Inning",
+            value: pitcher => {
+
+                const insights =
+                    getPitcherInsights(pitcher);
+
+                return insights.runsPerInning;
             }
         }
     ];
 
+
+    // ---------------------------------------------------------
+    // MAIN TABLE
+    // ---------------------------------------------------------
+
     let html = `
         <div class="card summary-section">
-            <h3>Pitching Summary</h3>
 
-            <table class="period-table">
+            <h3>
+                Pitching Summary
+            </h3>
+
+            <table class="period-table softball-pitching-table">
+
                 <tr>
-                    <th>Metric</th>
+
+                    <th>
+                        Metric
+                    </th>
+
                     ${pitcherKeys.map(key => {
-                        const pitcher = pitchers[key] || {};
-                        return `<th>${pitcher.name || key.replace(/pitcher/, "Pitcher ")}</th>`;
+
+                        const pitcher =
+                            pitchers[key] || {};
+
+                        return `
+                            <th class="softball-pitcher-header">
+                                ${
+                                    pitcher.name ||
+                                    key.replace(
+                                        /pitcher/,
+                                        "Pitcher "
+                                    )
+                                }
+                            </th>
+                        `;
+
                     }).join("")}
+
                 </tr>
     `;
 
+
     metrics.forEach(metric => {
+
         html += `
             <tr>
-                <td>${metric.label}</td>
+
+                <td>
+                    ${metric.label}
+                </td>
+
                 ${pitcherKeys.map(key => {
-                    const pitcher = pitchers[key] || {};
-                    return `<td>${metric.value(pitcher)}</td>`;
+
+                    const pitcher =
+                        pitchers[key] || {};
+
+                    return `
+                        <td>
+                            ${metric.value(pitcher)}
+                        </td>
+                    `;
+
                 }).join("")}
+
             </tr>
         `;
+
     });
 
+
+    // ---------------------------------------------------------
+    // EFFECTIVENESS ROW
+    // ---------------------------------------------------------
+
     html += `
-            </table>
+
+        <tr>
+
+            <td>
+                <strong>
+                    Effectiveness
+                </strong>
+            </td>
+
+            ${pitcherKeys.map(key => {
+
+                const pitcher =
+                    pitchers[key] || {};
+
+                const insights =
+                    getPitcherInsights(pitcher);
+
+                return `
+                    <td class="softball-effectiveness">
+                            ${insights.effectiveness}
+                    </td>
+                `;
+
+            }).join("")}
+
+        </tr>
+
+        </table>
+
+        <div class="pitching-effectiveness-note">
+              
+            <strong>
+                How is Effectiveness calculated?
+            </strong>
+
+            <p>
+                MatchIQ considers strike percentage,
+                runs allowed per inning, and the balance
+                between strikeouts and walks.
+                A minimum of 5 pitches is required before
+                an effectiveness rating is assigned.
+            </p>
+
         </div>
 
-        <div class="card summary-section">
-            <h3>Pitching Comments</h3>
+    </div>
 
-            <table class="period-table">
+    
+
+    <!-- =================================================
+        STRIKEOUTS / WALKS GUIDE
+    ================================================== -->
+
+    <div class="card summary-section">
+
+        <h3>
+            Strikeouts / Walks Guide
+        </h3>
+
+        <table class="period-table softball-kwalk-table">
+
+            <colgroup>
+                <col class="kwalk-scale-col">
+                <col class="kwalk-indication-col">
+                <col class="kwalk-interpretation-col">
+            </colgroup>
+
+            <tr>
+                <th>Scale</th>
+                <th>Indication</th>
+                <th>Interpretation</th>
+            </tr>
+
+
+            <tr>
+                <td class="kwalk-excellent">
+                    🟢 4.0+
+                </td>
+
+                <td class="kwalk-excellent">
+                    Excellent
+                </td>
+
+                <td>
+                    Strong strikeout ability
+                    with good control
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="kwalk-good">
+                    🔵 2.0 – 3.9
+                </td>
+
+                <td class="kwalk-good">
+                    Very Good
+                </td>
+
+                <td>
+                    Good balance of
+                    control and strikeouts
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="kwalk-fair">
+                    🟡 1.0 – 1.9
+                </td>
+
+                <td class="kwalk-fair">
+                    Fair
+                </td>
+
+                <td>
+                    Opportunity to improve
+                    control or strikeouts
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="kwalk-attention">
+                    🔴 Below 1.0
+                </td>
+
+                <td class="kwalk-attention">
+                    Needs Attention
+                </td>
+
+                <td>
+                    More walks than strikeouts
+                </td>
+            </tr>
+
+        </table>
+
+        <p
+            style="
+                margin-top: 10px;
+                font-size: 0.9em;
+                opacity: 0.8;
+            "
+        >
+            A higher Strikeouts / Walks ratio generally
+            indicates a good combination of strikeout
+            ability and control.
+        </p>
+
+    </div>
+    <!-- =====================================================
+         INNING-BY-INNING COMMENTS
+    ====================================================== -->
+
+    <div class="card summary-section">
+
+        <h3>
+            Pitching Comments
+        </h3>
+
+        <table class="period-table softball-pitching-table">
+
+            <tr>
+
+                <th>
+                    Inning
+                </th>
+
+                <th>
+                    Comment
+                </th>
+
+            </tr>
+
+            ${getSoftballInnings().map(inning => `
+
                 <tr>
-                    <th>Inning</th>
-                    <th>Comment</th>
+
+                    <td>
+                        ${inning}
+                    </td>
+
+                    <td>
+                        ${getSoftballPitchingComment(inning)}
+                    </td>
+
                 </tr>
-                ${getSoftballInnings().map(inning => `
-                    <tr>
-                        <td>${inning}</td>
-                        <td>${getSoftballPitchingComment(inning)}</td>
-                    </tr>
-                `).join("")}
-            </table>
-        </div>
+
+            `).join("")}
+
+        </table>
+
+    </div>
+
     `;
 
     return html;
@@ -4545,12 +5023,18 @@ function buildSoftballBattingStatsHtml() {
     const batterStats =
         getSoftballBatterStats();
 
+
     for (let i = 1; i <= 9; i++) {
 
         const batter = i;
 
         const name =
             roster[i - 1] || `#${i}`;
+
+
+        // -----------------------------------------------------
+        // INNING-BY-INNING HITS
+        // -----------------------------------------------------
 
         const perInning =
             innings.map(inningLabel => {
@@ -4586,11 +5070,23 @@ function buildSoftballBattingStatsHtml() {
 
             }).join("");
 
+
+        // -----------------------------------------------------
+        // PLAYER TOTALS
+        // -----------------------------------------------------
+
         const playerStats =
             batterStats[i - 1] || {
+
                 hits: 0,
-                runs: 0
+
+                runs: 0,
+
+                effectiveness:
+                    "n/a"
+
             };
+
 
         rows.push(`
             <tr>
@@ -4612,10 +5108,15 @@ function buildSoftballBattingStatsHtml() {
                     ${playerStats.runs}
                 </td>
 
+                <td>
+                    ${playerStats.effectiveness}
+                </td>
+
             </tr>
         `);
 
     }
+
 
     return `
         <div class="card summary-section">
@@ -4624,7 +5125,7 @@ function buildSoftballBattingStatsHtml() {
                 Batting Stats
             </h3>
 
-            <table class="period-table">
+            <table class="period-table softball-batting-table">
 
                 <tr>
 
@@ -4647,6 +5148,10 @@ function buildSoftballBattingStatsHtml() {
                         Runs
                     </th>
 
+                    <th>
+                        Effectiveness
+                    </th>
+
                 </tr>
 
                 ${rows.join("")}
@@ -4655,7 +5160,6 @@ function buildSoftballBattingStatsHtml() {
 
         </div>
     `;
-
 }
 
 function buildSoftballRosterHtml() {
@@ -4681,7 +5185,7 @@ function buildSoftballRosterHtml() {
     return `
         <div class="card summary-section">
             <h3>Roster (Our Team)</h3>
-            <table class="period-table">
+            <table class="period-table softball-pitching-table">
                 <tr>
                     <th>#</th>
                     <th>Name</th>
