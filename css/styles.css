@@ -105,7 +105,7 @@ HEADER
 
 .app-header {
 
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 }
 
 .logo-area {
@@ -2212,11 +2212,13 @@ MOBILE
     
     body {
        
-        padding-top:
+        padding-top: 10px;
+        /*padding-top:
             max(
                 env(safe-area-inset-top),
                 12px
             );
+            */
 
     }
 
@@ -2572,7 +2574,7 @@ body,
 @media (max-width: 640px) {
 
     .softball-pitching-table {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
     
     .softball-kwalk-table {
