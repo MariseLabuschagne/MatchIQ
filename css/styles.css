@@ -2613,11 +2613,12 @@ body,
 
 .pitcher-summary:last-child {
     border-bottom: none;
+    font-size: 0.8rem;
 }
 
 .pitcher-summary-name {
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.8rem;
     margin-bottom: 6px;
 }
 
@@ -2909,4 +2910,31 @@ body,
 .logout-button:hover {
     background: #163A5F;
     color: #ffffff;
+}
+
+/* =========================================================
+   MOBILE - MOVE APP CONTENT HIGHER
+========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding-top: 0 !important;
+    }
+
+    main {
+        padding-top: 5px !important;
+        margin-top: 0 !important;
+    }
+
+    #homeScreen,
+    #setupScreen,
+    #liveMatchScreen,
+    #historyScreen,
+    #softballMenuScreen,
+    #authScreen {
+        margin-top: 0 !important;
+        padding-top: 5px !important;
+    }
+
 }
