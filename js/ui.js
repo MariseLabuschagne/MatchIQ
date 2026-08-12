@@ -602,10 +602,22 @@ function updateScoreboard() {
         scoreDisplay.innerHTML = `
 
             <div class="softball-scoreboard">
-                <div class="softball-score">
-                    ${score.our}
-                    -
-                    ${score.opposition}
+                <div class="softball-score-header">
+
+                    <div class="softball-team-name left">
+                        ${App.currentMatch.ourTeam}
+                    </div>
+
+                    <div class="softball-score">
+                        ${score.our}
+                        -
+                        ${score.opposition}
+                    </div>
+
+                    <div class="softball-team-name right">
+                        ${App.currentMatch.opponent}
+                    </div>
+
                 </div>
 
                 <div class="softball-batting-status">
@@ -1441,7 +1453,7 @@ function renderMatchInsights() {
         stats.effectiveness;
 
     const insights = [];
-    
+
     if (
         defence.circleEntriesAgainst >= 10
     ) {
