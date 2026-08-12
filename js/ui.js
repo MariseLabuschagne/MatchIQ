@@ -82,20 +82,33 @@ function renderLiveMatch() {
 
             <div class="score-row">
 
-                <div class="score-team">
-                    ${App.currentMatch.ourTeam}
-                </div>
+                ${
+                    isSoftballSport(App.currentMatch)
+                        ? `
+                            <div
+                                id="scoreDisplay"
+                                class="score"
+                            >
+                                0 - 0
+                            </div>
+                        `
+                        : `
+                            <div class="score-team">
+                                ${App.currentMatch.ourTeam}
+                            </div>
 
-                <div
-                    id="scoreDisplay"
-                    class="score"
-                >
-                    0 - 0
-                </div>
+                            <div
+                                id="scoreDisplay"
+                                class="score"
+                            >
+                                0 - 0
+                            </div>
 
-                <div class="score-team">
-                    ${App.currentMatch.opponent}
-                </div>
+                            <div class="score-team">
+                                ${App.currentMatch.opponent}
+                            </div>
+                        `
+                }
 
             </div>
 
@@ -600,7 +613,6 @@ function updateScoreboard() {
             getCurrentBatter();
 
         scoreDisplay.innerHTML = `
-
             <div class="softball-scoreboard">
                 <div class="softball-score-header">
 
@@ -920,7 +932,7 @@ function updateScoreboard() {
                     HOME
 
                 </div>
-
+            
             </div>
 
         `;
@@ -1280,6 +1292,7 @@ function renderMatchSummary() {
                     <button
                         id="exportPdfButton"
                         class="summary-button exportPDF"
+                        disabled
                     >
                         📸 Export to PDF
                     </button>
@@ -1322,6 +1335,8 @@ function renderMatchSummary() {
         );
 
     if (exportPdfButton) {
+        
+        exportPdfButton.disabled = true;
         exportPdfButton.addEventListener(
             "click",
             exportSummaryPdf
@@ -1434,8 +1449,6 @@ function renderFunnelStep(
     `;
 
 }
-
-
 
 
 function renderMatchInsights() {

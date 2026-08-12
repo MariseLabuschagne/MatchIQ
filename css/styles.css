@@ -1306,8 +1306,6 @@ MATCH SUMMARY
     border-radius: 12px;
 
 }
-
-
 .summary-button.export {
 
     background: linear-gradient(
@@ -1611,7 +1609,11 @@ SOFT BALL
     max-width: 100%;
     text-align: center;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
 
 .sticky-scoreboard {
     overflow-x: hidden;
@@ -1629,33 +1631,30 @@ SOFT BALL
 .softball-score-header {
 
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     gap: 4px;
-
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
 }
 
 .softball-team-name {
 
     text-align: center;
-
-    font-size: 0.95rem;
-
+    font-size: 0.85rem;
     font-weight: 700;
-
-    max-width: 240px;
+    max-width: 220px;
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: break-word;
 
 }
 
 .softball-team {
 
     flex: 1;
-
     font-size: 1.3rem;
-
     font-weight: 700;
 
 }
@@ -1714,8 +1713,8 @@ SOFT BALL
 
     font-weight: 700;
     font-size: 1rem;
-
-    margin-bottom: 12px;
+    margin-top: 2px;
+    margin-bottom: 8px;
 
 }
 .home-runner {
@@ -1799,11 +1798,12 @@ SOFT BALL
 
     width: 260px;
     margin: 16px auto;
-    margin-top: 12px;
+    margin-top: 20px;
     text-align: center;
     font-size: 26px;
     line-height: 1.6;
     font-weight: 700;
+    margin: 0 auto;
 
 }
 
@@ -2020,18 +2020,19 @@ SOFT BALL
 
 .count-row {
 
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
-    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
     justify-content: center;
-    margin-bottom: 16px;
+    align-items: stretch;
+    gap: 4px;
+    margin: 12px auto;
+    width: fit-content;
 
 }
 
 .count-card {
 
-    width: 100%;
+    width: 72px;
     min-width: 0;
     height: 65px;
     padding: 6px 2px;
@@ -2115,7 +2116,7 @@ SOFT BALL
 
     height: 140px;
 
-    margin: 0 auto 20px;
+    margin: 20px auto 0 auto;
 
 }
 
@@ -2344,12 +2345,32 @@ MOBILE
     opacity: 0.85;
 
 }
+.softball-display {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+}
 
 .softball-action-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 6px;
+
+    flex-wrap: nowrap;
+
+    margin: 10px auto 16px auto;
+
+    width: fit-content;
+
 }
 
 .softball-mini-button {
@@ -2401,10 +2422,11 @@ body,
 .pitcher-section {
 
     text-align: center;
-
-    margin-top: 8px;
-
-    margin-bottom: 10px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 
 }
 
