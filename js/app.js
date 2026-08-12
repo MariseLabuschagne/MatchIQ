@@ -226,7 +226,7 @@ function startMatch() {
 
     }
 
-}
+    }
 
     const venue =
         document.querySelector(
