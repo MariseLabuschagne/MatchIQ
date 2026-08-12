@@ -80,37 +80,36 @@ function renderLiveMatch() {
 
             </div>
 
-            <div class="score-row">
+                    ${
+            isSoftballSport(App.currentMatch)
+                ? `
+                    <div
+                        id="scoreDisplay"
+                        class="softball-display"
+                    >
+                    </div>
+                `
+                : `
+                    <div class="score-row">
 
-                ${
-                    isSoftballSport(App.currentMatch)
-                        ? `
-                            <div
-                                id="scoreDisplay"
-                                class="score"
-                            >
-                                0 - 0
-                            </div>
-                        `
-                        : `
-                            <div class="score-team">
-                                ${App.currentMatch.ourTeam}
-                            </div>
+                        <div class="score-team">
+                            ${App.currentMatch.ourTeam}
+                        </div>
 
-                            <div
-                                id="scoreDisplay"
-                                class="score"
-                            >
-                                0 - 0
-                            </div>
+                        <div
+                            id="scoreDisplay"
+                            class="score"
+                        >
+                            0 - 0
+                        </div>
 
-                            <div class="score-team">
-                                ${App.currentMatch.opponent}
-                            </div>
-                        `
-                }
+                        <div class="score-team">
+                            ${App.currentMatch.opponent}
+                        </div>
 
-            </div>
+                    </div>
+                `
+        }
 
         </div>
 
@@ -614,135 +613,140 @@ function updateScoreboard() {
 
         scoreDisplay.innerHTML = `
             <div class="softball-scoreboard">
-                <div class="softball-score-header">
 
-                    <div class="softball-team-name left">
-                        ${App.currentMatch.ourTeam}
+                <div class="softball-content">
+
+
+                    <div class="softball-score-header">
+
+                        <div class="softball-team-name left">
+                            ${App.currentMatch.ourTeam}
+                        </div>
+
+                        <div class="softball-score">
+                            ${score.our}
+                            -
+                            ${score.opposition}
+                        </div>
+
+                        <div class="softball-team-name right">
+                            ${App.currentMatch.opponent}
+                        </div>
+
                     </div>
 
-                    <div class="softball-score">
-                        ${score.our}
-                        -
-                        ${score.opposition}
+                    <div class="softball-batting-status">
+                        ${battingTeam}
                     </div>
 
-                    <div class="softball-team-name right">
-                        ${App.currentMatch.opponent}
-                    </div>
+                    <div class="pitcher-section">
 
-                </div>
+                        <div class="pitcher-buttons">
 
-                <div class="softball-batting-status">
-                    ${battingTeam}
-                </div>
-
-                <div class="pitcher-section">
-
-                    <div class="pitcher-buttons">
-
-                        <button
-                            class="
-                                pitcher-button
+                            <button
+                                class="
+                                    pitcher-button
+                                    ${
+                                        getActivePitcherSide()
+                                            .active === 1
+                                            ? "active"
+                                            : ""
+                                    }
+                                "
+                                onclick="setActivePitcher(1)"
+                            >
                                 ${
                                     getActivePitcherSide()
-                                        .active === 1
-                                        ? "active"
-                                        : ""
+                                        .pitcher1
+                                        .name || "Pitcher 1"
                                 }
-                            "
-                            onclick="setActivePitcher(1)"
-                        >
-                            ${
-                                getActivePitcherSide()
-                                    .pitcher1
-                                    .name || "Pitcher 1"
-                            }
-                        </button>
+                            </button>
 
-                        <button
-                            class="
-                                pitcher-button
+                            <button
+                                class="
+                                    pitcher-button
+                                    ${
+                                        getActivePitcherSide()
+                                            .active === 2
+                                            ? "active"
+                                            : ""
+                                    }
+                                "
+                                onclick="setActivePitcher(2)"
+                            >
                                 ${
                                     getActivePitcherSide()
-                                        .active === 2
-                                        ? "active"
-                                        : ""
+                                        .pitcher2
+                                        .name || "Pitcher 2"
                                 }
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="count-row">
+
+                        <div
+                            class="count-card balls"
+                            onclick="
+                                highlightEventButton(this);
+                                recordBall();
                             "
-                            onclick="setActivePitcher(2)"
                         >
-                            ${
-                                getActivePitcherSide()
-                                    .pitcher2
-                                    .name || "Pitcher 2"
-                            }
-                        </button>
+
+                            <span>BALLS</span>
+                            <strong>${App.currentMatch.balls}</strong>
+                        </div>
+
+
+                        <div
+                            class="count-card strikes"
+                            onclick="
+                                highlightEventButton(this);
+                                recordStrike();
+                            "
+                        >
+                            <span>STRIKES</span>
+                            <strong>${App.currentMatch.strikes}</strong>
+                        </div>
+
+                        <div
+                            class="count-card foul"
+                            onclick="
+                                highlightEventButton(this);
+                                recordFoul();
+                            "
+                        >
+                            <span>FOUL</span>
+                            <strong>⚠️</strong>
+                        </div>
+
+                        <div
+                            class="count-card hits"
+                            onclick="
+                                highlightEventButton(this);
+                                recordHit();
+                            "
+                        >
+                            <span>HITS</span>
+                            <strong>${App.currentMatch.hits || 0}</strong>
+                        </div>
+
+                        <div
+                            class="count-card outs"
+                            onclick="
+                                highlightEventButton(this);
+                                recordOut();
+                            "
+                        >
+                            <span>OUTS</span>
+                            <strong>${App.currentMatch.outs}</strong>
+                        </div>
 
                     </div>
-
+                
                 </div>
-
-                <div class="count-row">
-
-                    <div
-                        class="count-card balls"
-                        onclick="
-                            highlightEventButton(this);
-                            recordBall();
-                        "
-                    >
-
-                        <span>BALLS</span>
-                        <strong>${App.currentMatch.balls}</strong>
-                    </div>
-
-
-                    <div
-                        class="count-card strikes"
-                        onclick="
-                            highlightEventButton(this);
-                            recordStrike();
-                        "
-                    >
-                        <span>STRIKES</span>
-                        <strong>${App.currentMatch.strikes}</strong>
-                    </div>
-
-                    <div
-                        class="count-card foul"
-                        onclick="
-                            highlightEventButton(this);
-                            recordFoul();
-                        "
-                    >
-                        <span>FOUL</span>
-                        <strong>⚠️</strong>
-                    </div>
-
-                    <div
-                        class="count-card hits"
-                        onclick="
-                            highlightEventButton(this);
-                            recordHit();
-                        "
-                    >
-                        <span>HITS</span>
-                        <strong>${App.currentMatch.hits || 0}</strong>
-                    </div>
-
-                    <div
-                        class="count-card outs"
-                        onclick="
-                            highlightEventButton(this);
-                            recordOut();
-                        "
-                    >
-                        <span>OUTS</span>
-                        <strong>${App.currentMatch.outs}</strong>
-                    </div>
-
-                </div>
-
                 <div class="softball-action-row">
 
                     <button

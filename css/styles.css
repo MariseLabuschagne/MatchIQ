@@ -1708,6 +1708,15 @@ SOFT BALL
     margin-top: 4px;
 
 }
+.softball-content {
+
+    width: 320px;
+
+    max-width: 100%;
+
+    margin: 0 auto;
+
+}
 
 .softball-batting-status {
 
@@ -1719,9 +1728,11 @@ SOFT BALL
 }
 .home-runner {
 
+    position: relative;
+    
     text-align: center;
 
-    margin-top: -10px;
+    margin-top: 8px;
 
     font-size: 1.2rem;
 
