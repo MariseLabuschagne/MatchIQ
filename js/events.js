@@ -488,11 +488,56 @@ function recordStrike() {
         return;
     }
 
-    App.currentMatch.strikes++;
+     /*
+    ---------------------------------------------------------
+    PREVENT ADDITIONAL STRIKES AFTER THIRD STRIKE
+    ---------------------------------------------------------
+    If the third-strike outcome panel is already active,
+    do not allow another strike to be recorded.
+    */
+
+    if (
+        App.currentMatch.strikes >= 3
+    ) {
+        return;
+    }    
+   
+    if (App.currentMatch.strikes >= 3) {
+
+        console.log(
+            "Third strike already reached - awaiting outcome."
+        );
+
+        showThirdStrikeOutcome();
+
+        return;
+    }
 
     /*
-    Only update OUR pitcher's statistics
-    when the OPPONENT is batting.
+    ---------------------------------------------------------
+    SAVE UNDO STATE
+    ---------------------------------------------------------
+    Save the state BEFORE this tap changes anything.
+    */
+
+    saveUndoState();
+
+
+    /*
+    ---------------------------------------------------------
+    RECORD STRIKE
+    ---------------------------------------------------------
+    */
+
+    App.currentMatch.strikes++;
+
+
+    /*
+    ---------------------------------------------------------
+    PITCHER STATISTICS
+    ---------------------------------------------------------
+    Only update OUR pitcher's statistics when the
+    OPPONENT is batting.
     */
 
     if (
@@ -504,62 +549,355 @@ function recordStrike() {
             getActivePitcher();
 
         if (pitcher) {
+
             pitcher.strikes++;
+
         }
     }
+
+
+    /*
+    ---------------------------------------------------------
+    RECORD TIMELINE EVENT
+    ---------------------------------------------------------
+    */
 
     recordEvent(
         "strike"
     );
 
+
     /*
-    Strikeout
+    ---------------------------------------------------------
+    THIRD STRIKE
+    ---------------------------------------------------------
+    DO NOT automatically record an out.
+
+    We need to know whether:
+    1. Catcher caught it → OUT
+    2. Catcher dropped it → SAFE AT 1ST
     */
 
     if (
-        App.currentMatch.strikes >= 3
+        App.currentMatch.strikes === 3
     ) {
 
-        App.currentMatch.outs++;
+        saveMatch();
 
-        if (
-            App.currentMatch.currentSide ===
-            "opponentBatting"
-        ) {
+        updateScoreboard();
 
-            const pitcher =
-                getActivePitcher();
+        renderTimeline();
 
-            if (pitcher) {
-                pitcher.strikeouts++;
-                pitcher.outs++;
-            }
-        }
+        showThirdStrikeOutcome();
 
-        recordEvent(
-            "out"
+        return;
+    }
+
+
+    /*
+    ---------------------------------------------------------
+    NORMAL STRIKE
+    ---------------------------------------------------------
+    */
+
+    saveMatch();
+
+    updateScoreboard();
+
+    renderTimeline();
+}
+
+function showThirdStrikeOutcome() {
+
+    removeOutcomePanel();
+
+    const container =
+        document.getElementById(
+            "softballEventSections"
+        ) ||
+        document.getElementById(
+            "eventSections"
         );
 
-        nextBatter();
+    if (!container) {
 
-        App.currentMatch.strikes = 0;
-        App.currentMatch.balls = 0;
+        console.error(
+            "❌ Could not find softball event container."
+        );
 
-        /*
-        Third out
-        */
+        return;
+    }
+    
+    const panel =
+        document.createElement(
+            "div"
+        );
 
-        if (
-            App.currentMatch.outs >= 3
-        ) {
+    panel.id =
+        "outcomePanel";
 
-            switchSides();
+    panel.className =
+        "card outcome-panel";
 
-            renderTimeline();
+    panel.innerHTML = `
 
-            return;
+        <h3 class="outcome-title">
+            THIRD STRIKE
+        </h3>
+
+        <p style="text-align:center;">
+            What happened?
+        </p>
+
+        <div class="event-grid">
+
+            <button
+                class="event-button softball advance"
+                onclick="completeThirdStrikeOut()"
+            >
+                ⚾<br>
+                CAUGHT — OUT
+            </button>
+
+            <button
+                class="event-button softball advance"
+                onclick="thirdStrikeDropped()"
+            >
+                🏃<br>
+                DROPPED — SAFE AT 1ST
+            </button>
+
+            <button
+                class="event-button outcome-cancel"
+                onclick="cancelThirdStrikeOutcome()"
+            >
+                ✖<br>
+                Cancel
+            </button>
+
+        </div>
+    `;
+
+    container.prepend(
+        panel
+    );
+}
+
+// =========================================================
+// THIRD STRIKE — CAUGHT
+// =========================================================
+
+function completeThirdStrikeOut() {
+
+    if (!App.currentMatch) {
+        return;
+    }
+
+    const batter =
+        getCurrentBatter();
+
+    /*
+    ---------------------------------------------------------
+    Record the out
+    ---------------------------------------------------------
+    */
+
+    App.currentMatch.outs++;
+
+    /*
+    ---------------------------------------------------------
+    Update our pitcher's statistics
+    ---------------------------------------------------------
+    */
+
+    if (
+        App.currentMatch.currentSide ===
+        "opponentBatting"
+    ) {
+
+        const pitcher =
+            getActivePitcher();
+
+        if (pitcher) {
+
+            pitcher.strikeouts++;
+            pitcher.outs++;
+
         }
     }
+
+    /*
+    ---------------------------------------------------------
+    Record the out event
+    ---------------------------------------------------------
+    */
+
+    recordEvent(
+        "out",
+        {
+            player: batter,
+            reason: "thirdStrikeCaught"
+        }
+    );
+
+    /*
+    ---------------------------------------------------------
+    Move to next batter
+    ---------------------------------------------------------
+    */
+
+    nextBatter();
+
+    /*
+    ---------------------------------------------------------
+    Reset count for next batter
+    ---------------------------------------------------------
+    */
+
+    App.currentMatch.strikes = 0;
+    App.currentMatch.balls = 0;
+
+    /*
+    ---------------------------------------------------------
+    Close third-strike options
+    ---------------------------------------------------------
+    */
+
+    removeOutcomePanel();
+
+    /*
+    ---------------------------------------------------------
+    Third out
+    ---------------------------------------------------------
+    */
+
+    if (
+        App.currentMatch.outs >= 3
+    ) {
+
+        saveMatch();
+        updateScoreboard();
+        renderTimeline();
+
+        switchSides();
+
+        return;
+    }
+
+    /*
+    ---------------------------------------------------------
+    Save and refresh
+    ---------------------------------------------------------
+    */
+
+    saveMatch();
+    updateScoreboard();
+    renderTimeline();
+}
+
+
+// =========================================================
+// THIRD STRIKE — DROPPED / SAFE AT FIRST
+// =========================================================
+
+function thirdStrikeDropped() {
+
+    if (!App.currentMatch) {
+        return;
+    }
+
+    const batter =
+        getCurrentBatter();
+
+    const bases =
+        App.currentMatch.bases;
+
+    /*
+    ---------------------------------------------------------
+    Batter reaches first base
+    ---------------------------------------------------------
+    */
+
+    if (
+        bases.first !== null &&
+        bases.first !== undefined
+    ) {
+
+        alert(
+            "First base is occupied."
+        );
+
+        return;
+    }
+
+    bases.first =
+        batter;
+
+    /*
+    ---------------------------------------------------------
+    Record the advance
+    ---------------------------------------------------------
+    */
+
+    recordEvent(
+        "advance",
+        {
+            player: batter,
+            from: "batter",
+            to: "first",
+            reason: "thirdStrikeDropped"
+        }
+    );
+
+    /*
+    ---------------------------------------------------------
+    IMPORTANT:
+    This is NOT an out and NOT a strikeout.
+    ---------------------------------------------------------
+    */
+
+    /*
+    Move to next batter
+    */
+
+    nextBatter();
+
+    /*
+    Reset count for next batter
+    */
+
+    App.currentMatch.strikes = 0;
+    App.currentMatch.balls = 0;
+
+    /*
+    Close third-strike options
+    */
+
+    removeOutcomePanel();
+
+    /*
+    Save and refresh
+    */
+
+    saveMatch();
+    updateScoreboard();
+    renderTimeline();
+}
+
+
+// =========================================================
+// THIRD STRIKE — CANCEL
+// =========================================================
+
+function cancelThirdStrikeOutcome() {
+
+    removeOutcomePanel();
+
+    /*
+    Leave the third strike recorded and leave the
+    current batter/count unchanged so the user can
+    decide what actually happened.
+    */
 
     saveMatch();
     updateScoreboard();
@@ -567,6 +905,8 @@ function recordStrike() {
 }
 
 function recordBall() {
+
+    saveUndoState();
 
     if (!App.currentMatch) {
         return;
@@ -718,6 +1058,12 @@ function recordBall() {
 }
 
 function recordOut() {
+
+    if (!App.currentMatch) {
+        return;
+    }
+
+    saveUndoState();
 
     showOutOptions();
 
@@ -1316,6 +1662,8 @@ function moveRunner(
     to
 ) {
 
+    saveUndoState();
+    
     const bases =
         App.currentMatch.bases;
 
@@ -1457,10 +1805,9 @@ function moveRunner(
 
         nextBatter();
 
+        App.currentMatch.balls = 0;
+        App.currentMatch.strikes = 0;
     }
-
-    App.currentMatch.balls = 0;
-    App.currentMatch.strikes = 0;
 
     recordEvent(
         "advance"
@@ -1551,6 +1898,13 @@ function advanceRunnerPrev() {
 }
 
 function recordHit() {
+    
+    if (!App.currentMatch) {
+        return;
+    }
+
+    saveUndoState();
+    
     recordEvent("hit", {
         batter: getCurrentBatter(),
         timestamp: new Date().toISOString()
@@ -1566,6 +1920,13 @@ function recordHit() {
 }
 
 function recordFoul() {
+    
+    if (!App.currentMatch) {
+        return;
+    }
+
+    saveUndoState();
+    
     const batter = getCurrentBatter();
 
     recordEvent("foul", {
@@ -1588,6 +1949,12 @@ function recordFoul() {
 }
 
 function recordHomeRun() {
+
+    if (!App.currentMatch) {
+            return;
+    }
+
+    saveUndoState();
 
     const bases =
         App.currentMatch.bases;

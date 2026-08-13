@@ -673,3 +673,55 @@ function getDefaultCompetition() {
     ) || "";
 
 }
+
+// =========================================================
+// UNDO LAST ACTION
+// =========================================================
+
+function saveUndoState() {
+
+    if (!App.currentMatch) {
+        return;
+    }
+
+    App.undoState =
+        structuredClone(
+            App.currentMatch
+        );
+
+    console.log(
+        "↩️ Undo state captured"
+    );
+}
+
+
+function undoLastAction() {
+
+    if (
+        !App.currentMatch ||
+        !App.undoState
+    ) {
+
+        alert(
+            "There is no action to undo."
+        );
+
+        return;
+    }
+
+    App.currentMatch =
+        structuredClone(
+            App.undoState
+        );
+
+    App.undoState = null;
+
+    saveMatch();
+
+    updateScoreboard();
+    renderTimeline();
+
+    console.log(
+        "↩️ Last action undone"
+    );
+}

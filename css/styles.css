@@ -89,7 +89,7 @@ HEADER
 
     position: sticky;
 
-    top: 0;
+    top: 5;
 
     z-index: 1000;
 
@@ -2718,6 +2718,38 @@ body,
     color: #ffffff !important;
     background: transparent;
     
+}
+
+.kwalk-result {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    white-space: nowrap;
+}
+
+.kwalk-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.kwalk-dot.kwalk-excellent {
+    background: #4fd18b;
+}
+
+.kwalk-dot.kwalk-good {
+    background: #4f8fe8;
+}
+
+.kwalk-dot.kwalk-fair {
+    background: #f2c14e;
+}
+
+.kwalk-dot.kwalk-attention {
+    background: #e94b63;
 }
 
 .period-table th,

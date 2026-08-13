@@ -114,10 +114,18 @@ function renderLiveMatch() {
         </div>
 
         ${
-            App.currentMatch.sport !==
+            App.currentMatch.sport ===
             "softball"
 
                 ? `
+
+                    <div
+                        id="softballEventSections"
+                    ></div>
+
+                `
+
+                : `
 
                     <div class="card">
 
@@ -126,8 +134,6 @@ function renderLiveMatch() {
                     </div>
 
                 `
-
-                : ""
         }
 
         <div class="card match-controls">
@@ -765,9 +771,9 @@ function updateScoreboard() {
 
                     <button
                         class="softball-mini-button undo"
-                        onclick="undoLastRun()"
+                        onclick="undoLastAction()"
                     >
-                        ↩️ Undo Run
+                        ↩️ Undo Last Action
                     </button>
 
                 </div>
@@ -4537,13 +4543,22 @@ function buildPitchingSummaryHtml() {
         },
 
         {
-            label: "Strikeouts / Walks",
+            label: "Strikeouts / Walk",
             value: pitcher => {
 
                 const insights =
                     getPitcherInsights(pitcher);
 
-                return insights.kWalkRatio;
+                if (insights.pitches === 0) {
+                    return insights.kWalkRatio;
+                }
+
+                return `
+                    <span class="kwalk-result">
+                        <span class="kwalk-dot ${insights.kWalkClass}"></span>
+                        ${insights.kWalkRatio}
+                    </span>
+                `;
             }
         },
 
@@ -5141,7 +5156,7 @@ function buildSoftballBattingStatsHtml() {
                         .join("")}
 
                     <th>
-                        Total Hits
+                        Hits
                     </th>
 
                     <th>
