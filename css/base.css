@@ -1,0 +1,425 @@
+/*
+=========================================================
+MatchIQ
+base.css
+Shared styles for all screens and sports
+=========================================================
+*/
+
+/* =====================================================
+THEME VARIABLES
+===================================================== */
+
+:root {
+
+    --bg: #020617;
+
+    --card: #0f172a;
+    --card-light: #1e293b;
+
+    --text: #f8fafc;
+    --muted: #94a3b8;
+
+    --border: #334155;
+
+    --accent: #38bdf8;
+
+    --attack: #4987ea;
+    --attack-dark: #437ad1;
+
+    --defence: #24b9ad;
+    --defence-dark: #188177;
+
+    --discipline: #D97706;
+    --discipline-dark: #a95c04;
+
+    --control: #a1a6ac;
+    --control-dark: #898e94;
+
+    --success: #4e956b;
+    --success-dark: #3a7555;
+
+    --radius: 18px;
+}
+
+/* =====================================================
+RESET
+===================================================== */
+
+* {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+/* =====================================================
+APP LAYOUT
+===================================================== */
+
+body {
+
+    padding:
+        max(
+            env(safe-area-inset-top),
+            12px
+        )
+        12px
+        12px
+        12px;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+    background: var(--bg);
+
+    color: var(--text);
+
+    min-height: 100vh;
+
+    box-sizing: border-box;
+}
+
+#app {
+
+    width: 100%;
+    max-width: 1000px;
+
+    margin: 0 auto;
+}
+
+/* =====================================================
+VISIBILITY
+===================================================== */
+
+.hidden {
+
+    display: none !important;
+}
+
+/* =====================================================
+CARDS
+===================================================== */
+
+.card {
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    padding: 16px;
+}
+
+/* =====================================================
+FORMS
+===================================================== */
+
+.form-group {
+
+    margin-bottom: 20px;
+}
+
+label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--muted);
+}
+
+input[type="text"],
+select {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    border: 1px solid var(--border);
+
+    background: var(--card-light);
+
+    color: white;
+
+    font-size: 16px;
+}
+
+.radio-group {
+
+    display: flex;
+
+    gap: 16px;
+
+    flex-wrap: wrap;
+}
+
+.radio-group label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: white;
+}
+
+/* =====================================================
+SHARED BUTTONS
+===================================================== */
+
+.primary-button,
+.control-button,
+.undo-button,
+.end-button,
+.period-button,
+.summary-button,
+.action-button {
+
+    border: none;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    color: white;
+
+    font-weight: 700;
+
+    transition: all .15s ease;
+}
+
+.primary-button:hover,
+.control-button:hover,
+.undo-button:hover,
+.end-button:hover,
+.period-button:hover,
+.summary-button:hover,
+.action-button:hover {
+
+    transform: translateY(-2px);
+}
+
+.primary-button:active,
+.control-button:active,
+.undo-button:active,
+.end-button:active,
+.period-button:active,
+.summary-button:active,
+.action-button:active {
+
+    transform: scale(0.98);
+}
+
+button:disabled {
+
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+/* =====================================================
+HOME / NAVIGATION
+===================================================== */
+
+.home-container {
+
+    text-align: center;
+
+    margin-top: 30px;
+
+    padding: 20px;
+}
+
+.home-logo {
+
+    width: 100%;
+    max-width: 350px;
+
+    height: auto;
+
+    display: block;
+
+    margin: 0 auto 20px auto;
+
+    background: white;
+
+    padding: 12px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 25px rgba(
+            0,
+            0,
+            0,
+            0.30
+        );
+}
+
+.home-tagline {
+
+    color: var(--muted);
+
+    margin-bottom: 30px;
+
+    font-size: 18px;
+}
+
+.sport-selection {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+    max-width: 350px;
+
+    margin: 0 auto;
+}
+
+.sport-button {
+
+    min-height: 65px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    color: white;
+}
+
+/* =====================================================
+HEADER
+===================================================== */
+
+#appHeader {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    padding-top:
+        calc(
+            env(safe-area-inset-top)
+            + 6px
+        );
+
+    padding-bottom: 6px;
+}
+
+.app-header {
+
+    margin-bottom: 8px;
+}
+
+.logo-area {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+}
+
+.matchiq-logo {
+
+    width: 100%;
+
+    max-width: 350px;
+
+    height: auto;
+
+    display: block;
+}
+
+/* =====================================================
+TIMELINE
+===================================================== */
+
+.timeline-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 16px;
+}
+
+#timeline {
+
+    margin-top: 10px;
+}
+
+.timeline-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 12px;
+
+    margin-bottom: 8px;
+
+    border-radius: 12px;
+
+    background: var(--card-light);
+
+    border: 1px solid var(--border);
+}
+
+.timeline-time {
+
+    width: 70px;
+
+    color: var(--accent);
+
+    font-weight: 700;
+}
+
+.timeline-event {
+
+    flex: 1;
+}
+
+/* =====================================================
+PDF LOADER
+===================================================== */
+
+#pdfLoaderOverlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.65);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 2000;
+}

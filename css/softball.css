@@ -1,0 +1,505 @@
+/*
+=========================================================
+MatchIQ
+softball.css
+Softball-only styles
+=========================================================
+*/
+
+/* =====================================================
+SOFTBALL SCOREBOARD
+===================================================== */
+
+.softball-scoreboard {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.softball-teams {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.softball-score-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.softball-team-name {
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    max-width: 220px;
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.softball-team {
+    flex: 1;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.softball-score {
+    font-size: 4rem;
+    margin-top: 0px;
+    font-weight: 800;
+    color: #35C6FF;
+}
+
+.softball-inning {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #22c55e;
+}
+
+.softball-counts {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.softball-status {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.softball-content {
+    width: 320px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.softball-batting-status {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 2px;
+    margin-bottom: 8px;
+}
+
+/* =====================================================
+SOFTBALL EVENT BUTTONS
+===================================================== */
+
+.event-grid.softball {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.event-button.softball {
+    min-height: 80px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    background: #475569;
+    color: white;
+}
+
+.event-button.softball.switch {
+    background: #7c3aed;
+}
+
+.event-button.softball.advance {
+    background: #f59e0b;
+    color: white;
+}
+
+.event-button.softball.strike {
+    background: #16a34a;
+    color: white;
+}
+
+.event-button.softball.ball {
+    background: #2563eb;
+    color: white;
+}
+
+.event-button.softball.out {
+    background: #dc2626;
+    color: white;
+}
+
+/* =====================================================
+SOFTBALL ACTION BAR
+===================================================== */
+
+.softball-action-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+    margin: 10px auto 16px auto;
+    width: fit-content;
+}
+
+.softball-mini-button {
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    padding: 8px 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: white;
+}
+
+.softball-mini-button.switch {
+    background: #64748b;
+}
+
+.softball-mini-button.advance {
+    background: #f59e0b;
+}
+
+.softball-mini-button.homerun {
+    background: linear-gradient(
+        135deg,
+        var(--attack),
+        var(--attack-dark)
+    );
+}
+
+.softball-mini-button.undo {
+    background: linear-gradient(
+        135deg,
+        #a1a6ac,
+        #898e94
+    );
+}
+
+/* =====================================================
+COUNT CARDS
+===================================================== */
+
+.count-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 4px;
+    margin: 12px auto;
+    width: fit-content;
+}
+
+.count-card {
+    width: 72px;
+    min-width: 0;
+    height: 65px;
+    padding: 6px 2px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.count-card:active {
+    transform: scale(0.95);
+}
+
+.count-card:hover {
+    box-shadow:
+        0 0 12px rgba(255,255,255,0.25);
+}
+
+.count-card span {
+    display: block;
+    font-size: 0.65rem;
+    opacity: 0.9;
+}
+
+.count-card strong {
+    display: block;
+    font-size: 1.4rem;
+}
+
+.count-card.balls {
+    background: #2563eb;
+}
+
+.count-card.strikes {
+    background: #16a34a;
+}
+
+.count-card.hits {
+    background: #14b8a6;
+}
+
+.count-card.foul {
+    background: #f59e0b;
+}
+
+.count-card.outs {
+    background: #dc2626;
+}
+
+/* =====================================================
+DIAMOND / BASES
+===================================================== */
+
+.home-runner {
+    position: relative;
+    text-align: center;
+    margin-top: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f59e0b;
+}
+
+.home-label {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.base-runner {
+    position: absolute;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.runner-second {
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.label-second {
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.runner-third {
+    top: 65px;
+    left: -5px;
+}
+
+.label-third {
+    top: 85px;
+    left: -20px;
+}
+
+.runner-first {
+    top: 65px;
+    right: -5px;
+}
+
+.label-first {
+    top: 85px;
+    right: -20px;
+}
+
+.softball-diamond {
+    width: 260px;
+    margin: 16px auto;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 26px;
+    line-height: 1.6;
+    font-weight: 700;
+    margin: 0 auto;
+}
+
+.softball-second {
+    margin-bottom: 20px;
+}
+
+.softball-middle {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.softball-home {
+    margin-top: 10px;
+}
+
+.base-label {
+    position: absolute;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #94a3b8;
+}
+
+.diamond {
+    position: relative;
+    width: 260px;
+    height: 140px;
+    margin: 20px auto 0 auto;
+}
+
+.base {
+    width: 34px;
+    height: 34px;
+    background: #475569;
+    transform: rotate(45deg);
+    border-radius: 4px;
+    position: absolute;
+}
+
+.base.occupied {
+    background: #f59e0b;
+}
+
+.base.second {
+    top: 0;
+    left: 113px;
+}
+
+.base.third {
+    top: 50px;
+    left: 35px;
+}
+
+.base.first {
+    top: 50px;
+    right: 35px;
+}
+
+.base.home {
+    bottom: 0;
+    left: 113px;
+    background: #eab308;
+}
+
+/* =====================================================
+BATTER
+===================================================== */
+
+.batter-card {
+    text-align: center;
+    font-weight: 700;
+    color: #cbd5e1;
+}
+
+.batter-number {
+    font-size: 2.2rem;
+    color: white;
+}
+
+/* =====================================================
+PITCHERS
+===================================================== */
+
+.pitcher-section {
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.pitcher-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.pitcher-button {
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    background: #334155;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.pitcher-button.active {
+    background: linear-gradient(
+        135deg,
+        #35C6FF,
+        #0EA5E9
+    );
+    color: white;
+}
+
+.pitcher-name {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #d1d5db;
+}
+
+/* =====================================================
+SOFTBALL SUMMARY
+===================================================== */
+
+.softball-summary-header {
+    text-align: center;
+    margin: 5px 0 20px;
+}
+
+.summary-team {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.summary-score {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #38bdf8;
+    margin: 2px 0;
+}
+
+.sub-stat {
+    padding-left: 30px !important;
+    color: #94a3b8;
+}
+
+/* =====================================================
+SOFTBALL TABLES
+===================================================== */
+
+.softball-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.softball-summary-table th {
+    color: #38bdf8;
+    padding: 10px;
+    text-align: center;
+}
+
+.softball-summary-table td {
+    padding: 10px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.softball-summary-table td:first-child {
+    text-align: left;
+}
+
+.softball-summary-table td:not(:first-child) {
+    text-align: center;
+    font-weight: 700;
+}
