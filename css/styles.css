@@ -89,7 +89,7 @@ HEADER
 
     position: sticky;
 
-    top: 5;
+    top: 0;
 
     z-index: 1000;
 
@@ -2948,31 +2948,4 @@ body,
 .logout-button:hover {
     background: #163A5F;
     color: #ffffff;
-}
-
-/* =========================================================
-   MOBILE - MOVE APP CONTENT HIGHER
-========================================================= */
-
-@media (max-width: 640px) {
-
-    body {
-        padding-top: 0 !important;
-    }
-
-    main {
-        padding-top: 5px !important;
-        margin-top: 0 !important;
-    }
-
-    #homeScreen,
-    #setupScreen,
-    #liveMatchScreen,
-    #historyScreen,
-    #softballMenuScreen,
-    #authScreen {
-        margin-top: 0 !important;
-        padding-top: 5px !important;
-    }
-
 }
