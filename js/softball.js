@@ -301,6 +301,11 @@ function showSoftballMenu() {
 
     hideAllScreens();
 
+    window.scrollTo(
+        0,
+        0
+    );
+
     document
         .getElementById(
             "setupScreen"
