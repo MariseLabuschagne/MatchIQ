@@ -1074,7 +1074,7 @@ function showOutOptions() {
 
     const container =
         document.querySelector(
-            ".sticky-scoreboard"
+            "sticky-scoreboard"
         );
 
     const panel =

@@ -93,6 +93,97 @@ body {
 }
 
 /* =====================================================
+HEADER
+===================================================== */
+
+
+#appHeader {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    padding-top:
+        calc(
+            env(safe-area-inset-top)
+            + 6px
+        );
+
+    padding-bottom: 6px;
+
+}
+
+.app-header {
+
+    margin-bottom: 8px;
+}
+
+.logo-area {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+}
+
+.logo-circle {
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #38bdf8
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 30px;
+}
+
+
+.matchiq-logo {
+
+    width: 100%;
+
+    max-width: 350px;
+
+    height: auto;
+
+    display: block;
+
+    margin: 0 auto 24px auto;
+
+    border-radius: 12px;
+}
+
+
+.app-header h1 {
+
+    font-size: 42px;
+
+    font-weight: 800;
+}
+
+.subtitle {
+
+    color: var(--muted);
+
+    margin-top: 4px;
+}
+
+/* =====================================================
 VISIBILITY
 ===================================================== */
 
@@ -184,18 +275,61 @@ SHARED BUTTONS
 .summary-button,
 .action-button {
 
+    height: 32px;
+    min-width: 80px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    margin-bottom: 16px;
     border: none;
-
-    border-radius: 14px;
-
-    cursor: pointer;
+    background: linear-gradient(
+        135deg,
+        #64748b,
+        #475569
+    );
 
     color: white;
-
-    font-weight: 700;
-
+    cursor: pointer;
     transition: all .15s ease;
 }
+
+
+.history-events {
+
+    margin-bottom: 18px;
+
+}
+
+.history-actions {
+
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+
+.history-open-button {
+
+    min-height: 54px;
+    min-width: 120px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    margin: 6px;
+
+}
+.history-delete-button {
+
+    min-height: 54px;
+    min-width: 120px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    margin: 6px;
+
+}
+
 
 .primary-button:hover,
 .control-button:hover,

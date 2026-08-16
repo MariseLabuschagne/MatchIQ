@@ -1163,6 +1163,7 @@ async function openHistoricalMatch(
 
 }
 
+/*
 function showHockeyMenu() {
 
     hideAllScreens();
@@ -1285,6 +1286,7 @@ function showHockeyMenu() {
     `;
 
 }
+*/
 
 function returnToHomeScreen() {
 
@@ -1411,6 +1413,39 @@ function hideAllScreens() {
     });
 
 }
+
+function goBackToSportMenu() {
+
+    hideAllScreens();
+
+    if (
+        isSoftballSport(
+            App.selectedSport
+        )
+    ) {
+
+        document
+            .getElementById(
+                "softballMenuScreen"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
+    } else {
+
+        document
+            .getElementById(
+                "hockeyMenuScreen"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
+    }
+
+}
+
 function selectRunner(position) {
 
     if (selectedRunner === position) {
