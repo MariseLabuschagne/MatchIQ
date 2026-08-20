@@ -1073,10 +1073,17 @@ function showOutOptions() {
     removeOutcomePanel();
 
     const container =
-        document.querySelector(
-            "sticky-scoreboard"
-        );
+    document.querySelector(
+        "#eventSections, #softballEventSections"
+    );
 
+    console.log(container);
+
+/*    const container =
+        document.getElementById(
+            "eventSections"
+        );
+*/
     const panel =
         document.createElement(
             "div"
@@ -1172,9 +1179,7 @@ function showOutOptions() {
 
     `;
 
-    container.appendChild(
-        panel
-    );
+    container.prepend(panel);
 
 }
 function recordSpecificOut(position) {

@@ -1390,6 +1390,11 @@ function returnToHockeyHome() {
 
 function hideAllScreens() {
 
+    window.scrollTo(
+        0,
+        0
+    );
+    
     [
         "homeScreen",
         "setupScreen",
