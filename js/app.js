@@ -755,3 +755,20 @@ function selectSport(
     
 }
 
+function updateConnectivityStatus() {
+
+    App.isOnline = navigator.onLine;
+
+    const badge = document.getElementById("connection-status");
+
+    if (!badge) return;
+
+    if (App.isOnline) {
+        badge.textContent = "🟢 Online";
+    } else {
+        badge.textContent = "📴 Offline";
+    }
+}
+
+window.addEventListener("online", updateConnectivityStatus);
+window.addEventListener("offline", updateConnectivityStatus);

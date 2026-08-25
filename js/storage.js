@@ -172,6 +172,32 @@ async function saveMatch() {
         return false;
     }
 
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEYS.currentMatch,
+            JSON.stringify(App.currentMatch)
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Failed to save match locally.",
+            error
+        );
+
+        return false;
+    }
+}
+
+/*async function saveMatch() {
+
+    if (!App.currentMatch) {
+        return false;
+    }
+
     // =====================================================
     // LOCAL STORAGE
     // =====================================================
@@ -240,7 +266,7 @@ async function saveMatch() {
 
 
     return true;
-}
+}*/
 
 // =========================================================
 // SAVE MATCH TO FIRESTORE
