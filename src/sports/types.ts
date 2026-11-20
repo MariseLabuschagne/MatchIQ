@@ -25,13 +25,16 @@ export interface SportModule<TSetup = any> { // eslint-disable-line @typescript-
   title: (setup: TSetup) => string;
   /** Score for lists, e.g. "2–1" or "6–4 6–3". */
   scoreLine: (match: Match<TSetup>) => string;
+  /** Optional work to run in the background after someone signs in (e.g. a one-off import of old matches). */
+  onSignIn?: (uid: string) => Promise<void>;
   /** Optional extra panel at the bottom of the sport's history page (e.g. importing old matches). */
   HistoryExtra?: ComponentType<{ onChanged: () => void }>;
 }
 
-/** A sport shown on the home screen but not available yet. */
+/** A sport not in this version yet, shown on the home screen; `href` can point to where it lives for now. */
 export interface ComingSoon {
   name: string;
   icon: string;
   note: string;
+  href?: string;
 }

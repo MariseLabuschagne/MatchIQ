@@ -107,7 +107,7 @@ textarea { min-height: 96px; resize: vertical; }
 
 .sport-button {
   min-height: 65px; border-radius: 18px; font-size: 22px; font-weight: 700; color: white; width: 100%;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
+  display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none;
 }
 .sport-button.hockey { background: linear-gradient(135deg, #2563eb, #38bdf8); }
 .sport-button.tennis { background: linear-gradient(135deg, #0d9488, #2dd4bf); }

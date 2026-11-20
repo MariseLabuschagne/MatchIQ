@@ -1,18 +1,46 @@
 # MatchIQ v3
 
-Tap-based match capture with coach insights for school sport. This version covers **field hockey** and **tennis**. Softball is being redesigned; until then, use the old app in `legacy/`.
+Tap-based match capture with coach insights for school sport. This version covers **field hockey** and **tennis**. Softball is being redesigned; until then, the old app is published alongside at `/legacy/`.
 
 ## Run it
 
+Same set-up as Court Order: React + Vite + Firebase (Auth, Firestore, Hosting), deployed from this computer.
+
 ```bash
 npm install
-npm run dev          # signs in with Firebase (project matchiq-9f263)
-npm run dev:local    # no sign-in, everything stays on this computer (testing only)
+npm run dev          # http://localhost:5173, uses the real Firebase project
 npm test             # scoring, stats and insight rules
-npm run build        # production build in dist/ (offline-capable PWA)
+npm run test:rules   # security rules on the Firestore emulator (needs Java)
+npm run build        # production build in dist/ (offline-capable PWA, old app at /legacy/)
 ```
 
-`dev:local` is switched off in production builds.
+**Try it without touching real data:**
+
+1. Run `npm run emulators` in one terminal.
+2. Run `npm run seed:emulators` once, then `npm run dev:emulators`.
+3. Open http://localhost:5176 and sign in as `parent@test.local` (password `testpass123`).
+
+That account exists only in the local emulator. It comes with two old v2 matches, so you can watch the automatic import. The old app at `/legacy/` always uses the real project.
+
+## Putting it online
+
+- `npm run deploy:rules` publishes only the security rules and indexes.
+- `npm run deploy` builds the app and publishes Hosting plus the rules to https://matchiq-9f263.web.app.
+- To test first without changing the live site, use a preview link that expires on its own:
+
+```bash
+npm run build && npx firebase hosting:channel:deploy preview --expires 7d
+```
+
+The home screen shows the version and build date, for example "MatchIQ v3.00 · built 20 Nov 2026", so you can tell which deploy a phone has. The version comes from `package.json`: 3.1.0 shows as v3.01.
+
+**App Check** is wired in the same way as Court Order, but off until a reCAPTCHA Enterprise key is registered for the MatchIQ domains. When there is one, paste it into `APP_CHECK_SITE_KEY` in `src/core/firebase.ts`.
+
+## Moving from the old app
+
+- **Old matches:** the old app's hockey matches are copied in automatically the first time each person signs in to v3. This covers matches in the cloud (`users/{uid}/matches`) and any kept in that browser. The originals are never changed. History → "Check for old matches" runs the import again.
+- **Softball:** the old app is published inside v3 at `/legacy/`. The Softball button opens it, using the same accounts and data.
+- **Safe copy:** the last v2 code is in `legacy/`, and gets tagged `v2-final` in git at the switch-over.
 
 ## How it is built
 
@@ -67,10 +95,10 @@ There are three capture levels (Quick, Standard and Detailed), and the parent ca
 
 ## Firestore rules
 
-`firestore.rules` lets each user read and write only their own profile and matches, and stops a user from making themselves an administrator. Deploy with:
+`firestore.rules` lets each user read and write only their own profile and matches, and stops a user from making themselves an administrator. It also accepts exactly what the old app writes, so it is safe to publish while the old app is still in use (`tests/rules` checks this). Deploy with:
 
 ```bash
-firebase deploy --only firestore:rules
+npm run deploy:rules
 ```
 
 Check the rules in the Firebase console before deploying. If the live project has rules already, merge them rather than replacing them.

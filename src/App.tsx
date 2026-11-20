@@ -17,7 +17,10 @@ export default function App() {
   const { ready, user } = useAuth();
 
   useEffect(() => {
-    if (user?.emailVerified) pullAll(user.uid).catch((err) => console.warn("Could not fetch cloud matches yet", err));
+    if (!user?.emailVerified) return;
+    const uid = user.uid;
+    pullAll(uid).catch((err) => console.warn("Could not fetch cloud matches yet", err));
+    for (const s of SPORTS) s.onSignIn?.(uid).catch((err) => console.warn(`${s.name}: sign-in task will retry next time`, err));
   }, [user]);
 
   if (!ready) return <main className="app"><p className="muted center" style={{ marginTop: 80 }}>Loading…</p></main>;
@@ -47,12 +50,19 @@ function Home() {
         {SPORTS.map((s) => (
           <button key={s.id} className={`sport-button ${s.buttonClass}`} onClick={() => navigate(`/sport/${s.id}`)}>{s.icon} {s.name}</button>
         ))}
-        {COMING_SOON.map((s) => (
-          <button key={s.name} className="sport-button disabled" disabled>
-            <span>{s.icon} {s.name}<small>{s.note}</small></span>
-          </button>
-        ))}
+        {COMING_SOON.map((s) =>
+          s.href ? (
+            <a key={s.name} className="sport-button disabled" href={s.href}>
+              <span>{s.icon} {s.name}<small>{s.note}</small></span>
+            </a>
+          ) : (
+            <button key={s.name} className="sport-button disabled" disabled>
+              <span>{s.icon} {s.name}<small>{s.note}</small></span>
+            </button>
+          )
+        )}
         <p className="muted small">Signed in{profile?.name ? ` as ${profile.name}` : ""}. <button className="link" onClick={logout}>Sign out</button></p>
+        <p className="muted small">MatchIQ v{__APP_VERSION__} · built {new Date(__BUILD_DATE__).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
       </div>
     </>
   );

@@ -20,14 +20,6 @@ interface AuthState {
   logout: () => Promise<void>;
 }
 
-/**
- * Local-only dev mode: `npm run dev:local` skips sign-in and keeps everything on this computer.
- * Never active in a production build.
- */
-export const LOCAL_UID = "local-dev";
-export const LOCAL_MODE = import.meta.env.DEV && import.meta.env.VITE_LOCAL_ONLY === "1";
-const LOCAL_USER = { uid: LOCAL_UID, email: "", emailVerified: true, displayName: "Local test" } as unknown as User;
-
 const Ctx = createContext<AuthState>({ ready: false, user: null, profile: null, refresh: async () => {}, logout: async () => {} });
 
 async function loadProfile(user: User): Promise<Profile> {
@@ -47,16 +39,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<Omit<AuthState, "refresh" | "logout">>({ ready: false, user: null, profile: null });
 
   useEffect(
-    () => {
-      if (LOCAL_MODE) {
-        setState({ ready: true, user: LOCAL_USER, profile: { uid: LOCAL_UID, email: "", name: "Local test", role: "parent" } });
-        return;
-      }
-      return onAuthStateChanged(auth, async (user) => {
+    () =>
+      onAuthStateChanged(auth, async (user) => {
         if (!user) return setState({ ready: true, user: null, profile: null });
         setState({ ready: true, user, profile: await loadProfile(user) });
-      });
-    },
+      }),
     []
   );
 

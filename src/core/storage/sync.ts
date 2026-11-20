@@ -1,5 +1,4 @@
 import type { Match } from "../types";
-import { LOCAL_UID } from "../auth/AuthProvider";
 import { deleteCloud, pullMatches, pushMatch } from "./cloud";
 import { deleteLocal, getLocal, markSynced, saveLocal } from "./local";
 
@@ -14,7 +13,7 @@ const PUSH_DELAY_MS = 4000;
 
 export async function saveMatch(match: Match, uid: string | null, immediate = false): Promise<void> {
   await saveLocal(match, uid);
-  if (!uid || uid === LOCAL_UID) return;
+  if (!uid) return;
   const prev = timers.get(match.id);
   if (prev) clearTimeout(prev);
   const run = () => {
@@ -29,7 +28,6 @@ export async function saveMatch(match: Match, uid: string | null, immediate = fa
 
 /** Bring cloud matches onto this phone (e.g. after signing in on a new device). Newer copy wins. */
 export async function pullAll(uid: string): Promise<number> {
-  if (uid === LOCAL_UID) return 0;
   const remote = await pullMatches(uid);
   let changed = 0;
   for (const m of remote) {
@@ -47,5 +45,5 @@ export async function pullAll(uid: string): Promise<number> {
 
 export async function removeMatch(id: string, uid: string | null): Promise<void> {
   await deleteLocal(id);
-  if (uid && uid !== LOCAL_UID) await deleteCloud(uid, id).catch((err) => console.warn("Cloud delete will retry later", err));
+  if (uid) await deleteCloud(uid, id).catch((err) => console.warn("Cloud delete will retry later", err));
 }
