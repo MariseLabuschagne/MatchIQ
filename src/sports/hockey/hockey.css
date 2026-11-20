@@ -1,0 +1,40 @@
+/* Hockey-only styles: scoreboard and clock, timeline, summary header and attack funnel. */
+
+/* ---------- scoreboard ---------- */
+.scoreboard {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: var(--scoreboard);
+  border-radius: var(--radius); border: 1px solid var(--border); padding: 12px; text-align: center;
+}
+.score-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px; }
+.score-team { font-size: 19px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.score-team:first-child { text-align: right; }
+.score-team:last-child { text-align: left; }
+.score { font-size: 44px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.timer { font-size: 56px; line-height: 1; font-weight: 900; color: var(--timer); font-variant-numeric: tabular-nums; }
+.timer.over { color: var(--highlight); }
+.period-label { color: var(--muted); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 13px; margin-top: 4px; }
+.clock-controls { display: flex; justify-content: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+/* ---------- timeline ---------- */
+.timeline { display: flex; flex-direction: column; gap: 8px; }
+.timeline-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--card-light); border: 1px solid var(--border); font-size: 14px; }
+.timeline-time { width: 64px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
+.timeline-event { flex: 1; min-width: 0; }
+.timeline-row button { font-size: 12px; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; }
+
+/* ---------- summary ---------- */
+.summary-head { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; text-align: center; }
+.summary-head .team { font-size: 18px; font-weight: 700; overflow-wrap: anywhere; }
+.summary-head .final { font-size: 44px; font-weight: 900; font-variant-numeric: tabular-nums; }
+
+.funnel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.funnel-step { text-align: center; padding: 12px 6px; border-radius: 12px; background: var(--card-light); }
+.funnel-value { font-size: 28px; font-weight: 900; color: var(--accent); }
+.funnel-label { font-size: 12px; font-weight: 700; color: #fff; margin-top: 2px; }
+.funnel-rate { font-size: 12px; color: var(--success); font-weight: 700; margin-top: 4px; }
+
+@media (max-width: 420px) {
+  .timer { font-size: 48px; }
+  .score { font-size: 38px; }
+  .funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
