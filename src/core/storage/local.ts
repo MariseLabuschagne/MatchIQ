@@ -18,9 +18,18 @@ class MatchDB extends Dexie {
 
 export const localDb = new MatchDB();
 
+/** Lists on screen refresh when matches arrive in the background (cloud download, import of old matches). */
+const CHANGED = "matchiq:local-changed";
+const changed = () => { if (typeof window !== "undefined") window.dispatchEvent(new Event(CHANGED)); };
+export function onLocalChange(cb: () => void): () => void {
+  window.addEventListener(CHANGED, cb);
+  return () => window.removeEventListener(CHANGED, cb);
+}
+
 export async function saveLocal(match: Match, ownerUid: string | null, syncedAt?: string | null): Promise<void> {
   const existing = await localDb.matches.get(match.id);
   await localDb.matches.put({ ...match, ownerUid, syncedAt: syncedAt !== undefined ? syncedAt : existing?.syncedAt ?? null });
+  changed();
 }
 
 export function getLocal(id: string): Promise<StoredMatch | undefined> {
@@ -36,6 +45,7 @@ export async function listLocal(ownerUid: string | null, sport?: SportId): Promi
 
 export async function deleteLocal(id: string): Promise<void> {
   await localDb.matches.delete(id);
+  changed();
 }
 
 export async function markSynced(id: string, updatedAt: string): Promise<void> {

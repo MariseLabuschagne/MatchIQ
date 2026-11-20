@@ -1,6 +1,6 @@
 /* =========================================================
    MatchIQ v3 styles
-   Same look as v2: dark navy, Inter, blue attack, teal defence,
+   Same look as v2: dark navy, the phone's own font, blue attack, teal defence,
    amber discipline, 18px radius, gradient buttons.
    Shared design system only. Each sport keeps its own styles
    next to its screens (src/sports/<sport>/<sport>.css).
@@ -36,7 +36,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body, #root { min-height: 100%; }
 body {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   -webkit-tap-highlight-color: transparent;
@@ -60,13 +60,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
 .center { text-align: center; }
-h1 { font-size: 28px; font-weight: 800; }
-h2 { font-size: 22px; font-weight: 800; }
-h3 { font-size: 18px; font-weight: 700; }
+h1 { font-size: 28px; font-weight: 700; }
+h2 { font-size: 22px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 600; }
 
 /* ---------- header ---------- */
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.topbar .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; }
+.topbar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; }
 .topbar .brand img { width: 36px; height: 36px; border-radius: 10px; background: white; object-fit: cover; }
 .topbar .who { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
 .sync { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
@@ -93,7 +93,7 @@ textarea { min-height: 96px; resize: vertical; }
 
 /* ---------- buttons ---------- */
 .btn {
-  min-height: 48px; padding: 10px 16px; border-radius: 12px; font-weight: 700; color: white;
+  min-height: 48px; padding: 10px 16px; border-radius: 12px; font-weight: 600; color: white;
   background: linear-gradient(135deg, var(--control), var(--control-dark));
   transition: transform 0.15s ease;
 }
@@ -106,7 +106,7 @@ textarea { min-height: 96px; resize: vertical; }
 .link { color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 8px 0; }
 
 .sport-button {
-  min-height: 65px; border-radius: 18px; font-size: 22px; font-weight: 700; color: white; width: 100%;
+  min-height: 65px; border-radius: 18px; font-size: 22px; font-weight: 600; color: white; width: 100%;
   display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none;
 }
 .sport-button.hockey { background: linear-gradient(135deg, #2563eb, #38bdf8); }
@@ -121,13 +121,13 @@ textarea { min-height: 96px; resize: vertical; }
 .home-tagline { color: var(--muted); font-size: 17px; }
 
 /* ---------- capture buttons and outcome panel (the v2 look, for any sport) ---------- */
-.event-category { font-size: 22px; font-weight: 800; margin: 4px 0 10px; }
+.event-category { font-size: 22px; font-weight: 700; margin: 4px 0 10px; }
 .event-category.attack { color: var(--attack); }
 .event-category.defence { color: var(--defence); }
 .event-category.discipline { color: var(--discipline); }
 .event-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .event-button {
-  min-height: 72px; padding: 10px; font-size: 15px; line-height: 1.3; color: white; font-weight: 700;
+  min-height: 72px; padding: 10px; font-size: 15px; line-height: 1.3; color: white; font-weight: 600;
   border: 4px solid transparent; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
 }
 .event-button .ico { font-size: 20px; }
@@ -142,7 +142,7 @@ textarea { min-height: 96px; resize: vertical; }
   box-shadow: 0 0 20px rgba(103, 232, 249, 0.35); border-radius: var(--radius); padding: 14px;
 }
 .outcome-panel.against { background: linear-gradient(135deg, #0b3a35, #0d4a44); }
-.outcome-title { text-align: center; color: var(--panel); font-size: 20px; font-weight: 900; letter-spacing: 0.5px; }
+.outcome-title { text-align: center; color: var(--panel); font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
 .attack-context { text-align: center; color: #a5f3fc; font-size: 14px; margin: 4px 0 12px; font-weight: 600; }
 
 /* ---------- toolbar ---------- */
@@ -152,15 +152,15 @@ textarea { min-height: 96px; resize: vertical; }
 /* ---------- summary tables ---------- */
 .table-wrap { overflow-x: auto; }
 .period-table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
-.period-table th { color: #fff; border-bottom: 2px solid rgba(255, 255, 255, 0.15); font-weight: 700; }
+.period-table th { color: #fff; border-bottom: 2px solid rgba(255, 255, 255, 0.15); font-weight: 600; }
 .period-table tr { border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
 .period-table th, .period-table td { padding: 8px 10px; white-space: nowrap; }
 .period-table th:first-child, .period-table td:first-child { text-align: left; width: 45%; white-space: normal; }
 .period-table th:not(:first-child), .period-table td:not(:first-child) { text-align: right; }
-.period-table th:last-child, .period-table td:last-child { font-weight: 700; color: #4fc3ff; }
+.period-table th:last-child, .period-table td:last-child { font-weight: 600; color: #4fc3ff; }
 .period-table .i1 td:first-child { padding-left: 24px; color: #cbd5e1; }
 .period-table .i2 td:first-child { padding-left: 40px; color: var(--muted); }
-.period-table .head td { font-weight: 700; }
+.period-table .head td { font-weight: 600; }
 
 .insights { display: flex; flex-direction: column; gap: 8px; }
 .insight { display: grid; grid-template-columns: 6px 1fr; gap: 12px; background: var(--card-light); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px 10px 0; overflow: hidden; }
@@ -179,7 +179,7 @@ textarea { min-height: 96px; resize: vertical; }
 /* ---------- history ---------- */
 .history-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .history-item .meta { font-size: 13px; color: var(--muted); }
-.badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--card-light); border: 1px solid var(--border); color: var(--muted); }
+.badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--card-light); border: 1px solid var(--border); color: var(--muted); }
 
 /* ---------- sheet / dialog ---------- */
 .scrim { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.7); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }

@@ -34,6 +34,9 @@ export async function importLegacyMatches(uid: string | null): Promise<ImportRes
   for (const raw of raws) {
     const m = convertLegacyHockey(raw);
     if (!m) { skipped++; continue; }
+    // v2 ids are only unique per user, and this phone may be shared, so tie the id to the owner.
+    // Re-running finds the same id and leaves the match alone.
+    m.id = `v2-${uid ?? "local"}-${raw.id ?? m.id}`;
     if (await getLocal(m.id)) continue;
     await saveMatch(m as Match, uid, true);
     added++;

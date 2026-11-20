@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "./core/auth/AuthProvider";
 import { AuthScreen, VerifyScreen } from "./core/auth/AuthScreen";
 import { navigate, useRoute } from "./core/router";
-import { listLocal, type StoredMatch } from "./core/storage/local";
+import { listLocal, onLocalChange, type StoredMatch } from "./core/storage/local";
 import { pullAll, removeMatch } from "./core/storage/sync";
 import { Confirm, Topbar } from "./core/ui/components";
 import { useMatch } from "./core/useMatch";
@@ -72,7 +72,9 @@ function SportMenu({ sport }: { sport: SportModule }) {
   const { user } = useAuth();
   const [active, setActive] = useState<StoredMatch[]>([]);
   useEffect(() => {
-    listLocal(user?.uid ?? null, sport.id).then((list) => setActive(list.filter((m) => m.status === "active")));
+    const load = () => listLocal(user?.uid ?? null, sport.id).then((list) => setActive(list.filter((m) => m.status === "active")));
+    load();
+    return onLocalChange(load);
   }, [sport, user]);
   return (
     <>
@@ -100,7 +102,7 @@ function History({ sport }: { sport: SportModule }) {
   const [list, setList] = useState<StoredMatch[] | null>(null);
   const [del, setDel] = useState<StoredMatch | null>(null);
   const load = () => listLocal(uid, sport.id).then(setList);
-  useEffect(() => { load(); }, [sport, uid]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { load(); return onLocalChange(load); }, [sport, uid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
