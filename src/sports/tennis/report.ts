@@ -49,9 +49,9 @@ export function tennisReport(m: Match<TennisSetup>, r: TennisState, st: TennisSt
         kind: "kpis",
         title: "Key numbers",
         items: [
-          { label: `Points won (${st.won} of ${st.n})`, value: `${pct(st.won, st.n)}%` },
-          { label: "Service games held", value: `${st.holds.won}/${st.holds.n}` },
-          { label: "Return games broken", value: `${st.breaks.won}/${st.breaks.n}` },
+          { label: `Points won (${pct(st.won, st.n)}%)`, value: `${st.won} / ${st.n}` },
+          { label: "Service games held", value: `${st.holds.won} / ${st.holds.n}` },
+          { label: "Return games broken", value: `${st.breaks.won} / ${st.breaks.n}` },
           { label: "Winners / errors", value: `${st.winners} / ${st.errorsAll}` }
         ]
       },

@@ -441,9 +441,9 @@ export function TennisReport({ session }: { session: Session }) {
       <section className="card wide">
         <h3>Key numbers</h3>
         <div className="kpis">
-          <div className="kpi"><div className="v">{pct(st.won, st.n)}%</div><div className="l">Points won ({st.won} of {st.n})</div></div>
-          <div className="kpi"><div className="v">{st.holds.won}/{st.holds.n}</div><div className="l">Service games held</div></div>
-          <div className="kpi"><div className="v">{st.breaks.won}/{st.breaks.n}</div><div className="l">Return games broken</div></div>
+          <div className="kpi"><div className="v">{st.won} / {st.n}</div><div className="l">Points won ({pct(st.won, st.n)}%)</div></div>
+          <div className="kpi"><div className="v">{st.holds.won} / {st.holds.n}</div><div className="l">Service games held</div></div>
+          <div className="kpi"><div className="v">{st.breaks.won} / {st.breaks.n}</div><div className="l">Return games broken</div></div>
           <div className="kpi"><div className="v">{st.winners} / {st.errorsAll}</div><div className="l">Winners / errors</div></div>
         </div>
       </section>
