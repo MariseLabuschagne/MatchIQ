@@ -93,7 +93,7 @@ export function HockeySummary({ session }: { session: Session }) {
     <>
       <div className="row">
         {match.status === "active" && <button className="btn primary small" onClick={() => navigate(`/match/${match.id}`)}>← Back to live capture</button>}
-        <BackLink to="/matches/hockey" label="Matches" />
+        <BackLink to="/matches/hockey" label="Match history" />
       </div>
       <div ref={ref} className="report-grid">
         <section className="card span-all">

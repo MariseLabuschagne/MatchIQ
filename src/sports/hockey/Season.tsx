@@ -4,7 +4,8 @@ import { SeasonChart } from "../../core/ui/Chart";
 import type { HockeySetup } from "./model";
 import { computeStats } from "./stats";
 
-const US = "#3b82f6", THEM = "#ea580c";
+/** Logo green for us, a quiet grey for the other side. */
+const US = "#5fa82a", THEM = "#94a3b8";
 const short = (iso: string) => new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 
 /** Season view for one team: record, totals and per-match charts. `matches` are completed, oldest first. */
@@ -32,10 +33,12 @@ export function HockeySeason({ matches }: { matches: Match<HockeySetup>[] }) {
         <div className="kpi"><div className="v">{pct(ent, entriesAg)}%</div><div className="l">Entries against kept to no shot ({ent} of {entriesAg})</div></div>
         <div className="kpi"><div className="v">{pct(pcGoals, pcs)}%</div><div className="l">Penalty corners scored ({pcGoals} of {pcs})</div></div>
       </div>
+      <div className="season-charts">
       <SeasonChart title="Goals per match" series={[{ name: "Scored", color: US }, { name: "Conceded", color: THEM }]}
         groups={groups((t) => [t.goals.for.total, t.goals.against.total])} />
       <SeasonChart title="Circle entries per match" series={[{ name: "Ours", color: US }, { name: "Against", color: THEM }]}
         groups={groups((t) => [t.entries.for.total, t.entries.against.total])} />
+      </div>
     </>
   );
 }

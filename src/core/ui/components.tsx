@@ -1,9 +1,9 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Insight } from "../types";
 import { useAuth } from "../auth/AuthProvider";
 import { navigate } from "../router";
 import { initials } from "../names";
-import { BackIcon } from "./icons-nav";
+import { BackIcon, ChevronDownIcon, DataSaverIcon, LogOutIcon, SendIcon, ShieldIcon, TeamsIcon } from "./icons-nav";
 import { myRoles, ROLE_LABEL } from "../squads";
 import { isDataSaver, onDataSaverChange, sendWaiting, setDataSaver, waitingToSend } from "../storage/sync";
 
@@ -26,7 +26,7 @@ export function useOnline(): boolean {
  * Pages that pass `right` get a back link and their own controls, e.g. Live / Points / Report.
  * Older calls with no controls render nothing.
  */
-export function Topbar({ right, back = "/matches", backLabel = "Matches" }: { right?: ReactNode; home?: boolean; back?: string; backLabel?: string }) {
+export function Topbar({ right, back = "/matches", backLabel = "Match history" }: { right?: ReactNode; home?: boolean; back?: string; backLabel?: string }) {
   if (!right) return null;
   return (
     <div className="page-bar">
@@ -80,18 +80,55 @@ export function useRoleLabel(): string {
   return label;
 }
 
+/**
+ * Profile button with a dropdown menu, as in CourtOrder: initials, name and role; the menu holds
+ * who is signed in, teams, the data saver and log out.
+ */
 export function ProfileButton({ compact = false }: { compact?: boolean }) {
-  const { user, profile } = useAuth();
+  const { user, profile, logout } = useAuth();
   const online = useOnline();
   const saver = useDataSaver();
   const role = useRoleLabel();
   const [open, setOpen] = useState(false);
+  const [waiting, setWaiting] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const wrap = useRef<HTMLDivElement>(null);
+  const uid = user?.uid ?? null;
+
+  useEffect(() => {
+    if (!open || !uid) return;
+    const load = () => waitingToSend(uid).then((l) => setWaiting(l.length)).catch(() => setWaiting(0));
+    load();
+    return onDataSaverChange(load);
+  }, [open, uid]);
+
+  useEffect(() => {
+    if (!open) return;
+    // A tap outside only closes the menu (as in CourtOrder); it doesn't also press what's underneath.
+    const swallow = (e: MouseEvent) => { e.stopPropagation(); e.preventDefault(); };
+    const away = (e: PointerEvent) => {
+      if (wrap.current?.contains(e.target as Node)) return;
+      setOpen(false);
+      document.addEventListener("click", swallow, { capture: true, once: true });
+      setTimeout(() => document.removeEventListener("click", swallow, { capture: true }), 400);
+    };
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    const shut = () => setOpen(false);
+    document.addEventListener("pointerdown", away);
+    document.addEventListener("keydown", esc);
+    window.addEventListener("hashchange", shut);
+    return () => { document.removeEventListener("pointerdown", away); document.removeEventListener("keydown", esc); window.removeEventListener("hashchange", shut); };
+  }, [open]);
+
   if (!user) return null;
   const name = profile?.name || user.displayName || user.email || "";
   const tag = !online ? "Offline" : saver ? "Data saver" : "";
+  const go = (to: string) => { setOpen(false); navigate(to); };
+
   return (
-    <>
-      <button className={`profile-btn${compact ? " compact" : ""}`} onClick={() => setOpen(true)} aria-label={`Your profile: ${name}${role ? `, ${role}` : ""}${tag ? `. ${tag} on` : ""}`}>
+    <div className="profile-wrap" ref={wrap}>
+      <button className={`profile-btn${compact ? " compact" : ""}`} onClick={() => setOpen((o) => !o)} aria-haspopup="menu" aria-expanded={open}
+        aria-label={`Your profile menu: ${name}${role ? `, ${role}` : ""}${tag ? `. ${tag} on` : ""}`}>
         {tag && <span className="status-tag">{tag}</span>}
         <span className="avatar">{initials(name, user.email)}</span>
         {!compact && (
@@ -100,52 +137,33 @@ export function ProfileButton({ compact = false }: { compact?: boolean }) {
             {role && <span className="profile-role">{role}</span>}
           </span>
         )}
+        <span className="profile-chev"><ChevronDownIcon /></span>
       </button>
-      {open && <ProfileSheet name={name} onClose={() => setOpen(false)} />}
-    </>
-  );
-}
-
-function ProfileSheet({ name, onClose }: { name: string; onClose: () => void }) {
-  const { user, profile, logout } = useAuth();
-  const saver = useDataSaver();
-  const online = useOnline();
-  const [waiting, setWaiting] = useState<number | null>(null);
-  const [busy, setBusy] = useState(false);
-  const uid = user?.uid ?? null;
-  useEffect(() => {
-    if (!uid) return;
-    const load = () => waitingToSend(uid).then((l) => setWaiting(l.length)).catch(() => setWaiting(null));
-    load();
-    return onDataSaverChange(load);
-  }, [uid]);
-  return (
-    <Sheet onClose={onClose}>
-      <div className="profile-head">
-        <span className="avatar large">{initials(name, user?.email)}</span>
-        <span>
-          <strong>{name}</strong>
-          <span className="muted small" style={{ display: "block" }}>{user?.email}</span>
-          {profile?.role === "administrator" && <span className="badge">App administrator</span>}
-        </span>
-      </div>
-      <label className="check">
-        <span>
-          Data saver
-          <span className="muted small" style={{ display: "block" }}>Send matches when they end, not during play.</span>
-        </span>
-        <input type="checkbox" checked={saver} onChange={(e) => setDataSaver(e.target.checked, uid)} />
-      </label>
-      {waiting !== null && waiting > 0 && (
-        <div className="message">
-          {waiting} {waiting === 1 ? "match has" : "matches have"} changes waiting to send.{" "}
-          <button className="link" disabled={busy || !online} onClick={async () => { if (!uid) return; setBusy(true); try { await sendWaiting(uid); } finally { setBusy(false); } }}>
-            {busy ? "Sending…" : online ? "Send now" : "Send when back online"}
-          </button>
+      {open && (
+        <div className="menu" role="menu">
+          <div className="menu-label">
+            <span className="menu-name">{name}</span>
+            <span className="menu-email">{user.email}</span>
+            {profile?.role === "administrator" && <span className="menu-admin"><ShieldIcon size={13} /> App administrator</span>}
+          </div>
+          <div className="menu-sep" />
+          <button className="menu-item" role="menuitem" onClick={() => go("/teams")}><TeamsIcon /> Teams &amp; players</button>
+          <label className="menu-item menu-switch" role="menuitemcheckbox" aria-checked={saver}>
+            <DataSaverIcon />
+            <span className="menu-grow">Data saver<span className="menu-hint">Send matches when they end, not during play.</span></span>
+            <input type="checkbox" className="switch" checked={saver} onChange={(e) => setDataSaver(e.target.checked, uid)} />
+          </label>
+          {waiting > 0 && (
+            <button className="menu-item" role="menuitem" disabled={busy || !online}
+              onClick={async () => { if (!uid) return; setBusy(true); try { await sendWaiting(uid); } finally { setBusy(false); } }}>
+              <SendIcon /> {busy ? "Sending…" : online ? `Send ${waiting} waiting ${waiting === 1 ? "match" : "matches"}` : `${waiting} waiting · send when online`}
+            </button>
+          )}
+          <div className="menu-sep" />
+          <button className="menu-item" role="menuitem" onClick={() => { setOpen(false); logout(); }}><LogOutIcon /> Log out</button>
         </div>
       )}
-      <button className="btn block" onClick={() => { onClose(); logout(); }}>Sign out</button>
-    </Sheet>
+    </div>
   );
 }
 

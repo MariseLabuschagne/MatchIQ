@@ -24,3 +24,9 @@ export const MatchIQMark = ({ size = 36 }: { size?: number }) => (
     <path d="M7 14.5 13 9l4 3.5 8-7" fill="none" stroke="#3d7a1a" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
+export const ChevronDownIcon = ({ size = 14 }: { size?: number }) => <Svg size={size}><path d="m6 9 6 6 6-6" /></Svg>;
+export const LogOutIcon = ({ size = 16 }: { size?: number }) => <Svg size={size}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" /></Svg>;
+export const DataSaverIcon = ({ size = 16 }: { size?: number }) => <Svg size={size}><path d="M12 3v12M7 10l5 5 5-5" /><path d="M5 21h14" /></Svg>;
+export const SendIcon = ({ size = 16 }: { size?: number }) => <Svg size={size}><path d="M12 19V5M5 12l7-7 7 7" /></Svg>;
+export const ShieldIcon = ({ size = 16 }: { size?: number }) => <Svg size={size}><path d="M12 3 4 6v6c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V6z" /><path d="m9 12 2 2 4-4" /></Svg>;

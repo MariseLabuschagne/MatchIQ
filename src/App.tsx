@@ -40,7 +40,7 @@ type Section = "dashboard" | "capture" | "matches" | "teams";
 const NAV: { id: Section; to: string; label: string; short?: string; Icon: () => ReactNode }[] = [
   { id: "dashboard", to: "/", label: "Dashboard", Icon: DashboardIcon },
   { id: "capture", to: "/capture", label: "New match", short: "New match", Icon: CaptureIcon },
-  { id: "matches", to: "/matches", label: "Matches", Icon: MatchesIcon },
+  { id: "matches", to: "/matches", label: "Match history", Icon: MatchesIcon },
   { id: "teams", to: "/teams", label: "Teams & players", short: "Teams", Icon: TeamsIcon }
 ];
 
@@ -339,7 +339,7 @@ function Matches({ sportId }: { sportId?: string }) {
   };
   return (
     <div className="stack-lg">
-      <PageHeader title="Matches" subtitle="Every match you and your teams have captured, with season trends."
+      <PageHeader title="Match history" subtitle="Every match you and your teams have captured, with season trends."
         actions={<button className="btn primary" onClick={() => navigate(`/new/${sport.id}`)}>New {sport.name.toLowerCase()} match</button>} />
       <SportTabs value={id} onChange={pick} />
       <History key={id} sport={sport} />

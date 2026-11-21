@@ -52,7 +52,13 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         // The old app at ./legacy/ is its own site: never cache it here or answer its pages with v3.
         globIgnores: ["legacy/**"],
-        navigateFallbackDenylist: [/\/legacy\//]
+        navigateFallbackDenylist: [/\/legacy\//],
+        // Inter, as in CourtOrder: cached after the first visit so it still shows offline at the field.
+        runtimeCaching: [{
+          urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\//,
+          handler: "CacheFirst",
+          options: { cacheName: "fonts", expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 }, cacheableResponse: { statuses: [0, 200] } }
+        }]
       }
     })
   ],

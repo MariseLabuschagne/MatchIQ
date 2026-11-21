@@ -332,7 +332,7 @@ function MissedSheet({ setup, points, name, onClose, onAdd }: {
     <Sheet onClose={onClose}>
       <h2>Missed a point?</h2>
       <p className="muted small">Tap who won each point you missed, as many times as needed, until the score matches the court. Missed points count in the score and points won, but not in how points ended.</p>
-      <p className="center" style={{ fontWeight: 700, fontSize: 18 }}>
+      <p className="center" style={{ fontWeight: 600, fontSize: 18 }}>
         {r.done ? "Match over" : `${name("p")} ${r.games.p}–${r.games.o} ${name("o")} · ${lab.p}–${lab.o}`}
       </p>
       <div className="tgrid">
@@ -429,7 +429,7 @@ export function TennisReport({ session }: { session: Session }) {
       <div className="report-grid">
       <section className="card span-all">
         <p className="muted small">{[`${fullName("p")} vs ${fullName("o")}`, venueLabel(m.setup), m.setup.competition].filter(Boolean).join(" · ")}</p>
-        <div className="final" style={{ fontSize: 34, fontWeight: 900, margin: "6px 0" }}>{resultString(r) || `${r.games.p}–${r.games.o}`}</div>
+        <div className="final" style={{ fontSize: 34, fontWeight: 600, margin: "6px 0" }}>{resultString(r) || `${r.games.p}–${r.games.o}`}</div>
         <p className="muted">{r.done ? `${name(r.winner!)} won` : m.setup.endReason ? `Ended early · ${m.setup.endReason}` : "In progress"} · {st.n} points captured</p>
       </section>
       {st.n < 10 && <p className="hint span-all">Capture at least 10 points to see patterns. Percentages in grey come from fewer than 10 points.</p>}
