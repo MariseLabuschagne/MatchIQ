@@ -85,7 +85,10 @@ export const HOCKEY_TABLES: { title: string; rows: Row[] }[] = [
     rows: [
     { label: "Green cards", v: (c) => c.cards.green },
     { label: "Yellow cards", v: (c) => c.cards.yellow },
-    { label: "Red cards", v: (c) => c.cards.red }
+    { label: "Red cards", v: (c) => c.cards.red },
+    { label: "Opponent green cards", v: (c) => c.cardsAgainst.green },
+    { label: "Opponent yellow cards", v: (c) => c.cardsAgainst.yellow },
+    { label: "Opponent red cards", v: (c) => c.cardsAgainst.red }
     ]
   }
 ];

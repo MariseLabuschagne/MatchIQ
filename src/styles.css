@@ -28,12 +28,14 @@
   --accent-soft: rgba(15, 39, 71, 0.08);
   --link: #0f766e;
   --timer: #f5c518;
-  --attack: #3b82f6;
-  --attack-dark: #2563eb;
-  --defence: #f97316;
-  --defence-dark: #ea580c;
-  --discipline: #8b5cf6;
-  --discipline-dark: #7c3aed;
+  /* Hockey tap buttons: the colours of the previous MatchIQ app. */
+  --attack: #4987ea;
+  --attack-dark: #437ad1;
+  --defence: #24b9ad;
+  --defence-dark: #188177;
+  --discipline: #d97706;
+  --discipline-dark: #a95c04;
+  --coral: #ea580c;
   --control: #1e3a5f;
   --control-dark: #0f2747;
   --success: #15803d;
@@ -191,25 +193,28 @@ textarea { min-height: 96px; resize: vertical; }
 
 /* ---------- capture buttons and outcome panel (the v2 look, for any sport) ---------- */
 .event-category { font-size: 22px; font-weight: 700; margin: 4px 0 10px; }
-.event-category.attack { color: var(--attack); }
-.event-category.defence { color: var(--defence); }
-.event-category.discipline { color: var(--discipline); }
+.event-category.attack { color: var(--attack-dark); }
+.event-category.defence { color: var(--defence-dark); }
+.event-category.discipline { color: var(--discipline-dark); }
 .event-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .event-button {
   min-height: 64px; padding: 8px; font-size: 14px; line-height: 1.3; color: white; font-weight: 600;
   border: 4px solid transparent; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
 }
 .event-button .ico { font-size: 20px; }
-.event-button.attack { background: var(--attack); }
-.event-button.defence { background: var(--defence); }
-.event-button.discipline { background: var(--discipline); }
-.event-button.control { background: var(--control); border-color: #64748b; }
+.event-button.attack { background: linear-gradient(135deg, var(--attack), var(--attack-dark)); }
+.event-button.defence { background: linear-gradient(135deg, var(--defence), var(--defence-dark)); }
+.event-button.discipline { background: linear-gradient(135deg, var(--discipline), var(--discipline-dark)); }
+/* The opponent's cards: same amber, outlined, so they can't be mistaken for ours. */
+.event-button.discipline.opp { background: #fff; color: var(--discipline-dark); border: 3px solid var(--discipline); }
+.event-button.control { background: linear-gradient(135deg, #a1a6ac, #898e94); }
+.event-button .sub { font-size: 11.5px; font-weight: 500; opacity: 0.9; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .event-button.flash { border-color: var(--highlight); box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.55); }
 
 .outcome-panel {
   background: #eef3fa; border: 2px solid var(--panel); border-radius: var(--radius); padding: 14px;
 }
-.outcome-panel.against { background: #fff4ec; border-color: var(--defence); }
+.outcome-panel.against { background: #eaf8f6; border-color: var(--defence); }
 .outcome-panel.against .outcome-title { color: var(--defence-dark); }
 .outcome-title { text-align: center; color: var(--panel); font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
 .attack-context { text-align: center; color: var(--link); font-size: 14px; margin: 4px 0 12px; font-weight: 600; }
@@ -235,7 +240,7 @@ textarea { min-height: 96px; resize: vertical; }
 .insight { display: grid; grid-template-columns: 6px 1fr; gap: 12px; background: var(--card-light); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px 10px 0; overflow: hidden; }
 .insight::before { content: ""; border-radius: 0 3px 3px 0; background: var(--accent); }
 .insight.strength::before { background: var(--success); }
-.insight.workon::before { background: var(--defence); }
+.insight.workon::before { background: var(--coral); }
 .insight b { display: block; }
 .insight span { color: var(--muted); font-size: 14px; }
 .insight-group h4 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 6px 0 8px; }

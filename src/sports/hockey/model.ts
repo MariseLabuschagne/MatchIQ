@@ -42,7 +42,8 @@ export type HockeyEventMap = {
   /** General-play turnover: won = we gained the ball. */
   turnover: { won: boolean; zone: Zone };
   restart16: { side: Side };
-  card: { colour: CardColour };
+  /** side: whose player got the card. Older matches have no side: those were our team's. */
+  card: { colour: CardColour; side?: Side };
   period: { to: string };
 };
 

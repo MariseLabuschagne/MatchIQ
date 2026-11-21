@@ -20,7 +20,10 @@ export interface HockeyCounts {
   turnoversLost: { att25: number; mid: number; def25: number; total: number };
   restart16: Record<Side, number>;
   gkSaves: number;
+  /** Our team's cards. */
   cards: { green: number; yellow: number; red: number; total: number };
+  /** The opponent's cards. */
+  cardsAgainst: { green: number; yellow: number; red: number; total: number };
   /** Possessions (circle entries) that produced at least one shot / goal. */
   possWithShot: Record<Side, number>;
   possWithGoal: Record<Side, number>;
@@ -44,6 +47,7 @@ function emptyCounts(): HockeyCounts {
     restart16: sides(() => 0),
     gkSaves: 0,
     cards: { green: 0, yellow: 0, red: 0, total: 0 },
+    cardsAgainst: { green: 0, yellow: 0, red: 0, total: 0 },
     possWithShot: sides(() => 0),
     possWithGoal: sides(() => 0),
     events: 0
@@ -114,8 +118,10 @@ function addTo(c: HockeyCounts, e: MatchEvent, possPeriod: Map<number, HockeyCou
       c.gkSaves++;
       break;
     case "card": {
-      c.cards[data(e, "card").colour]++;
-      c.cards.total++;
+      const d = data(e, "card");
+      const bucket = d.side === "against" ? c.cardsAgainst : c.cards;
+      bucket[d.colour]++;
+      bucket.total++;
       break;
     }
   }

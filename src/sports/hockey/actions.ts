@@ -120,8 +120,8 @@ export function longCorner(live: HockeyLive, side: Side): NewEvent[] {
 }
 
 /** Cards do not end an open attack: play can continue after a card. */
-export function card(_live: HockeyLive, colour: CardColour): NewEvent[] {
-  return [ev("card", { colour })];
+export function card(_live: HockeyLive, colour: CardColour, side: Side = "for"): NewEvent[] {
+  return [ev("card", { colour, side })];
 }
 
 export function nextPeriod(live: HockeyLive, to: string): NewEvent[] {

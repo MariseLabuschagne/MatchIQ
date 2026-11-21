@@ -26,7 +26,7 @@ export function describeTap(group: MatchEvent[], ourTeam: string, opponent: stri
     case "possessionEnd": return d.side === "for" ? "Attack ended" : "Defence ended";
     case "turnover": return `Turnover ${d.won ? "won" : "lost"} · ${ZONE_LABEL[d.zone as Zone]}`;
     case "restart16": return `${team(d.side)} 16-yard hit`;
-    case "card": return `${String(d.colour).replace(/^./, (c) => c.toUpperCase())} card`;
+    case "card": return `${String(d.colour).replace(/^./, (c) => c.toUpperCase())} card · ${team(d.side ?? "for")}`;
     case "period": return `Start of ${String(d.to)}`;
     default: return main.type;
   }

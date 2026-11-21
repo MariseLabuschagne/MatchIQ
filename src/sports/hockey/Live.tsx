@@ -16,7 +16,8 @@ interface Btn {
   id: string;
   ico: string;
   label: string;
-  cls: "attack" | "defence" | "discipline" | "control";
+  cls: "attack" | "defence" | "discipline" | "discipline opp" | "control";
+  sub?: string;
   run: (live: HockeyLive, m: Match<HockeySetup>) => NewEvent[];
 }
 
@@ -136,10 +137,17 @@ export function HockeyLive({ session }: { session: Session }) {
       ]
     },
     {
-      title: "Discipline", cls: "discipline", items: [
-        { id: "green", ico: "🟩", label: "Green card", cls: "discipline", run: (l) => A.card(l, "green") },
-        { id: "yellow", ico: "🟨", label: "Yellow card", cls: "discipline", run: (l) => A.card(l, "yellow") },
-        { id: "red", ico: "🟥", label: "Red card", cls: "discipline", run: (l) => A.card(l, "red") }
+      title: `Discipline · ${s.ourTeam}`, cls: "discipline", items: [
+        { id: "green", ico: "🟩", label: "Green card", cls: "discipline", sub: s.ourTeam, run: (l) => A.card(l, "green", "for") },
+        { id: "yellow", ico: "🟨", label: "Yellow card", cls: "discipline", sub: s.ourTeam, run: (l) => A.card(l, "yellow", "for") },
+        { id: "red", ico: "🟥", label: "Red card", cls: "discipline", sub: s.ourTeam, run: (l) => A.card(l, "red", "for") }
+      ]
+    },
+    {
+      title: `Discipline · ${s.opponent}`, cls: "discipline", items: [
+        { id: "green-against", ico: "🟩", label: "Green card", cls: "discipline opp", sub: s.opponent, run: (l) => A.card(l, "green", "against") },
+        { id: "yellow-against", ico: "🟨", label: "Yellow card", cls: "discipline opp", sub: s.opponent, run: (l) => A.card(l, "yellow", "against") },
+        { id: "red-against", ico: "🟥", label: "Red card", cls: "discipline opp", sub: s.opponent, run: (l) => A.card(l, "red", "against") }
       ]
     }
   ];
@@ -200,7 +208,7 @@ export function HockeyLive({ session }: { session: Session }) {
           <div className="event-grid">
             {possessionButtons(live).map((b) => (
               <button key={b.id} className={`event-button ${b.cls}${flash === b.id ? " flash" : ""}`} onClick={() => runBtn(b)}>
-                <span className="ico">{b.ico}</span>{b.label}
+                <span className="ico">{b.ico}</span>{b.label}{b.sub && <span className="sub">{b.sub}</span>}
               </button>
             ))}
             <button className="event-button control" onClick={() => tap("end-poss", A.endPossession(live))}>
@@ -216,7 +224,7 @@ export function HockeyLive({ session }: { session: Session }) {
           <div className="event-grid">
             {sec.items.map((b) => (
               <button key={b.id} className={`event-button ${b.cls}${flash === b.id ? " flash" : ""}`} onClick={() => runBtn(b)}>
-                <span className="ico">{b.ico}</span>{b.label}
+                <span className="ico">{b.ico}</span>{b.label}{b.sub && <span className="sub">{b.sub}</span>}
               </button>
             ))}
           </div>

@@ -66,6 +66,13 @@ describe("hockey capture flow", () => {
     expect(computeStats(setup, m.events).total.shots.for.total).toBe(0);
   });
 
+  it("counts our cards and the opponent's cards separately", () => {
+    const m = play([(l) => A.card(l, "green", "for"), (l) => A.card(l, "yellow", "against"), (l) => A.card(l, "yellow", "against")]);
+    const t = computeStats(setup, m.events).total;
+    expect(t.cards).toEqual({ green: 1, yellow: 0, red: 0, total: 1 });
+    expect(t.cardsAgainst).toEqual({ green: 0, yellow: 2, red: 0, total: 2 });
+  });
+
   it("keeps the attack open for a card", () => {
     const m = play([(l) => A.startEntry(l, "for", "topD"), (l) => A.card(l, "green")]);
     expect(deriveLive(setup, m.events).open).not.toBeNull();
