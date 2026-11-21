@@ -109,8 +109,13 @@ export function replay(setup: Pick<TennisSetup, "format" | "noAd" | "firstServer
     } else if (s.pts[w] >= 4 && (noAd || s.pts[w] - s.pts[l] >= 2)) {
       s.gameLog.push({ server: srv, winner: w, tb: false, set: c.set });
       s.games[w]++; s.pts = { p: 0, o: 0 }; s.server = other(srv);
-      const setWon = f.firstTo ? s.games[w] >= f.firstTo : s.games[w] >= f.games && s.games[w] - s.games[l] >= 2;
-      if (setWon) { s.sets.push({ p: s.games.p, o: s.games.o, tb: null, w }); endSet(w); }
+      const setOver = f.totalGames ? s.games.p + s.games.o >= f.totalGames : s.games[w] >= f.games && s.games[w] - s.games[l] >= 2;
+      if (setOver) {
+        // In a games format the winner is whoever has more games once they are all played.
+        const setWinner: P = f.totalGames ? (s.games.p > s.games.o ? "p" : "o") : w;
+        s.sets.push({ p: s.games.p, o: s.games.o, tb: null, w: setWinner });
+        endSet(setWinner);
+      }
       else if (s.games.p === f.tbAt && s.games.o === f.tbAt) { s.tb = true; s.tbTarget = 7; s.tbFirst = s.server; s.tbCount = 0; }
     }
   });

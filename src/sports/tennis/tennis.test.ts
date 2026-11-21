@@ -10,21 +10,24 @@ const P = (n: number) => Array.from({ length: n }, () => ({ winner: "p" as const
 const O = (n: number) => Array.from({ length: n }, () => ({ winner: "o" as const }));
 
 describe("tennis scoring", () => {
-  it("best of 5 games ends at 3 games, with no tiebreak or 2-game margin", () => {
+  it("best of 5 games plays all 5: 3–2, 4–1 or 5–0", () => {
     const g = { ...base, format: "bo5g" as const };
-    // p wins 2 games, o wins 2 games, then p wins the 5th: 3–2.
-    const r = replay(g, [...P(4), ...O(4), ...P(4), ...O(4), ...P(4)]);
+    // p wins the first 3 games but the match goes on until 5 games are played.
+    const after3 = replay(g, P(12));
+    expect(after3.done).toBe(false);
+    const r = replay(g, [...P(12), ...O(4), ...P(4)]);
     expect(r.done).toBe(true);
     expect(r.winner).toBe("p");
-    expect(resultString(r)).toBe("3–2");
+    expect(resultString(r)).toBe("4–1");
+    expect(resultString(replay(g, [...O(8), ...P(12)]))).toBe("3–2");
   });
 
-  it("best of 7, 9 and 11 games end at 4, 5 and 6", () => {
-    for (const [format, n] of [["bo7g", 4], ["bo9g", 5], ["bo11g", 6]] as const) {
-      const before = replay({ ...base, format }, O(4 * (n - 1)));
-      expect(before.done).toBe(false);
+  it("best of 7, 9 and 11 games always total 7, 9 and 11", () => {
+    for (const [format, n] of [["bo7g", 7], ["bo9g", 9], ["bo11g", 11]] as const) {
+      expect(replay({ ...base, format }, O(4 * (n - 1))).done).toBe(false);
       const r = replay({ ...base, format }, O(4 * n));
       expect(r.done).toBe(true);
+      expect(r.winner).toBe("o");
       expect(resultString(r)).toBe(`0–${n}`);
     }
   });

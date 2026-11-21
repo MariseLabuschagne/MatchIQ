@@ -23,8 +23,8 @@ export interface Format {
   games: number;
   tbAt: number;
   finalMtb: boolean;
-  /** Games formats: one set that ends as soon as someone reaches this many games (no tiebreak, no 2-game margin). */
-  firstTo?: number;
+  /** Games formats: one set of exactly this many games, all played (e.g. 5 → 3–2, 4–1 or 5–0). No tiebreak. */
+  totalGames?: number;
 }
 
 export const FORMATS: Record<FormatKey, Format> = {
@@ -32,10 +32,10 @@ export const FORMATS: Record<FormatKey, Format> = {
   bo3mtb: { label: "2 sets + match tiebreak to 10", setsToWin: 2, games: 6, tbAt: 6, finalMtb: true },
   pro8: { label: "One pro set to 8", setsToWin: 1, games: 8, tbAt: 8, finalMtb: false },
   short4: { label: "Short sets to 4, best of 3", setsToWin: 2, games: 4, tbAt: 4, finalMtb: false },
-  bo5g: { label: "Best of 5 games (first to 3)", setsToWin: 1, games: 3, tbAt: 99, finalMtb: false, firstTo: 3 },
-  bo7g: { label: "Best of 7 games (first to 4)", setsToWin: 1, games: 4, tbAt: 99, finalMtb: false, firstTo: 4 },
-  bo9g: { label: "Best of 9 games (first to 5)", setsToWin: 1, games: 5, tbAt: 99, finalMtb: false, firstTo: 5 },
-  bo11g: { label: "Best of 11 games (first to 6)", setsToWin: 1, games: 6, tbAt: 99, finalMtb: false, firstTo: 6 }
+  bo5g: { label: "Best of 5 games (all 5 played)", setsToWin: 1, games: 5, tbAt: 99, finalMtb: false, totalGames: 5 },
+  bo7g: { label: "Best of 7 games (all 7 played)", setsToWin: 1, games: 7, tbAt: 99, finalMtb: false, totalGames: 7 },
+  bo9g: { label: "Best of 9 games (all 9 played)", setsToWin: 1, games: 9, tbAt: 99, finalMtb: false, totalGames: 9 },
+  bo11g: { label: "Best of 11 games (all 11 played)", setsToWin: 1, games: 11, tbAt: 99, finalMtb: false, totalGames: 11 }
 };
 
 export const LEVELS: Record<Level, { label: string; hint: string }> = {
