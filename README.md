@@ -94,6 +94,14 @@ Nothing in hockey, tennis or `core/` needs to change.
 
 There are three capture levels (Quick, Standard and Detailed), and the parent can switch between them mid-match. After each point, the parent taps who won and, if they can, how. MatchIQ keeps the score. "Missed point" keeps the score right without guessing stats. The report includes a capture check (taps and seconds per point) so the level can be tuned. "See a sample report first" creates a generated match that stays on the phone only.
 
+## Season view
+
+History → pick a team (hockey) or player (tennis) and a year. The season card shows the record, key rates and per-match charts (`src/sports/<sport>/Season.tsx`, charts in `src/core/ui/Chart.tsx`, plain SVG with a table view). It covers matches on this phone, which includes every match shared with your teams.
+
+## PDF reports
+
+Export PDF builds a laid-out A4 report (`src/core/report.ts`) from data each sport provides (`src/sports/<sport>/report.ts`). `REPORT_OUT=<folder> npm test` writes sample hockey and tennis PDFs to look at.
+
 ## Teams, players and sharing
 
 A *squad* is a hockey team or a tennis player (`src/core/squads.ts`, screens in `src/core/ui/Squads.tsx`).

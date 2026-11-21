@@ -128,6 +128,17 @@ function History({ sport }: { sport: SportModule }) {
     return onLocalChange(load);
   }, [sport, uid]); // eslint-disable-line react-hooks/exhaustive-deps
   const squadOf = (m: StoredMatch) => squads?.find((s) => s.id === m.squadId);
+
+  // Season filters: which team or player, and which year. Remembered per sport on this phone.
+  const keyOf = (m: StoredMatch) => sport.seasonKey(m.setup) || "Unnamed";
+  const keys = [...new Set((list ?? []).map(keyOf))].sort();
+  const years = [...new Set((list ?? []).map((m) => m.createdAt.slice(0, 4)))].sort().reverse();
+  const [who, setWho] = useState<string>(() => { try { return localStorage.getItem(`matchiq.${sport.id}.season.who`) ?? ""; } catch { return ""; } });
+  const [year, setYear] = useState<string>(String(new Date().getFullYear()));
+  const pickWho = (v: string) => { setWho(v); try { localStorage.setItem(`matchiq.${sport.id}.season.who`, v); } catch { /* private mode */ } };
+  const activeWho = keys.includes(who) ? who : keys.length === 1 ? keys[0] : "";
+  const shown = (list ?? []).filter((m) => (!activeWho || keyOf(m) === activeWho) && (year === "all" || m.createdAt.startsWith(year)));
+  const seasonMatches = shown.filter((m) => m.status === "completed").slice().reverse();
   // Your own matches, ones you captured, and any match in a team you coach can be deleted.
   const canDelete = (m: StoredMatch) => !m.squadId || m.createdBy === uid || squadOf(m)?.role === "coach";
 
@@ -138,8 +149,30 @@ function History({ sport }: { sport: SportModule }) {
       <h2>{sport.name} history</h2>
       {list === null && <p className="muted">Loading…</p>}
       {list?.length === 0 && <p className="muted">No matches yet.</p>}
+      {!!list?.length && (
+        <div className="filters">
+          <select aria-label={`${sport.squad.one} to show`} value={activeWho} onChange={(e) => pickWho(e.target.value)}>
+            {keys.length > 1 && <option value="">All {sport.squad.many}</option>}
+            {keys.map((k) => <option key={k} value={k}>{k}</option>)}
+          </select>
+          <select aria-label="Year" value={year} onChange={(e) => setYear(e.target.value)}>
+            {!years.includes(year) && year !== "all" && <option value={year}>{year}</option>}
+            {years.map((y) => <option key={y} value={y}>{y}</option>)}
+            <option value="all">All time</option>
+          </select>
+        </div>
+      )}
+      {!!list?.length && (
+        <section className="card stack season">
+          <h3 style={{ margin: 0 }}>{activeWho ? `${activeWho} · ` : ""}{year === "all" ? "All time" : `${year} season`}</h3>
+          {!activeWho ? <p className="muted small">Choose a {sport.squad.one} to see their season.</p>
+            : seasonMatches.length === 0 ? <p className="muted small">No finished matches in this period yet.</p>
+            : <sport.Season matches={seasonMatches} />}
+        </section>
+      )}
+      {!!list?.length && shown.length === 0 && <p className="muted">No matches in this period.</p>}
       <div className="stack" style={{ gap: 10 }}>
-        {list?.map((m) => (
+        {shown.map((m) => (
           <div key={m.id} className="card history-item">
             <button style={{ textAlign: "left", flex: 1, minWidth: 0 }} onClick={() => navigate(`/match/${m.id}${m.status === "completed" ? `/${sport.completedView}` : ""}`)}>
               <div style={{ fontWeight: 700 }}>{sport.title(m.setup)}</div>

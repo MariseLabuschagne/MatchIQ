@@ -28,6 +28,10 @@ export interface SportModule<TSetup = any> { // eslint-disable-line @typescript-
   scoreLine: (match: Match<TSetup>) => string;
   /** What a shared group is called in this sport: a hockey team, a tennis player. */
   squad: { one: string; many: string; nameLabel: string; placeholder: string };
+  /** Who a match is about, for season views: the team (hockey) or player (tennis). */
+  seasonKey: (setup: TSetup) => string;
+  /** Season view for one team or player. Gets completed matches, oldest first. */
+  Season: ComponentType<{ matches: Match<TSetup>[] }>;
   /** Optional work to run in the background after someone signs in (e.g. a one-off import of old matches). */
   onSignIn?: (uid: string) => Promise<void>;
   /** Optional extra panel at the bottom of the sport's history page (e.g. importing old matches). */

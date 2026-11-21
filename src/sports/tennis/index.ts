@@ -1,3 +1,4 @@
+import { TennisSeason } from "./Season";
 import { TennisIcon } from "./Icon";
 import { SQUAD_WORDS } from "./words";
 import type { SportModule } from "../types";
@@ -15,6 +16,8 @@ export const tennis: SportModule<TennisSetup> = {
   squad: SQUAD_WORDS,
   Setup: TennisSetupScreen,
   MatchView: TennisMatchView,
+  seasonKey: (s) => (s?.player ?? "").trim(),
+  Season: TennisSeason,
   completedView: "report",
   title: (s) => `${s.player} vs ${s.opponent}`,
   scoreLine: (m) => {
