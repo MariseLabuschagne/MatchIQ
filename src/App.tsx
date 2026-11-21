@@ -4,7 +4,7 @@ import { AuthScreen, VerifyScreen } from "./core/auth/AuthScreen";
 import { navigate, useRoute } from "./core/router";
 import { listLocal, onLocalChange, type StoredMatch } from "./core/storage/local";
 import { pullAll, removeMatch } from "./core/storage/sync";
-import { Confirm, MovedNotice, Topbar } from "./core/ui/components";
+import { BuiltBy, Confirm, MovedNotice, Topbar } from "./core/ui/components";
 import { SquadScreen, SquadSection, useMySquads } from "./core/ui/Squads";
 import { useMatch } from "./core/useMatch";
 import { COMING_SOON, SPORTS, getSport } from "./sports/registry";
@@ -73,7 +73,7 @@ function Home() {
         </div>
         <div className="home-foot">
           <p className="muted small">Signed in{profile?.name ? ` as ${profile.name}` : ""}. <button className="link" onClick={logout}>Sign out</button></p>
-          <p className="muted small">MatchIQ v{__APP_VERSION__} · built {new Date(__BUILD_DATE__).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
+          <BuiltBy />
         </div>
       </div>
     </>

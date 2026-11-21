@@ -8,6 +8,7 @@ import {
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { useAuth } from "./AuthProvider";
+import { BuiltBy } from "../ui/components";
 
 function friendly(code: string): string {
   switch (code) {
@@ -98,6 +99,7 @@ export function AuthScreen() {
           )}
           {mode === "login" && <button type="button" className="link" onClick={() => setMode("forgot")}>Forgot password?</button>}
         </div>
+        <BuiltBy onLight />
       </form>
     </div>
   );
@@ -116,6 +118,7 @@ export function VerifyScreen() {
         <button className="btn primary block" onClick={async () => { await refresh(); if (!auth.currentUser?.emailVerified) setMsg("Not verified yet. Open the link in the email first."); }}>I've verified my email</button>
         <button className="btn block" onClick={async () => { if (auth.currentUser) { await sendEmailVerification(auth.currentUser); setMsg("Verification email sent again."); } }}>Send the email again</button>
         <button className="link" onClick={() => logout()}>Use a different account</button>
+        <BuiltBy onLight />
       </div>
     </div>
   );

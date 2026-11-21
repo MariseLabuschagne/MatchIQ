@@ -261,3 +261,11 @@ textarea { min-height: 96px; resize: vertical; }
 .chart-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
 .chart-readout { font-size: 13px; min-height: 18px; }
 @media (min-width: 640px) { .season-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* Built by InAwe Solutions (as in CourtOrder) */
+.built-by { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 8px; color: #94a3b8; }
+.built-by-row { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.18em; }
+.built-by img { height: 44px; width: auto; background: #fff; border-radius: 8px; padding: 4px 8px; box-sizing: content-box; }
+.built-by p { font-size: 9px; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; margin: 0; }
+.built-by.on-light { color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-top: 4px; }
+.built-by.on-light img { background: none; padding: 0; }

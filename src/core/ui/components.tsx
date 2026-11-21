@@ -126,3 +126,21 @@ export function MovedNotice() {
     </div>
   );
 }
+
+/**
+ * The maker's mark, as in CourtOrder: a light-grey "BUILT BY" beside the InAwe Solutions logo
+ * in its own colours, with the version underneath. On the dark background the logo sits on a
+ * small white tile so its navy lettering stays readable.
+ */
+export function BuiltBy({ onLight = false }: { onLight?: boolean }) {
+  const built = new Date(__BUILD_DATE__).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  return (
+    <div className={`built-by${onLight ? " on-light" : ""}`}>
+      <div className="built-by-row">
+        <span>Built by</span>
+        <img src="./inawe-logo.png" alt="InAwe Solutions" width="98" height="44" />
+      </div>
+      <p>MatchIQ v{__APP_VERSION__} · {built}</p>
+    </div>
+  );
+}
