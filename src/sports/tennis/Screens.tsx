@@ -132,7 +132,7 @@ export function TennisLive({ session }: { session: Session }) {
   if (r.done && !draft.committed) {
     return (
       <>
-        <Topbar right={<Tabs id={m.id} view="live" />} />
+        <Topbar back="/matches/tennis" right={<Tabs id={m.id} view="live" />} />
         <Board r={r} setup={m.setup} name={name} />
         <section className="card stack">
           <h2>{name(r.winner!)} won {resultString(r)}</h2>
@@ -146,7 +146,7 @@ export function TennisLive({ session }: { session: Session }) {
   if (m.setup.endReason) {
     return (
       <>
-        <Topbar right={<Tabs id={m.id} view="live" />} />
+        <Topbar back="/matches/tennis" right={<Tabs id={m.id} view="live" />} />
         <Board r={r} setup={m.setup} name={name} />
         <section className="card stack">
           <h2>Match ended: {m.setup.endReason}</h2>
@@ -253,7 +253,7 @@ export function TennisLive({ session }: { session: Session }) {
 
   return (
     <>
-      <Topbar right={<Tabs id={m.id} view="live" />} />
+      <Topbar back="/matches/tennis" right={<Tabs id={m.id} view="live" />} />
       <Board r={r} setup={m.setup} name={name} />
       <section className="stack" style={{ gap: 10 }}>
         <div className="step-head"><span className="step-title">{title}</span><span className="step-tag">{tag}</span></div>
@@ -367,7 +367,7 @@ export function TennisPoints({ session }: { session: Session }) {
   const games = isGamesFormat(m.setup.format);
   return (
     <>
-      <Topbar right={<Tabs id={m.id} view="points" />} />
+      <Topbar back="/matches/tennis" right={<Tabs id={m.id} view="points" />} />
       <h2>Points ({points.length})</h2>
       <p className="muted small">Newest first. Remove a point and the score is worked out again.</p>
       <div className="plist">
@@ -424,7 +424,7 @@ export function TennisReport({ session }: { session: Session }) {
 
   return (
     <>
-      <Topbar right={<Tabs id={m.id} view="report" />} />
+      <Topbar back="/matches/tennis" right={<Tabs id={m.id} view="report" />} />
       {isSample && <p className="message">Sample data, generated to show the report. Not a real match.</p>}
       <div className="report-grid">
       <section className="card span-all">
@@ -438,7 +438,7 @@ export function TennisReport({ session }: { session: Session }) {
         <InsightList title="Work-ons" items={ins.workons} empty="No clear work-on yet." />
         <InsightList title="Game plan for next time" items={ins.plan} />
       </section>
-      <section className="card">
+      <section className="card wide">
         <h3>Key numbers</h3>
         <div className="kpis">
           <div className="kpi"><div className="v">{pct(st.won, st.n)}%</div><div className="l">Points won ({st.won} of {st.n})</div></div>
@@ -495,7 +495,6 @@ export function TennisReport({ session }: { session: Session }) {
       </div>
       <div className="row">
         <button className="btn primary" disabled={busy} onClick={pdf}>{busy ? "Making PDF…" : "Export PDF"}</button>
-        <button className="btn" onClick={() => navigate("/sport/tennis")}>Tennis home</button>
       </div>
     </>
   );

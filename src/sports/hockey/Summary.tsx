@@ -6,7 +6,7 @@ import { exportReportPdf } from "../../core/report";
 import { hockeyReport } from "./report";
 import { navigate } from "../../core/router";
 import { listLocal } from "../../core/storage/local";
-import { InsightList, Topbar } from "../../core/ui/components";
+import { InsightList, BackLink } from "../../core/ui/components";
 import type { Match } from "../../core/types";
 import type { MatchSession } from "../../core/useMatch";
 import { describeTap } from "./describe";
@@ -91,10 +91,9 @@ export function HockeySummary({ session }: { session: Session }) {
 
   return (
     <>
-      <Topbar />
       <div className="row">
         {match.status === "active" && <button className="btn primary small" onClick={() => navigate(`/match/${match.id}`)}>← Back to live capture</button>}
-        <button className="link" onClick={() => navigate("/history/hockey")}>Hockey history</button>
+        <BackLink to="/matches/hockey" label="Matches" />
       </div>
       <div ref={ref} className="report-grid">
         <section className="card span-all">
@@ -147,7 +146,6 @@ export function HockeySummary({ session }: { session: Session }) {
       <div className="row">
         <button className="btn primary" disabled={busy} onClick={pdf}>{busy ? "Making PDF…" : "Export PDF"}</button>
         <button className="btn" onClick={exportCsv}>Export CSV</button>
-        <button className="btn" onClick={() => navigate("/sport/hockey")}>Hockey home</button>
       </div>
     </>
   );

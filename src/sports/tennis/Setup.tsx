@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../core/auth/AuthProvider";
 import { createMatch, remember } from "../../core/matchFactory";
 import { navigate } from "../../core/router";
-import { Topbar } from "../../core/ui/components";
+import { BackLink } from "../../core/ui/components";
 import { useMySquads } from "../../core/ui/Squads";
 import { firstName } from "../../core/names";
 import type { MySquad } from "../../core/squads";
@@ -68,8 +68,7 @@ export function TennisSetupScreen() {
 
   return (
     <>
-      <Topbar />
-      <button className="link" onClick={() => navigate("/sport/tennis")}>← Tennis</button>
+      <BackLink to="/capture" label="New match" />
       <div className="card">
         <h2>Capture a match, one point at a time</h2>
         <p className="muted" style={{ margin: "6px 0 16px" }}>After each point, tap who won and, if you can, how. MatchIQ keeps the score.</p>

@@ -3,6 +3,7 @@ import type { Insight } from "../types";
 import { useAuth } from "../auth/AuthProvider";
 import { navigate } from "../router";
 import { initials } from "../names";
+import { BackIcon } from "./icons-nav";
 import { myRoles, ROLE_LABEL } from "../squads";
 import { isDataSaver, onDataSaverChange, sendWaiting, setDataSaver, waitingToSend } from "../storage/sync";
 
@@ -21,23 +22,40 @@ export function useOnline(): boolean {
 }
 
 /**
- * Top bar: "Home" on the left (not on the home page itself), and on the right either the page's
- * own controls (e.g. Live / Points / Report) or the profile: initials in a circle, full name,
- * and whether matches are being sent. Tapping the profile opens the profile sheet.
+ * Page bar inside a page (the app shell holds the brand, navigation and profile).
+ * Pages that pass `right` get a back link and their own controls, e.g. Live / Points / Report.
+ * Older calls with no controls render nothing.
  */
-export function Topbar({ right, home = false }: { right?: ReactNode; home?: boolean }) {
+export function Topbar({ right, back = "/matches", backLabel = "Matches" }: { right?: ReactNode; home?: boolean; back?: string; backLabel?: string }) {
+  if (!right) return null;
   return (
-    <header className={`topbar${home ? " at-home" : ""}`}>
-      {!home && <button className="home-link" onClick={() => navigate("/")}><span aria-hidden="true">‹</span> Home</button>}
-      <div className="topbar-right">
-        {right}
-        <ProfileButton compact={!!right} />
+    <div className="page-bar">
+      <button className="back-link" onClick={() => navigate(back)}><BackIcon /> {backLabel}</button>
+      <div className="page-bar-right">{right}</div>
+    </div>
+  );
+}
+
+/** Back link at the top of a page. */
+export function BackLink({ to, label }: { to: string; label: string }) {
+  return <button className="back-link" onClick={() => navigate(to)}><BackIcon /> {label}</button>;
+}
+
+/** Page title block, as in CourtOrder: big title, short subtitle, actions on the right. */
+export function PageHeader({ eyebrow, title, subtitle, actions }: { eyebrow?: string; title: ReactNode; subtitle?: ReactNode; actions?: ReactNode }) {
+  return (
+    <header className="page-header">
+      <div>
+        {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+        <h1>{title}</h1>
+        {subtitle && <p className="page-sub">{subtitle}</p>}
       </div>
+      {actions && <div className="page-actions">{actions}</div>}
     </header>
   );
 }
 
-function useDataSaver(): boolean {
+export function useDataSaver(): boolean {
   const [on, setOn] = useState(isDataSaver());
   useEffect(() => onDataSaverChange(() => setOn(isDataSaver())), []);
   return on;
@@ -45,7 +63,7 @@ function useDataSaver(): boolean {
 
 /** "COACH · PARENT", "ADMINISTRATOR"; empty until known. Loaded once per sign-in. */
 let rolesCache: { uid: string; label: string } | null = null;
-function useRoleLabel(): string {
+export function useRoleLabel(): string {
   const { user, profile } = useAuth();
   const [label, setLabel] = useState(rolesCache && rolesCache.uid === user?.uid ? rolesCache.label : "");
   useEffect(() => {
@@ -62,7 +80,7 @@ function useRoleLabel(): string {
   return label;
 }
 
-function ProfileButton({ compact }: { compact: boolean }) {
+export function ProfileButton({ compact = false }: { compact?: boolean }) {
   const { user, profile } = useAuth();
   const online = useOnline();
   const saver = useDataSaver();

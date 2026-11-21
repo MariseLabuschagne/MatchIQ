@@ -7,7 +7,7 @@ import {
   type CodeInfo, type Member, type MySquad, type Squad, type SquadRole
 } from "../squads";
 import { dropSquadLocal } from "../storage/local";
-import { Confirm, Sheet, Topbar } from "./components";
+import { BackLink, Confirm, Sheet } from "./components";
 
 /** Words for a sport's squads, e.g. { one: "team", many: "teams" }. Comes from the SportModule. */
 export interface SquadWords { one: string; many: string; nameLabel: string; placeholder: string }
@@ -55,7 +55,6 @@ export function SquadSection({ sport, words }: { sport: string; words: SquadWord
   const appAdmin = useAppAdmin();
   return (
     <section className="squads">
-      <h3>Your {words.many}</h3>
       {list === null && <p className="muted small">Loading…</p>}
       {list?.length === 0 && (
         <p className="muted small">
@@ -224,9 +223,9 @@ export function SquadScreen({ id, words, sportName }: { id: string; words: (spor
   useEffect(() => { load(); }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (squad === "gone") {
-    return <><Topbar /><p className="muted">You're not in this team or player any more.</p><button className="link" onClick={() => navigate("/")}>Home</button></>;
+    return <><BackLink to="/teams" label="Teams & players" /><p className="muted">You're not in this team or player any more.</p></>;
   }
-  if (!squad || !user) return <><Topbar /><p className="muted center">Loading…</p></>;
+  if (!squad || !user) return <p className="muted center">Loading…</p>;
 
   const w = words(squad.sport) ?? { one: "team", many: "teams", nameLabel: "Name", placeholder: "" };
   const mine = members.find((m) => m.uid === user.uid);
@@ -248,8 +247,7 @@ export function SquadScreen({ id, words, sportName }: { id: string; words: (spor
 
   return (
     <>
-      <Topbar />
-      <button className="link" onClick={() => navigate(`/sport/${squad.sport}`)}>← {sportName(squad.sport)}</button>
+      <BackLink to="/teams" label="Teams & players" />
       <h2>{squad.name}</h2>
       <p className="muted small">
         {cap(w.one)} · {mine ? <>you are {mine.role === "parent" ? "a parent" : `the ${ROLE_LABEL[mine.role].toLowerCase()}`}{isSquadAdmin(mine, squad) ? " and an administrator" : ""}</> : "you are viewing as app administrator"}
@@ -325,7 +323,7 @@ export function SquadScreen({ id, words, sportName }: { id: string; words: (spor
       )}
       {ask?.kind === "leave" && (
         <Confirm title={`Leave ${squad.name}?`} body={`Its matches will be removed from this phone. You can rejoin later with the code.`} confirmLabel="Leave" danger
-          onConfirm={async () => { await leaveSquad(squad.id, user.uid); await dropSquadLocal(squad.id, user.uid); navigate(`/sport/${squad.sport}`); }} onClose={() => setAsk(null)} />
+          onConfirm={async () => { await leaveSquad(squad.id, user.uid); await dropSquadLocal(squad.id, user.uid); navigate("/teams"); }} onClose={() => setAsk(null)} />
       )}
       {ask?.kind === "code" && (
         <Confirm title="Make a new code?" body="The old code stops working. Everyone already in stays in." confirmLabel="New code"

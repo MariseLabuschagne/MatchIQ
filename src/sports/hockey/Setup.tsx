@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../core/auth/AuthProvider";
 import { createMatch, remember } from "../../core/matchFactory";
 import { navigate } from "../../core/router";
-import { Topbar } from "../../core/ui/components";
+import { BackLink } from "../../core/ui/components";
 import { SquadPicker } from "../../core/ui/Squads";
 import type { MySquad } from "../../core/squads";
 import { SQUAD_WORDS } from "./words";
@@ -39,8 +39,7 @@ export function HockeySetupScreen() {
 
   return (
     <>
-      <Topbar />
-      <button className="link" onClick={() => navigate("/sport/hockey")}>← Hockey</button>
+      <BackLink to="/capture" label="New match" />
       <div className="card">
         <h2 style={{ marginBottom: 16 }}>New hockey match</h2>
         <label className="field">Competition<input id="h-comp" type="text" value={f.competition} onChange={(e) => set("competition", e.target.value)} placeholder="League, festival, friendly" /></label>
