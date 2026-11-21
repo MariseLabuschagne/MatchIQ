@@ -126,14 +126,6 @@ export function HockeySummary({ session }: { session: Session }) {
         </section>
 
         {HOCKEY_TABLES.map((tb) => <PeriodTable key={tb.title} title={tb.title} periods={periods} byPeriod={stats.byPeriod} total={t} rows={tb.rows} />)}
-
-        <section className="card">
-          <h3>Match information</h3>
-          <div className="kpis">
-            <div className="kpi"><div className="v">{groups(match.events).length}</div><div className="l">Taps recorded</div></div>
-            <div className="kpi"><div className="v">{periods.length}</div><div className="l">{periods.length === 2 ? "Halves" : "Quarters"} of {s.periodMinutes} min</div></div>
-          </div>
-        </section>
       </div>
 
       <section className="card stack">

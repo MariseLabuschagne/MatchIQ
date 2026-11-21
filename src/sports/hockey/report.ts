@@ -1,4 +1,3 @@
-import { groups } from "../../core/events";
 import type { ReportDoc } from "../../core/report";
 import type { Match } from "../../core/types";
 import type { HockeyInsights } from "./insights";
@@ -9,7 +8,7 @@ import { HOCKEY_TABLES } from "./tables";
 const fmtDate = (iso: string) => new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 
 /** The hockey match report as data, for the PDF (core/report.ts). Same numbers as the summary screen. */
-export function hockeyReport(match: Match<HockeySetup>, stats: HockeyStats, ins: HockeyInsights, historyCount: number): ReportDoc {
+export function hockeyReport(match: Match<HockeySetup>, stats: HockeyStats, ins: HockeyInsights, _historyCount: number): ReportDoc {
   const s = match.setup, t = stats.total, eff = effectiveness(t);
   const gf = t.goals.for.total, ga = t.goals.against.total;
   const outcome = match.status === "active" ? "Match in progress" : gf > ga ? `${s.ourTeam} won` : gf < ga ? `${s.opponent} won` : "Draw";
@@ -50,15 +49,6 @@ export function hockeyReport(match: Match<HockeySetup>, stats: HockeyStats, ins:
           cells: [r.label, ...stats.periods.map((p) => (r.head ? "" : String(r.v(stats.byPeriod[p])))), r.head ? "" : String(r.v(t))]
         }))
       })),
-      {
-        kind: "kpis",
-        title: "Match information",
-        items: [
-          { label: "Taps recorded", value: String(groups(match.events).length) },
-          { label: stats.periods.length === 2 ? "Halves" : "Quarters", value: String(stats.periods.length) },
-          ...(historyCount >= 3 ? [{ label: `Insights compare with the last ${historyCount} matches`, value: String(historyCount) }] : [])
-        ]
-      },
       { kind: "text", title: "Notes", body: match.notes ?? "" }
     ]
   };
