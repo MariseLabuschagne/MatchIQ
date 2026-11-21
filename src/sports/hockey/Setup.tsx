@@ -1,3 +1,4 @@
+import { tidyTeam } from "../../core/names";
 import { useState } from "react";
 import { useAuth } from "../../core/auth/AuthProvider";
 import { createMatch, remember } from "../../core/matchFactory";
@@ -29,11 +30,11 @@ export function HockeySetupScreen() {
   const start = async () => {
     if (!f.ourTeam.trim()) return setError("Enter your team name.");
     if (!f.opponent.trim()) return setError("Enter the opposition name.");
-    remember("hockey.team", f.ourTeam.trim());
+    remember("hockey.team", tidyTeam(f.ourTeam));
     remember("hockey.competition", f.competition.trim());
     remember("hockey.format", f.format);
     remember("hockey.minutes", String(f.periodMinutes));
-    const m = await createMatch("hockey", { ...f, ourTeam: f.ourTeam.trim(), opponent: f.opponent.trim() }, f.periodMinutes, user?.uid ?? null, squad?.id);
+    const m = await createMatch("hockey", { ...f, ourTeam: tidyTeam(f.ourTeam), opponent: f.opponent.trim() }, f.periodMinutes, user?.uid ?? null, squad?.id);
     navigate(`/match/${m.id}`);
   };
 

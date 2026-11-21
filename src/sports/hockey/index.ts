@@ -1,3 +1,4 @@
+import { tidyTeam } from "../../core/names";
 import { HockeySeason } from "./Season";
 import { HockeyIcon } from "./Icon";
 import { SQUAD_WORDS } from "./words";
@@ -18,10 +19,10 @@ export const hockey: SportModule<HockeySetup> = {
   squad: SQUAD_WORDS,
   Setup: HockeySetupScreen,
   MatchView: HockeyMatchView,
-  seasonKey: (s) => (s?.ourTeam ?? "").trim(),
+  seasonKey: (s) => tidyTeam(s?.ourTeam),
   Season: HockeySeason,
   completedView: "summary",
-  title: (s) => `${s.ourTeam} vs ${s.opponent}`,
+  title: (s) => `${tidyTeam(s.ourTeam)} vs ${s.opponent}`,
   scoreLine: (m) => {
     const { score } = deriveLive(m.setup, m.events);
     return `${score.for}–${score.against}`;
