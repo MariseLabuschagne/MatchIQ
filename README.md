@@ -32,7 +32,14 @@ That account exists only in the local emulator. It comes with two old v2 matches
 npm run build && npx firebase hosting:channel:deploy preview --expires 7d
 ```
 
-The home screen shows the version and build date, for example "MatchIQ v3.00 · built 20 Nov 2026", so you can tell which deploy a phone has. The version comes from `package.json`: 3.1.0 shows as v3.01.
+The home screen shows the version and build date, for example "v4.00 · 21 Nov 2026", so you can tell which deploy a phone has. The version comes from `package.json`: 4.1.0 shows as v4.01.
+
+Every deploy gets a new version:
+
+- Small change (a fix, a tweak, a removed box): `npm run version:small`, e.g. v4.00 → v4.01.
+- Bigger change (a new feature or redesign): `npm run version:big`, e.g. v4.07 → v5.00.
+
+Then commit and `npm run deploy`.
 
 **App Check** is wired in the same way as Court Order, but off until a reCAPTCHA Enterprise key is registered for the MatchIQ domains. When there is one, paste it into `APP_CHECK_SITE_KEY` in `src/core/firebase.ts`.
 

@@ -1,7 +1,7 @@
 {
   "name": "matchiq",
   "private": true,
-  "version": "3.0.0",
+  "version": "4.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,8 @@
     "test:rules": "npx --no-install firebase emulators:exec --only firestore --project demo-matchiq \"vitest run tests/rules\"",
     "deploy:rules": "firebase deploy --only firestore:rules,firestore:indexes",
     "deploy": "npm run build && firebase deploy --only hosting,firestore",
+    "version:small": "npm version minor --no-git-tag-version",
+    "version:big": "npm version major --no-git-tag-version",
     "emulators": "firebase emulators:start --only auth,firestore --project matchiq-9f263",
     "seed:emulators": "node tests/seed-emulator.mjs",
     "dev:emulators": "VITE_USE_EMULATORS=true vite --port 5176"
