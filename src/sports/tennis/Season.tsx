@@ -28,7 +28,7 @@ export function TennisSeason({ matches }: { matches: Match<TennisSetup>[] }) {
         <div className="kpi"><div className="v">{pct(brk, brkN)}%</div><div className="l">Return games broken ({brk} of {brkN})</div></div>
         {fN > 0 && <div className="kpi"><div className="v">{pct(fIn, fN)}%</div><div className="l">First serves in ({fIn} of {fN})</div></div>}
       </div>
-      <SeasonChart title="Points won per match (%)" series={[{ name: "Points won", color: "#0d9488" }]} max={100}
+      <SeasonChart title="Points won per match (%)" series={[{ name: "Points won", color: "#1d4f91" }]} max={100}
         reference={{ value: 50, label: "50%" }} format={(v) => `${Math.round(v)}%`}
         groups={rows.map(({ m, st }) => ({ label: short(m.createdAt), detail: `${short(m.createdAt)} vs ${m.setup.opponent}`, values: [st.n ? pct(st.won, st.n) : null] }))} />
     </>

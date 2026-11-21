@@ -84,7 +84,7 @@ export function SeasonChart({ title, series, groups, max, reference, format = St
               return (
                 <g key={i} onMouseEnter={() => setActive(i)} onClick={() => setActive(i)} style={{ cursor: "pointer" }}>
                   {/* hit target: the whole band, bigger than the marks */}
-                  <rect x={x0} y={PAD_T} width={band} height={plotH} fill={active === i ? "rgba(148,163,184,0.10)" : "transparent"} />
+                  <rect x={x0} y={PAD_T} width={band} height={plotH} fill={active === i ? "rgba(15,39,71,0.06)" : "transparent"} />
                   {g.values.map((v, j) => {
                     if (v === null) return null;
                     const bx = x0 + (band - inner) / 2 + j * (barW + 2), by = y(v), bh = PAD_T + plotH - by;
