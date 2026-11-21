@@ -20,7 +20,7 @@ type Session = MatchSession<HockeySetup>;
 
 function PeriodTable({ title, rows, periods, byPeriod, total }: { title: string; rows: Row[]; periods: string[]; byPeriod: Record<string, HockeyCounts>; total: HockeyCounts }) {
   return (
-    <section className="card">
+    <section className="card wide">
       <h3>{title}</h3>
       <div className="table-wrap">
         <table className="period-table">
@@ -78,9 +78,15 @@ export function HockeySummary({ session }: { session: Session }) {
     });
     downloadCsv(rows, safeName("MatchIQ", s.ourTeam, "v", s.opponent, match.createdAt.slice(0, 10)));
   };
+  // Notes save themselves (when the box loses focus, and before a PDF), so nothing needs saving first.
+  const saveNotes = () => {
+    if (notes === null || notes === (match.notes ?? "")) return;
+    update((m: Match<HockeySetup>) => ({ ...m, notes: notes ?? "" }));
+  };
   const pdf = async () => {
     setBusy(true);
-    try { await exportReportPdf(hockeyReport(match, stats, ins, history.length), safeName("MatchIQ", s.ourTeam, "v", s.opponent, match.createdAt.slice(0, 10))); } finally { setBusy(false); }
+    saveNotes();
+    try { await exportReportPdf(hockeyReport({ ...match, notes: notes ?? match.notes ?? "" }, stats, ins, history.length), safeName("MatchIQ", s.ourTeam, "v", s.opponent, match.createdAt.slice(0, 10))); } finally { setBusy(false); }
   };
 
   return (
@@ -90,8 +96,8 @@ export function HockeySummary({ session }: { session: Session }) {
         {match.status === "active" && <button className="btn primary small" onClick={() => navigate(`/match/${match.id}`)}>← Back to live capture</button>}
         <button className="link" onClick={() => navigate("/history/hockey")}>Hockey history</button>
       </div>
-      <div ref={ref} className="stack">
-        <section className="card">
+      <div ref={ref} className="report-grid">
+        <section className="card span-all">
           <p className="muted small center">{[s.competition, s.venue, new Date(match.createdAt).toLocaleDateString()].filter(Boolean).join(" · ")}</p>
           <div className="summary-head" style={{ marginTop: 8 }}>
             <div className="team">{s.ourTeam}</div>
@@ -102,7 +108,7 @@ export function HockeySummary({ session }: { session: Session }) {
           {match.importedFrom && <p className="muted small center" style={{ marginTop: 6 }}>Imported from the previous MatchIQ app</p>}
         </section>
 
-        <section className="card stack">
+        <section className="card stack span-all">
           <h3 style={{ margin: 0 }}>Coach's insights</h3>
           <InsightList title="Strengths" items={ins.strengths} empty="No clear strength yet. Capture more of the match." />
           <InsightList title="Work-ons" items={ins.workons} empty="No clear work-on yet." />
@@ -110,7 +116,7 @@ export function HockeySummary({ session }: { session: Session }) {
           {history.length >= 3 && <p className="muted small">Compared with {s.ourTeam}'s last {history.length} matches on this phone.</p>}
         </section>
 
-        <section className="card">
+        <section className="card span-all">
           <h3>Attack journey</h3>
           <div className="funnel">
             <div className="funnel-step"><div className="funnel-value">{t.entries.for.total}</div><div className="funnel-label">Circle entries</div></div>
@@ -134,15 +140,13 @@ export function HockeySummary({ session }: { session: Session }) {
       <section className="card stack">
         <h3 style={{ margin: 0 }}>Notes</h3>
         <textarea id="h-notes" placeholder="Anything the numbers don't show: injuries, weather, umpiring, who played where."
-          value={notes ?? match.notes ?? ""} onChange={(e) => setNotes(e.target.value)} />
-        {notes !== null && notes !== (match.notes ?? "") && (
-          <button className="btn success" onClick={() => { update((m: Match<HockeySetup>) => ({ ...m, notes: notes ?? "" })); setNotes(null); }}>Save notes</button>
-        )}
+          value={notes ?? match.notes ?? ""} onChange={(e) => setNotes(e.target.value)} onBlur={saveNotes} />
+        <p className="muted small">Saved as you type; included in the PDF.</p>
       </section>
 
       <div className="row">
-        <button className="btn primary" onClick={exportCsv}>Export CSV</button>
         <button className="btn primary" disabled={busy} onClick={pdf}>{busy ? "Making PDF…" : "Export PDF"}</button>
+        <button className="btn" onClick={exportCsv}>Export CSV</button>
         <button className="btn" onClick={() => navigate("/sport/hockey")}>Hockey home</button>
       </div>
     </>

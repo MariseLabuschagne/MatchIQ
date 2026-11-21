@@ -4,6 +4,7 @@ import { createMatch, remember } from "../../core/matchFactory";
 import { navigate } from "../../core/router";
 import { Topbar } from "../../core/ui/components";
 import { useMySquads } from "../../core/ui/Squads";
+import { firstName } from "../../core/names";
 import type { MySquad } from "../../core/squads";
 import { appendEvents } from "../../core/events";
 import { saveMatch } from "../../core/storage/sync";
@@ -38,7 +39,7 @@ export function TennisSetupScreen() {
     if (pick) pickSquad(pick);
   }, [players]); // eslint-disable-line react-hooks/exhaustive-deps
   const showInput = typing || !players?.length;
-  const pName = f.player.trim() || "Your player", oName = f.opponent.trim() || "Opponent";
+  const pName = firstName(f.player) || "Your player", oName = firstName(f.opponent) || "Opponent";
 
   const start = async () => {
     const setup: TennisSetup = { ...f, player: f.player.trim() || "Player", opponent: f.opponent.trim() || "Opponent", competition: f.competition.trim() };

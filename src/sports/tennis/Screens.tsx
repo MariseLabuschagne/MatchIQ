@@ -13,6 +13,7 @@ import { serveReturnRows, statCells, tennisReport, type StatRow } from "./report
 import { exportReportPdf } from "../../core/report";
 import { safeName } from "../../core/export";
 import { venueLabel } from "./words";
+import { firstName } from "../../core/names";
 
 type Session = MatchSession<TennisSetup>;
 
@@ -40,8 +41,10 @@ function useTennis(session: Session) {
   const m = session.match!;
   const points = useMemo(() => mergePoints(m.events), [m.events]);
   const r = useMemo(() => replay(m.setup, points), [m.setup, points]);
-  const name = (s: P) => (s === "p" ? m.setup.player : m.setup.opponent);
-  return { m, points, r, name };
+  // First names once the match is on: shorter on the buttons and scoreboard.
+  const name = (s: P) => firstName(s === "p" ? m.setup.player : m.setup.opponent) || (s === "p" ? "Player" : "Opponent");
+  const fullName = (s: P) => (s === "p" ? m.setup.player : m.setup.opponent);
+  return { m, points, r, name, fullName };
 }
 
 function Tabs({ id, view }: { id: string; view: "live" | "points" | "report" }) {
@@ -61,7 +64,7 @@ function Board({ r, setup, name }: { r: TennisState; setup: TennisSetup; name: (
   const row = (side: P) => (
     <div className="tboard-row">
       <span className={`srv${r.server === side && !r.done ? "" : " off"}`} aria-label={r.server === side ? "serving" : undefined} />
-      <span className="tname"><i style={{ background: side === "p" ? "var(--attack)" : "var(--defence)" }} />{name(side)}</span>
+      <span className="tname">{name(side)}</span>
       <span className="tsets">
         {r.sets.map((x, i) => (
           <span key={i} className={x.w === side ? "won" : ""}>
@@ -159,7 +162,7 @@ export function TennisLive({ session }: { session: Session }) {
     title = `${name(srv)} serving`; tag = "Serve";
     body = <div className="tgrid">
       <TBtn cls="tall" label="1st serve in" onClick={() => step(() => ({ serve: "first", step: "who", crumbs: [...draft.crumbs, "1st serve in"] }))} />
-      <TBtn cls="tall" label="Fault" sub="1st serve missed" onClick={() => step(() => ({ step: "serve2", crumbs: [...draft.crumbs, "Fault"] }))} />
+      <TBtn cls="tall fault" label="Fault" sub="1st serve missed" onClick={() => step(() => ({ step: "serve2", crumbs: [...draft.crumbs, "Fault"] }))} />
     </div>;
   } else if (draft.step === "serve2") {
     title = `${name(srv)} · second serve`; tag = "Serve";
@@ -174,8 +177,8 @@ export function TennisLive({ session }: { session: Session }) {
     title = "Who won the point?"; tag = "Required";
     const who = (w: P) => step((d, t) => { commitPoint({ winner: w, serve: d.serve, ending: null, finalShotBy: null, ...t }); return { committed: true, step: "how", crumbs: [...d.crumbs, `${name(w)} won`] }; });
     body = <div className="tgrid">
-      <TBtn cls="tall p" label={P_} onClick={() => who("p")} />
-      <TBtn cls="tall o" label={O_} onClick={() => who("o")} />
+      <TBtn cls="tall p name" label={P_} onClick={() => who("p")} />
+      <TBtn cls="tall o name" label={O_} onClick={() => who("o")} />
     </div>;
     if (level === "quick") hint = "Quick level: one tap is enough. Add how it ended if you can.";
   } else if (draft.step === "how" && last) {
@@ -373,7 +376,7 @@ export function TennisPoints({ session }: { session: Session }) {
           const c = r.ctx[i];
           return (
             <div key={pt.id} className="prow">
-              <span className="bar" style={{ background: pt.winner === "p" ? "var(--attack)" : "var(--defence)" }} />
+              <span className="bar" style={{ background: pt.winner === "p" ? "var(--teal)" : "var(--grey)" }} />
               <div style={{ minWidth: 0 }}>
                 <div className="meta">#{i + 1}{c ? ` · ${games ? "" : `Set ${c.set} · `}${c.games} · ${c.pts} · ${name(c.server)} serving` : ""}</div>
                 <div className="desc">{describePoint(pt, name)}</div>
@@ -405,7 +408,7 @@ function StatTable({ rows }: { rows: StatRow[] }) {
 }
 
 export function TennisReport({ session }: { session: Session }) {
-  const { m, points, r, name } = useTennis(session);
+  const { m, points, r, name, fullName } = useTennis(session);
   const st = useMemo(() => computeTennisStats(points, r), [points, r]);
   const ins = tennisInsights(st, name("p"), name("o"));
   const isSample = m.setup.competition.includes("(generated)");
@@ -423,13 +426,14 @@ export function TennisReport({ session }: { session: Session }) {
     <>
       <Topbar right={<Tabs id={m.id} view="report" />} />
       {isSample && <p className="message">Sample data, generated to show the report. Not a real match.</p>}
-      <section className="card">
-        <p className="muted small">{[`${name("p")} vs ${name("o")}`, venueLabel(m.setup), m.setup.competition].filter(Boolean).join(" · ")}</p>
+      <div className="report-grid">
+      <section className="card span-all">
+        <p className="muted small">{[`${fullName("p")} vs ${fullName("o")}`, venueLabel(m.setup), m.setup.competition].filter(Boolean).join(" · ")}</p>
         <div className="final" style={{ fontSize: 34, fontWeight: 900, margin: "6px 0" }}>{resultString(r) || `${r.games.p}–${r.games.o}`}</div>
         <p className="muted">{r.done ? `${name(r.winner!)} won` : m.setup.endReason ? `Ended early · ${m.setup.endReason}` : "In progress"} · {st.n} points captured</p>
       </section>
-      {st.n < 10 && <p className="hint">Capture at least 10 points to see patterns. Percentages in grey come from fewer than 10 points.</p>}
-      <section className="card stack">
+      {st.n < 10 && <p className="hint span-all">Capture at least 10 points to see patterns. Percentages in grey come from fewer than 10 points.</p>}
+      <section className="card stack span-all">
         <InsightList title="Strengths" items={ins.strengths} empty="No clear strength yet. Keep capturing." />
         <InsightList title="Work-ons" items={ins.workons} empty="No clear work-on yet." />
         <InsightList title="Game plan for next time" items={ins.plan} />
@@ -443,7 +447,7 @@ export function TennisReport({ session }: { session: Session }) {
           <div className="kpi"><div className="v">{st.winners} / {st.errorsAll}</div><div className="l">Winners / errors</div></div>
         </div>
       </section>
-      <section className="card">
+      <section className="card wide">
         <h3>Serve, return and pressure</h3>
         <StatTable rows={serveReturnRows(st)} />
       </section>
@@ -488,6 +492,7 @@ export function TennisReport({ session }: { session: Session }) {
         <p className="muted small" style={{ marginTop: 8 }}>If capturing takes more than about 8 seconds a point, try a simpler level.</p>
       </section>
       )}
+      </div>
       <div className="row">
         <button className="btn primary" disabled={busy} onClick={pdf}>{busy ? "Making PDF…" : "Export PDF"}</button>
         <button className="btn" onClick={() => navigate("/sport/tennis")}>Tennis home</button>

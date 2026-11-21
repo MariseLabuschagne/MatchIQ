@@ -8,6 +8,9 @@ import type { MySquad } from "../../core/squads";
 import { SQUAD_WORDS } from "./words";
 import type { HockeySetup } from "./model";
 
+/** Stored as shown on the summary and PDF. Older matches may have a typed venue instead. */
+const VENUES: [string, string][] = [["Home", "Home"], ["Away", "Away"], ["Neutral venue", "Neutral"]];
+
 export function HockeySetupScreen() {
   const { user } = useAuth();
   const [f, setF] = useState<HockeySetup>({
@@ -44,7 +47,11 @@ export function HockeySetupScreen() {
         <SquadPicker sport="hockey" words={SQUAD_WORDS} value={squad?.id ?? ""} onChange={pickSquad} />
         <label className="field">Our team<input id="h-team" type="text" value={f.ourTeam} onChange={(e) => set("ourTeam", e.target.value)} placeholder="e.g. U14A" /></label>
         <label className="field">Opposition<input id="h-opp" type="text" value={f.opponent} onChange={(e) => set("opponent", e.target.value)} /></label>
-        <label className="field">Venue (optional)<input id="h-venue" type="text" value={f.venue} onChange={(e) => set("venue", e.target.value)} /></label>
+        <div className="field">Venue
+          <div className="seg" role="group" aria-label="Venue">
+            {VENUES.map(([v, label]) => <button key={v} type="button" aria-pressed={f.venue === v} onClick={() => set("venue", f.venue === v ? "" : v)}>{label}</button>)}
+          </div>
+        </div>
         <div className="field">
           Format
           <div className="seg">

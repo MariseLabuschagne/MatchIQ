@@ -1,12 +1,11 @@
 /* Tennis-only styles: scoreboard, point steps, buttons, points list, view tabs. */
 
-.tboard { background: var(--scoreboard); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; }
-.tboard-row { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto 54px; align-items: center; gap: 8px; min-height: 42px; }
+.tboard { background: var(--scoreboard); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 8px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; }
+.tboard-row { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto 54px; align-items: center; gap: 8px; min-height: 40px; }
 .tboard-row + .tboard-row { border-top: 1px solid var(--border); }
-.srv { width: 11px; height: 11px; border-radius: 50%; background: var(--highlight); }
+.srv { width: 11px; height: 11px; border-radius: 50%; background: var(--green); }
 .srv.off { background: transparent; }
-.tname { font-size: 19px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 8px; }
-.tname i { width: 6px; height: 20px; border-radius: 3px; flex: none; }
+.tname { font-size: 18px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 8px; }
 .tsets { display: flex; gap: 10px; font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--muted); }
 .tsets .won, .tsets .cur { color: var(--text); }
 .tsets sup { font-size: 11px; }
@@ -14,20 +13,22 @@
 .tnote { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 6px; }
 .tnote .flag { color: var(--gold); font-weight: 600; }
 .step-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.step-title { font-size: 22px; font-weight: 700; }
+.step-title { font-size: 19px; font-weight: 500; }
 .step-tag { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
 .crumbs { display: flex; flex-wrap: wrap; gap: 6px; min-height: 26px; }
 .crumb { font-size: 12.5px; padding: 3px 9px; border-radius: 999px; background: var(--card-light); border: 1px solid var(--border); color: var(--muted); }
 .tgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.tbtn { min-height: 76px; border-radius: 14px; font-size: 17px; font-weight: 600; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 10px; background: var(--control); border: 4px solid transparent; }
-.tbtn.tall { min-height: 128px; font-size: 24px; }
-.tbtn.p { background: var(--attack); }
-.tbtn.o { background: var(--defence); }
-.tbtn.wide { grid-column: 1 / -1; min-height: 56px; }
+.tbtn { min-height: 60px; border-radius: 12px; font-size: 16px; font-weight: 600; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 10px; background: var(--control); border: 4px solid transparent; }
+.tbtn.tall { min-height: 96px; font-size: 20px; }
+.tbtn.name { font-weight: 400; }
+.tbtn.p { background: var(--teal); }
+.tbtn.o { background: var(--grey); }
+.tbtn.fault { background: var(--gold); color: var(--navy); }
+.tbtn.wide { grid-column: 1 / -1; min-height: 50px; }
 .tbtn .sub { font-size: 12.5px; font-weight: 500; opacity: 0.9; }
 .hint { font-size: 13px; color: var(--muted); border: 1px dashed var(--border); border-radius: 10px; padding: 8px 10px; }
 .chiprow { display: flex; flex-wrap: wrap; gap: 8px; }
-.chiprow button { min-height: 48px; padding: 0 16px; border-radius: 12px; background: var(--card-light); border: 1px solid var(--border); font-weight: 600; }
+.chiprow button { min-height: 42px; padding: 0 16px; border-radius: 12px; background: var(--card-light); border: 1px solid var(--border); font-weight: 600; }
 .chiprow button[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
 .plist { display: flex; flex-direction: column; gap: 6px; }
 .prow { display: grid; grid-template-columns: 6px minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--card-light); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px 8px 0; }

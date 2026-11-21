@@ -42,10 +42,9 @@ function Routes() {
 }
 
 function Home() {
-  const { profile, logout } = useAuth();
   return (
     <>
-      <Topbar />
+      <Topbar home />
       <div className="home">
         <img className="home-logo" src="./matchiq-logo.jpeg" alt="MatchIQ" />
         <p className="section-label">Choose a sport</p>
@@ -71,7 +70,6 @@ function Home() {
           })}
         </div>
         <div className="home-foot">
-          <p className="muted small">Signed in{profile?.name ? ` as ${profile.name}` : ""}. <button className="link" onClick={logout}>Sign out</button></p>
           <BuiltBy />
         </div>
       </div>
@@ -172,7 +170,7 @@ function History({ sport }: { sport: SportModule }) {
         </section>
       )}
       {!!list?.length && shown.length === 0 && <p className="muted">No matches in this period.</p>}
-      <div className="stack" style={{ gap: 10 }}>
+      <div className="history-list">
         {shown.map((m) => (
           <div key={m.id} className="card history-item">
             <button style={{ textAlign: "left", flex: 1, minWidth: 0 }} onClick={() => navigate(`/match/${m.id}${m.status === "completed" ? `/${sport.completedView}` : ""}`)}>

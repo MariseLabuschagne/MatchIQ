@@ -2,6 +2,8 @@ import { useEffect, useState, type ReactNode } from "react";
 import type { Insight } from "../types";
 import { useAuth } from "../auth/AuthProvider";
 import { navigate } from "../router";
+import { initials } from "../names";
+import { isDataSaver, onDataSaverChange, sendWaiting, setDataSaver, waitingToSend } from "../storage/sync";
 
 export function useOnline(): boolean {
   const [online, setOnline] = useState(typeof navigator === "undefined" ? true : navigator.onLine);
@@ -17,22 +19,93 @@ export function useOnline(): boolean {
   return online;
 }
 
-export function Topbar({ right }: { right?: ReactNode }) {
-  const { profile } = useAuth();
-  const online = useOnline();
+/**
+ * Top bar: "Home" on the left (not on the home page itself), and on the right either the page's
+ * own controls (e.g. Live / Points / Report) or the profile: initials in a circle, full name,
+ * and whether matches are being sent. Tapping the profile opens the profile sheet.
+ */
+export function Topbar({ right, home = false }: { right?: ReactNode; home?: boolean }) {
   return (
-    <header className="topbar">
-      <button className="brand" onClick={() => navigate("/")}>
-        <img src="./matchiq-logo.jpeg" alt="" />
-        Home
+    <header className={`topbar${home ? " at-home" : ""}`}>
+      {!home && <button className="home-link" onClick={() => navigate("/")}><span aria-hidden="true">‹</span> Home</button>}
+      <div className="topbar-right">
+        {right}
+        <ProfileButton compact={!!right} />
+      </div>
+    </header>
+  );
+}
+
+function useDataSaver(): boolean {
+  const [on, setOn] = useState(isDataSaver());
+  useEffect(() => onDataSaverChange(() => setOn(isDataSaver())), []);
+  return on;
+}
+
+function ProfileButton({ compact }: { compact: boolean }) {
+  const { user, profile } = useAuth();
+  const online = useOnline();
+  const saver = useDataSaver();
+  const [open, setOpen] = useState(false);
+  if (!user) return null;
+  const name = profile?.name || user.displayName || user.email || "";
+  const status = !online ? "Offline · saved on phone" : saver ? "Data saver · sends at the end" : "Online";
+  return (
+    <>
+      <button className={`profile-btn${compact ? " compact" : ""}`} onClick={() => setOpen(true)} aria-label={`Your profile: ${name}. ${status}`}>
+        <span className={`avatar${!online || saver ? " held" : ""}`}>{initials(name, user.email)}</span>
+        {!compact && (
+          <span className="profile-text">
+            <span className="profile-name">{name}</span>
+            <span className={`sync${!online ? " offline" : saver ? " saver" : ""}`}>{status}</span>
+          </span>
+        )}
       </button>
-      {right ?? (
-        <div className="who">
-          <span className={`sync${online ? "" : " offline"}`}>{online ? "Online" : "Offline · saved on phone"}</span>
-          {profile && <span>{profile.name}</span>}
+      {open && <ProfileSheet name={name} onClose={() => setOpen(false)} />}
+    </>
+  );
+}
+
+function ProfileSheet({ name, onClose }: { name: string; onClose: () => void }) {
+  const { user, profile, logout } = useAuth();
+  const saver = useDataSaver();
+  const online = useOnline();
+  const [waiting, setWaiting] = useState<number | null>(null);
+  const [busy, setBusy] = useState(false);
+  const uid = user?.uid ?? null;
+  useEffect(() => {
+    if (!uid) return;
+    const load = () => waitingToSend(uid).then((l) => setWaiting(l.length)).catch(() => setWaiting(null));
+    load();
+    return onDataSaverChange(load);
+  }, [uid]);
+  return (
+    <Sheet onClose={onClose}>
+      <div className="profile-head">
+        <span className="avatar large">{initials(name, user?.email)}</span>
+        <span>
+          <strong>{name}</strong>
+          <span className="muted small" style={{ display: "block" }}>{user?.email}</span>
+          {profile?.role === "administrator" && <span className="badge">App administrator</span>}
+        </span>
+      </div>
+      <label className="check">
+        <span>
+          Data saver
+          <span className="muted small" style={{ display: "block" }}>Keep a match on this phone while it's on and send it once, when it ends. Uses less mobile data and copes with poor signal. Others in the team see it after it ends.</span>
+        </span>
+        <input type="checkbox" checked={saver} onChange={(e) => setDataSaver(e.target.checked, uid)} />
+      </label>
+      {waiting !== null && waiting > 0 && (
+        <div className="message">
+          {waiting} {waiting === 1 ? "match has" : "matches have"} changes waiting to send.{" "}
+          <button className="link" disabled={busy || !online} onClick={async () => { if (!uid) return; setBusy(true); try { await sendWaiting(uid); } finally { setBusy(false); } }}>
+            {busy ? "Sending…" : online ? "Send now" : "Send when back online"}
+          </button>
         </div>
       )}
-    </header>
+      <button className="btn block" onClick={() => { onClose(); logout(); }}>Sign out</button>
+    </Sheet>
   );
 }
 
@@ -129,8 +202,7 @@ export function MovedNotice() {
 
 /**
  * The maker's mark, as in CourtOrder: a light-grey "BUILT BY" beside the InAwe Solutions logo
- * in its own colours, with the version underneath. The logo sits on a
- * small white tile so its navy lettering stays readable on any background.
+ * in its own colours on a clear background, with the version underneath.
  */
 export function BuiltBy({ onLight = false }: { onLight?: boolean }) {
   const built = new Date(__BUILD_DATE__).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
@@ -140,7 +212,7 @@ export function BuiltBy({ onLight = false }: { onLight?: boolean }) {
         <span>Built by</span>
         <img src="./inawe-logo.png" alt="InAwe Solutions" width="98" height="44" />
       </div>
-      <p>MatchIQ v{__APP_VERSION__} · {built}</p>
+      <p>v{__APP_VERSION__} · {built}</p>
     </div>
   );
 }
