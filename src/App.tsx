@@ -4,7 +4,7 @@ import { AuthScreen, VerifyScreen } from "./core/auth/AuthScreen";
 import { navigate, useRoute } from "./core/router";
 import { listLocal, onLocalChange, type StoredMatch } from "./core/storage/local";
 import { pullAll, removeMatch } from "./core/storage/sync";
-import { Confirm, Topbar } from "./core/ui/components";
+import { Confirm, MovedNotice, Topbar } from "./core/ui/components";
 import { useMatch } from "./core/useMatch";
 import { COMING_SOON, SPORTS, getSport } from "./sports/registry";
 import type { SportModule } from "./sports/types";
@@ -24,9 +24,9 @@ export default function App() {
   }, [user]);
 
   if (!ready) return <main className="app"><p className="muted center" style={{ marginTop: 80 }}>Loading…</p></main>;
-  if (!user) return <main className="app"><AuthScreen /></main>;
+  if (!user) return <main className="app"><MovedNotice /><AuthScreen /></main>;
   if (!user.emailVerified) return <main className="app"><VerifyScreen /></main>;
-  return <main className="app"><Routes /></main>;
+  return <main className="app"><MovedNotice /><Routes /></main>;
 }
 
 function Routes() {

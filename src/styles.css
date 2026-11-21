@@ -193,3 +193,7 @@ textarea { min-height: 96px; resize: vertical; }
   .event-button { font-size: 13.5px; min-height: 68px; padding: 6px; }
 }
 @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+
+.moved-notice { margin: 12px 0; display: grid; gap: 6px; }
+.moved-notice p { margin: 0; color: var(--muted); font-size: 14px; }
+.moved-notice .btn { justify-self: start; }

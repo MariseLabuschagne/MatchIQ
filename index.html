@@ -9,6 +9,13 @@
     <meta name="apple-mobile-web-app-title" content="MatchIQ" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
     <title>MatchIQ</title>
+    <script>
+      // MatchIQ moved from GitHub Pages to Firebase Hosting. GitHub Pages serves this file from main,
+      // so send visitors to the new address. The old app stays at /MatchIQ/legacy/ there.
+      if (location.hostname.endsWith("github.io") && !location.pathname.includes("/legacy/")) {
+        location.replace("https://matchiq-9f263.web.app/?moved=1");
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

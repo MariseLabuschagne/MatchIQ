@@ -98,3 +98,31 @@ export function useWakeLock(active: boolean) {
     };
   }, [active]);
 }
+
+const MOVED_KEY = "matchiq.movedNoticeSeen";
+
+/** Shown to people who arrive from the old GitHub Pages address (it redirects here with ?moved=1). */
+export function MovedNotice() {
+  const [show, setShow] = useState(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get("moved") !== "1") return false;
+      history.replaceState(null, "", location.pathname + location.hash);
+      return !localStorage.getItem(MOVED_KEY);
+    } catch {
+      return false;
+    }
+  });
+  if (!show) return null;
+  const close = () => {
+    try { localStorage.setItem(MOVED_KEY, "1"); } catch { /* private mode */ }
+    setShow(false);
+  };
+  return (
+    <div className="card moved-notice" role="status">
+      <strong>MatchIQ has a new address</strong>
+      <p>Sign in as usual and your matches come with you. If you added MatchIQ to your Home Screen, add this page again and remove the old icon.</p>
+      <button className="btn small" onClick={close}>Got it</button>
+    </div>
+  );
+}

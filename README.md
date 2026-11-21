@@ -40,7 +40,8 @@ The home screen shows the version and build date, for example "MatchIQ v3.00 · 
 
 - **Old matches:** the old app's hockey matches are copied in automatically the first time each person signs in to v3. This covers matches in the cloud (`users/{uid}/matches`) and any kept in that browser. The originals are never changed. History → "Check for old matches" runs the import again.
 - **Softball:** the old app is published inside v3 at `/legacy/`. The Softball button opens it, using the same accounts and data.
-- **Safe copy:** the last v2 code is in `legacy/`, and gets tagged `v2-final` in git at the switch-over.
+- **Safe copy:** the last v2 code is in `legacy/`, and the commit on main before the switch is tagged `v2-final`.
+- **Old address:** GitHub Pages still serves `main`. The inline script in `index.html` sends visitors from `*.github.io` to https://matchiq-9f263.web.app (with `?moved=1`, which shows a one-time "new address" note). The old app stays reachable there at `/MatchIQ/legacy/`, so matches kept only in that browser can still be opened.
 
 ## How it is built
 
