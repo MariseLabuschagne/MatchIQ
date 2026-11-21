@@ -5,7 +5,7 @@ import { navigate, useRoute } from "./core/router";
 import { listLocal, onLocalChange, type StoredMatch } from "./core/storage/local";
 import { pullAll, removeMatch } from "./core/storage/sync";
 import { BuiltBy, Confirm, MovedNotice, Topbar } from "./core/ui/components";
-import { SquadScreen, SquadSection, useMySquads } from "./core/ui/Squads";
+import { SquadScreen, SquadSection, useAppAdmin, useMySquads } from "./core/ui/Squads";
 import { useMatch } from "./core/useMatch";
 import { COMING_SOON, SPORTS, getSport } from "./sports/registry";
 import type { SportModule } from "./sports/types";
@@ -119,6 +119,7 @@ function History({ sport }: { sport: SportModule }) {
   const [list, setList] = useState<StoredMatch[] | null>(null);
   const [del, setDel] = useState<StoredMatch | null>(null);
   const [squads] = useMySquads(sport.id);
+  const appAdmin = useAppAdmin();
   const load = () => listLocal(uid, sport.id).then(setList);
   useEffect(() => {
     load();
@@ -139,7 +140,8 @@ function History({ sport }: { sport: SportModule }) {
   const shown = (list ?? []).filter((m) => (!activeWho || keyOf(m) === activeWho) && (year === "all" || m.createdAt.startsWith(year)));
   const seasonMatches = shown.filter((m) => m.status === "completed").slice().reverse();
   // Your own matches, ones you captured, and any match in a team you coach can be deleted.
-  const canDelete = (m: StoredMatch) => !m.squadId || m.createdBy === uid || squadOf(m)?.role === "coach";
+  // Your own matches; in a shared team or player, coaches and administrators can delete any match.
+  const canDelete = (m: StoredMatch) => !m.squadId || m.createdBy === uid || appAdmin || squadOf(m)?.role === "coach" || !!squadOf(m)?.admin;
 
   return (
     <>

@@ -2,9 +2,14 @@ rules_version = '2';
 // MatchIQ Firestore security rules.
 //
 // - Each person's profile and own matches are private to them.
-// - Shared matches belong to a squad (a hockey team or a tennis player). Only the squad's
-//   members can see or capture them. Its coach (whoever created it) holds a join code;
-//   people join as parents by presenting that code. The coach can remove anyone.
+// - Shared matches belong to a squad (a hockey team or a tennis player). Only its members can
+//   see or capture them. Members are a coach, parent or player; some are also administrators.
+// - Whoever creates a squad is its first administrator. Others join with the squad's join code,
+//   as a parent or player; asking to be coach needs an administrator to approve.
+// - Administrators manage the code, people and roles. Coaches can delete any match in the squad;
+//   everyone else only the matches they captured.
+// - App-wide administrators (users/{uid}.role == 'administrator', set in the Firebase console,
+//   never by the app) can see and manage every squad.
 //
 // Tests: npm run test:rules     Deploy: npm run deploy:rules
 service cloud.firestore {
@@ -34,73 +39,109 @@ service cloud.firestore {
       }
     }
 
+    // App-wide administrators: role set by hand in the Firebase console (the rule above stops anyone setting it).
+    function appAdmin() {
+      return verified()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'administrator';
+    }
+    function validRole(r) { return r in ['coach', 'parent', 'player']; }
+
     match /squads/{squadId} {
       function squadPath() { return /databases/$(database)/documents/squads/$(squadId); }
-      function isMember() { return exists(/databases/$(database)/documents/squads/$(squadId)/members/$(request.auth.uid)); }
-      function isCoach() { return get(squadPath()).data.coachUid == request.auth.uid; }
+      function meRef() { return /databases/$(database)/documents/squads/$(squadId)/members/$(request.auth.uid); }
+      function isMember() { return exists(meRef()); }
+      function me() { return get(meRef()).data; }
+      // The creator (coachUid, for older data) is always an administrator.
+      function isAdmin() {
+        return appAdmin() || get(squadPath()).data.coachUid == request.auth.uid
+          || (isMember() && me().get('admin', false) == true);
+      }
+      function isCoach() { return isMember() && me().role == 'coach'; }
 
-      allow read: if verified() && isMember();
+      // Members open their own squad; only app-wide administrators can list squads.
+      allow get: if verified() && (appAdmin() || isMember());
+      allow list: if appAdmin();
       allow create: if verified()
                     && request.resource.data.keys().hasOnly(['sport', 'name', 'coachUid', 'joinCode', 'createdAt'])
                     && request.resource.data.coachUid == request.auth.uid
                     && shortText(request.resource.data.name, 60)
                     && shortText(request.resource.data.sport, 20)
                     && request.resource.data.joinCode is string && request.resource.data.joinCode.size() == 6;
-      // The coach can rename the squad or change its code, but not hand it over or change its sport.
-      allow update: if verified() && isCoach()
+      // Administrators can rename the squad or change its code, but nobody can change its creator or sport.
+      allow update: if verified() && isAdmin()
                     && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'joinCode'])
                     && shortText(request.resource.data.name, 60)
                     && request.resource.data.joinCode is string && request.resource.data.joinCode.size() == 6;
-      allow delete: if verified() && isCoach();
+      allow delete: if verified() && (resource.data.coachUid == request.auth.uid || appAdmin());
 
       match /members/{memberUid} {
-        allow read: if verified() && isMember();
-        // People only ever add themselves: the coach while creating the squad,
-        // anyone else as a parent holding the squad's current join code.
+        allow read: if verified() && (appAdmin() || isMember());
+        // People only ever add themselves: the creator while creating the squad (any role, as administrator),
+        // anyone else holding the current join code, as a parent or player (a coach request is a parent
+        // with requested == 'coach').
         allow create: if verified() && memberUid == request.auth.uid
                       && request.resource.data.uid == memberUid
                       && shortText(request.resource.data.name, 80)
+                      && validRole(request.resource.data.role)
                       && (
-                        (request.resource.data.role == 'coach'
-                          && request.resource.data.keys().hasOnly(['uid', 'name', 'role', 'joinedAt'])
+                        (request.resource.data.keys().hasOnly(['uid', 'name', 'role', 'admin', 'joinedAt'])
+                          && request.resource.data.admin == true
                           && getAfter(squadPath()).data.coachUid == request.auth.uid)
                         ||
-                        (request.resource.data.role == 'parent'
-                          && request.resource.data.keys().hasOnly(['uid', 'name', 'role', 'joinedAt', 'code'])
+                        (request.resource.data.keys().hasOnly(['uid', 'name', 'role', 'admin', 'requested', 'joinedAt', 'code'])
+                          && request.resource.data.role in ['parent', 'player']
+                          && request.resource.data.get('admin', false) == false
+                          && request.resource.data.get('requested', null) in [null, 'coach']
                           && request.resource.data.code == get(squadPath()).data.joinCode)
                       );
-        allow update: if false;
-        // Anyone may leave; the coach may remove anyone else (but not their own coach place).
-        allow delete: if verified() && (
-                        (memberUid == request.auth.uid && resource.data.role != 'coach')
-                        || (isCoach() && memberUid != request.auth.uid)
+        // Administrators set roles, administrator status and answer coach requests for others.
+        // Anyone may move themselves between parent and player, or ask to be coach; administrators may also
+        // make themselves coach.
+        allow update: if verified() && validRole(request.resource.data.role)
+                      && request.resource.data.uid == resource.data.uid
+                      && request.resource.data.get('requested', null) in [null, 'coach']
+                      && (
+                        (isAdmin() && memberUid != request.auth.uid
+                          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'admin', 'requested']))
+                        ||
+                        (memberUid == request.auth.uid
+                          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'requested'])
+                          && (request.resource.data.role == resource.data.role || request.resource.data.role in ['parent', 'player'] || isAdmin()))
                       );
+        // Anyone but the creator may leave; administrators may remove anyone except the creator.
+        allow delete: if verified() && memberUid != get(squadPath()).data.coachUid
+                      && (memberUid == request.auth.uid || isAdmin());
       }
 
       match /matches/{matchId} {
-        allow read: if verified() && isMember();
+        allow read: if verified() && (appAdmin() || isMember());
         allow create: if verified() && isMember()
                       && request.resource.data.squadId == squadId
                       && request.resource.data.createdBy == request.auth.uid;
-        allow update: if verified() && isMember()
+        allow update: if verified() && (appAdmin() || isMember())
                       && request.resource.data.squadId == squadId
                       && request.resource.data.createdBy == resource.data.createdBy;
-        allow delete: if verified() && (isCoach() || resource.data.createdBy == request.auth.uid);
+        allow delete: if verified() && (resource.data.createdBy == request.auth.uid || isCoach() || isAdmin());
       }
     }
 
     // A join code points at its squad, so a code can be checked without being able to list squads.
     match /joinCodes/{code} {
-      function codeSquad() { return /databases/$(database)/documents/squads/$(request.resource.data.squadId); }
+      function squadAfter() { return getAfter(/databases/$(database)/documents/squads/$(request.resource.data.squadId)).data; }
+      function adminOf(sid) {
+        return appAdmin()
+          || get(/databases/$(database)/documents/squads/$(sid)).data.coachUid == request.auth.uid
+          || get(/databases/$(database)/documents/squads/$(sid)/members/$(request.auth.uid)).data.get('admin', false) == true;
+      }
       allow get: if verified();
       allow list: if false;
+      // Written with the squad (creating it) or when an administrator changes the code.
       allow create: if verified()
                     && request.resource.data.keys().hasOnly(['squadId', 'sport', 'name'])
-                    && getAfter(codeSquad()).data.coachUid == request.auth.uid
-                    && getAfter(codeSquad()).data.joinCode == code;
+                    && squadAfter().joinCode == code
+                    && (squadAfter().coachUid == request.auth.uid || adminOf(request.resource.data.squadId));
       allow update: if false;
-      allow delete: if verified()
-                    && get(/databases/$(database)/documents/squads/$(resource.data.squadId)).data.coachUid == request.auth.uid;
+      allow delete: if verified() && adminOf(resource.data.squadId);
     }
   }
 }

@@ -106,9 +106,12 @@ Export PDF builds a laid-out A4 report (`src/core/report.ts`) from data each spo
 
 A *squad* is a hockey team or a tennis player (`src/core/squads.ts`, screens in `src/core/ui/Squads.tsx`).
 
-- Whoever creates a squad is its **coach** and gets a 6-character **join code**. Anyone who enters the code joins as a **parent**.
-- Members see the squad's matches and can capture new ones. Only whoever captured a match, or the coach, can delete it.
-- The coach can remove people and make a new code (the old one stops working; people already in stay in).
+- Everyone picks a **role** when creating or joining: **Coach**, **Parent** or **Player**. A parent can create the team if nobody has yet; the coach joins later.
+- Whoever creates a squad is its first **administrator** and gets a 6-character **join code**. Administrators can make others administrators.
+- Anyone with the code joins as a parent or player. Choosing **Coach** joins as a parent with a request that an administrator approves (or declines).
+- Members see the squad's matches and can capture new ones. Coaches and administrators can delete any match; everyone else only the ones they captured.
+- Administrators change roles, remove people and make a new code (the old one stops working; people already in stay in). The creator can't be removed.
+- **App-wide administrator** (for support): set `role` to `administrator` on your `users/{uid}` document in the Firebase console. You then see "Show all teams/players" on each sport's menu and can open and manage any of them. The app itself can never set this role.
 - On a new match, "Share with" picks the team or player, or "Only me" for a private match. Private matches and imported v2 matches stay private.
 - Shared matches live at `squads/{id}/matches`; private ones at `users/{uid}/matchesV3`. The rules check membership and the join code on the server, so nobody can read a team they're not in, even outside the app. Tests: `tests/rules/squads.rules.test.ts`.
 

@@ -215,6 +215,8 @@ textarea { min-height: 96px; resize: vertical; }
 /* ---------- history ---------- */
 .history-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .history-item .meta { font-size: 13px; color: var(--muted); }
+.badge.pending { color: var(--timer); border-color: rgba(250, 204, 21, 0.5); }
+.all-squads { display: grid; gap: 8px; margin-top: 4px; }
 .badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--card-light); border: 1px solid var(--border); color: var(--muted); }
 
 /* ---------- sheet / dialog ---------- */
@@ -239,6 +241,7 @@ textarea { min-height: 96px; resize: vertical; }
 .squads h3 { font-size: 16px; }
 .list-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 10px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--border); text-align: left; }
 .list-row.static { background: var(--card-light); }
+.list-row:disabled { opacity: 1; color: var(--text); cursor: default; }
 .row-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
 .row-buttons .btn { flex: 1; }
 .code-card { display: grid; gap: 6px; margin-bottom: 14px; }
