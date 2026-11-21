@@ -1,3 +1,4 @@
+import { TennisIcon } from "./Icon";
 import { SQUAD_WORDS } from "./words";
 import type { SportModule } from "../types";
 import { mergePoints, type TennisSetup } from "./model";
@@ -9,8 +10,8 @@ import "./tennis.css";
 export const tennis: SportModule<TennisSetup> = {
   id: "tennis",
   name: "Tennis",
-  icon: "🎾",
-  buttonClass: "tennis",
+  Icon: TennisIcon,
+  blurb: "Point by point · serve, return and winners",
   squad: SQUAD_WORDS,
   Setup: TennisSetupScreen,
   MatchView: TennisMatchView,

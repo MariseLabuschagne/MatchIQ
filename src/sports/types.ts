@@ -12,9 +12,10 @@ export interface SportModule<TSetup = any> { // eslint-disable-line @typescript-
   /** Stored on every match and used in routes, e.g. "hockey". Never change it once matches exist. */
   id: string;
   name: string;
-  icon: string;
-  /** Gradient class for the home and menu buttons (.sport-button.<class>). */
-  buttonClass: string;
+  /** Line icon shown next to the name (drawn in the current text colour). */
+  Icon: ComponentType;
+  /** One line under the name on the home screen, e.g. "Team matches · entries, shots, goals". */
+  blurb: string;
   /** New-match screen. */
   Setup: ComponentType;
   /** Live capture and summary screens. `view` is the route part after the match id, e.g. "summary". */
@@ -36,7 +37,7 @@ export interface SportModule<TSetup = any> { // eslint-disable-line @typescript-
 /** A sport not in this version yet, shown on the home screen; `href` can point to where it lives for now. */
 export interface ComingSoon {
   name: string;
-  icon: string;
+  Icon: ComponentType;
   note: string;
   href?: string;
 }

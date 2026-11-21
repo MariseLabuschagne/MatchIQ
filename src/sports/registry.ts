@@ -1,3 +1,4 @@
+import { SoftballIcon } from "../core/ui/icons";
 import { hockey } from "./hockey";
 import { tennis } from "./tennis";
 import type { ComingSoon, SportModule } from "./types";
@@ -7,7 +8,7 @@ export const SPORTS: SportModule[] = [hockey, tennis];
 
 export const COMING_SOON: ComingSoon[] = [
   // The v2 app is published alongside v3 at ./legacy/ (see vite.config.ts) and shares sign-in and data.
-  { name: "Softball", icon: "🥎", note: "Being redesigned · opens the current app", href: "./legacy/" }
+  { name: "Softball", Icon: SoftballIcon, note: "Being redesigned · opens the previous app", href: "./legacy/" }
 ];
 
 export function getSport(id: string | undefined): SportModule | undefined {

@@ -1,3 +1,4 @@
+import { HockeyIcon } from "./Icon";
 import { SQUAD_WORDS } from "./words";
 import type { SportModule } from "../types";
 import { importLegacyOnce } from "./importLegacy";
@@ -11,8 +12,8 @@ import "./hockey.css";
 export const hockey: SportModule<HockeySetup> = {
   id: "hockey",
   name: "Hockey",
-  icon: "🏑",
-  buttonClass: "hockey",
+  Icon: HockeyIcon,
+  blurb: "Team matches · entries, shots and goals",
   squad: SQUAD_WORDS,
   Setup: HockeySetupScreen,
   MatchView: HockeyMatchView,

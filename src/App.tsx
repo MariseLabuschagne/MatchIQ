@@ -49,22 +49,32 @@ function Home() {
       <div className="home">
         <img className="home-logo" src="./matchiq-logo.jpeg" alt="MatchIQ" />
         <p className="home-tagline">Tap what happens. See what matters.</p>
-        {SPORTS.map((s) => (
-          <button key={s.id} className={`sport-button ${s.buttonClass}`} onClick={() => navigate(`/sport/${s.id}`)}>{s.icon} {s.name}</button>
-        ))}
-        {COMING_SOON.map((s) =>
-          s.href ? (
-            <a key={s.name} className="sport-button disabled" href={s.href}>
-              <span>{s.icon} {s.name}<small>{s.note}</small></span>
-            </a>
-          ) : (
-            <button key={s.name} className="sport-button disabled" disabled>
-              <span>{s.icon} {s.name}<small>{s.note}</small></span>
+        <p className="section-label">Choose a sport</p>
+        <div className="sport-list">
+          {SPORTS.map((s) => (
+            <button key={s.id} className="sport-row" onClick={() => navigate(`/sport/${s.id}`)}>
+              <span className="sport-icon"><s.Icon /></span>
+              <span><span className="name">{s.name}</span><span className="sub">{s.blurb}</span></span>
+              <span className="chev" aria-hidden="true">›</span>
             </button>
-          )
-        )}
-        <p className="muted small">Signed in{profile?.name ? ` as ${profile.name}` : ""}. <button className="link" onClick={logout}>Sign out</button></p>
-        <p className="muted small">MatchIQ v{__APP_VERSION__} · built {new Date(__BUILD_DATE__).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
+          ))}
+          {COMING_SOON.map((s) => {
+            const body = (
+              <>
+                <span className="sport-icon"><s.Icon /></span>
+                <span><span className="name">{s.name}</span><span className="sub">{s.note}</span></span>
+                <span className="chev" aria-hidden="true">{s.href ? "›" : ""}</span>
+              </>
+            );
+            return s.href
+              ? <a key={s.name} className="sport-row muted-row" href={s.href}>{body}</a>
+              : <div key={s.name} className="sport-row muted-row" aria-disabled="true">{body}</div>;
+          })}
+        </div>
+        <div className="home-foot">
+          <p className="muted small">Signed in{profile?.name ? ` as ${profile.name}` : ""}. <button className="link" onClick={logout}>Sign out</button></p>
+          <p className="muted small">MatchIQ v{__APP_VERSION__} · built {new Date(__BUILD_DATE__).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
+        </div>
       </div>
     </>
   );
@@ -82,16 +92,21 @@ function SportMenu({ sport }: { sport: SportModule }) {
     <>
       <Topbar />
       <div className="home">
-        <h2>{sport.name}</h2>
+        <button className="link" style={{ alignSelf: "flex-start" }} onClick={() => navigate("/")}>← All sports</button>
+        <div className="menu-head">
+          <span className="sport-icon"><sport.Icon /></span>
+          <h2>{sport.name}</h2>
+        </div>
         {active.map((m) => (
-          <button key={m.id} className="btn primary block" onClick={() => navigate(`/match/${m.id}`)}>
-            Resume: {sport.title(m.setup)}
+          <button key={m.id} className="sport-row" onClick={() => navigate(`/match/${m.id}`)}>
+            <span className="sport-icon" aria-hidden="true">▶</span>
+            <span><span className="name">Resume: {sport.title(m.setup)}</span><span className="sub">In progress · {sport.scoreLine(m)}</span></span>
+            <span className="chev" aria-hidden="true">›</span>
           </button>
         ))}
-        <button className={`sport-button ${sport.buttonClass}`} onClick={() => navigate(`/new/${sport.id}`)}>New match</button>
-        <button className="sport-button history" onClick={() => navigate(`/history/${sport.id}`)}>Match history</button>
+        <button className="btn primary block" onClick={() => navigate(`/new/${sport.id}`)}>New match</button>
+        <button className="btn block" onClick={() => navigate(`/history/${sport.id}`)}>Match history</button>
         <SquadSection sport={sport.id} words={sport.squad} />
-        <button className="link" onClick={() => navigate("/")}>← All sports</button>
       </div>
     </>
   );

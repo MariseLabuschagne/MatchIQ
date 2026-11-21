@@ -71,10 +71,10 @@ export function AuthScreen() {
   };
 
   return (
-    <div className="home">
-      <img className="home-logo" src="./matchiq-logo.jpeg" alt="MatchIQ" />
-      <p className="home-tagline">Capture the match with taps. Get the insights after.</p>
-      <form className="card stack" onSubmit={submit} style={{ textAlign: "left" }}>
+    <div className="auth-wrap">
+      <form className="auth-card" onSubmit={submit}>
+        <img className="auth-logo" src="./matchiq-logo.jpeg" alt="MatchIQ" />
+        <p className="auth-tagline">Capture the match with taps. Get the insights after.</p>
         <h2>{mode === "login" ? "Log in" : mode === "register" ? "Create account" : "Reset password"}</h2>
         {mode === "register" && (
           <label className="field">Your name<input id="reg-name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} /></label>
@@ -107,9 +107,9 @@ export function VerifyScreen() {
   const { user, refresh, logout } = useAuth();
   const [msg, setMsg] = useState<string | null>(null);
   return (
-    <div className="home">
-      <img className="home-logo" src="./matchiq-logo.jpeg" alt="MatchIQ" />
-      <div className="card stack" style={{ textAlign: "left" }}>
+    <div className="auth-wrap">
+      <div className="auth-card">
+        <img className="auth-logo" src="./matchiq-logo.jpeg" alt="MatchIQ" />
         <h2>Check your email</h2>
         <p className="muted">We sent a verification link to {user?.email}. Open it, then come back and tap the button below.</p>
         {msg && <p className="message">{msg}</p>}
