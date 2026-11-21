@@ -150,6 +150,16 @@ export async function listMySquads(uid: string, sport?: SportId): Promise<MySqua
   return out.sort((a, b) => a.name.localeCompare(b.name));
 }
 
+/**
+ * The roles this person holds across their teams and players, for the profile button,
+ * e.g. ["coach"] or ["coach", "parent"]. From their own list, so it is one quick read.
+ */
+export async function myRoles(uid: string): Promise<SquadRole[]> {
+  const snap = await getDocs(collection(db, "users", uid, "squads"));
+  const set = new Set(snap.docs.map((d) => (d.data().role as SquadRole) ?? "parent"));
+  return ROLES.filter((r) => set.has(r));
+}
+
 /** App-wide administrators only: every squad for a sport. */
 export async function listAllSquads(sport: SportId): Promise<Squad[]> {
   const snap = await getDocs(query(collection(db, "squads"), where("sport", "==", sport)));

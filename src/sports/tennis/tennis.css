@@ -29,7 +29,7 @@
 .hint { font-size: 13px; color: var(--muted); border: 1px dashed var(--border); border-radius: 10px; padding: 8px 10px; }
 .chiprow { display: flex; flex-wrap: wrap; gap: 8px; }
 .chiprow button { min-height: 42px; padding: 0 16px; border-radius: 12px; background: var(--card-light); border: 1px solid var(--border); font-weight: 600; }
-.chiprow button[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+.chiprow button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--navy); }
 .plist { display: flex; flex-direction: column; gap: 6px; }
 .prow { display: grid; grid-template-columns: 6px minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--card-light); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px 8px 0; }
 .prow .bar { align-self: stretch; border-radius: 0 3px 3px 0; }
@@ -37,7 +37,7 @@
 .prow .desc { font-size: 14px; overflow-wrap: anywhere; }
 .tabs { display: flex; gap: 4px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 3px; }
 .tabs button { padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); }
-.tabs button[aria-current="page"] { background: var(--accent-strong); color: white; }
+.tabs button[aria-current="page"] { background: var(--gold); color: var(--navy); }
 
 .stat-table td:nth-child(2) { color: var(--text); font-weight: 500; }
 .stat-table td.dim, .period-table td.dim { color: var(--muted); font-weight: 400; }

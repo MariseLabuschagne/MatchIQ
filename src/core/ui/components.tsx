@@ -3,6 +3,7 @@ import type { Insight } from "../types";
 import { useAuth } from "../auth/AuthProvider";
 import { navigate } from "../router";
 import { initials } from "../names";
+import { myRoles, ROLE_LABEL } from "../squads";
 import { isDataSaver, onDataSaverChange, sendWaiting, setDataSaver, waitingToSend } from "../storage/sync";
 
 export function useOnline(): boolean {
@@ -42,22 +43,43 @@ function useDataSaver(): boolean {
   return on;
 }
 
+/** "COACH · PARENT", "ADMINISTRATOR"; empty until known. Loaded once per sign-in. */
+let rolesCache: { uid: string; label: string } | null = null;
+function useRoleLabel(): string {
+  const { user, profile } = useAuth();
+  const [label, setLabel] = useState(rolesCache && rolesCache.uid === user?.uid ? rolesCache.label : "");
+  useEffect(() => {
+    if (!user) return;
+    if (profile?.role === "administrator") { setLabel("Administrator"); return; }
+    myRoles(user.uid)
+      .then((roles) => {
+        const l = roles.length ? roles.map((r) => ROLE_LABEL[r]).join(" · ") : "Parent";
+        rolesCache = { uid: user.uid, label: l };
+        setLabel(l);
+      })
+      .catch(() => {});
+  }, [user, profile?.role]);
+  return label;
+}
+
 function ProfileButton({ compact }: { compact: boolean }) {
   const { user, profile } = useAuth();
   const online = useOnline();
   const saver = useDataSaver();
+  const role = useRoleLabel();
   const [open, setOpen] = useState(false);
   if (!user) return null;
   const name = profile?.name || user.displayName || user.email || "";
-  const status = !online ? "Offline · saved on phone" : saver ? "Data saver · sends at the end" : "Online";
+  const tag = !online ? "Offline" : saver ? "Data saver" : "";
   return (
     <>
-      <button className={`profile-btn${compact ? " compact" : ""}`} onClick={() => setOpen(true)} aria-label={`Your profile: ${name}. ${status}`}>
-        <span className={`avatar${!online || saver ? " held" : ""}`}>{initials(name, user.email)}</span>
+      <button className={`profile-btn${compact ? " compact" : ""}`} onClick={() => setOpen(true)} aria-label={`Your profile: ${name}${role ? `, ${role}` : ""}${tag ? `. ${tag} on` : ""}`}>
+        {tag && <span className="status-tag">{tag}</span>}
+        <span className="avatar">{initials(name, user.email)}</span>
         {!compact && (
           <span className="profile-text">
             <span className="profile-name">{name}</span>
-            <span className={`sync${!online ? " offline" : saver ? " saver" : ""}`}>{status}</span>
+            {role && <span className="profile-role">{role}</span>}
           </span>
         )}
       </button>
@@ -92,7 +114,7 @@ function ProfileSheet({ name, onClose }: { name: string; onClose: () => void }) 
       <label className="check">
         <span>
           Data saver
-          <span className="muted small" style={{ display: "block" }}>Keep a match on this phone while it's on and send it once, when it ends. Uses less mobile data and copes with poor signal. Others in the team see it after it ends.</span>
+          <span className="muted small" style={{ display: "block" }}>Send matches when they end, not during play.</span>
         </span>
         <input type="checkbox" checked={saver} onChange={(e) => setDataSaver(e.target.checked, uid)} />
       </label>

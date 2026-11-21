@@ -52,7 +52,7 @@ function Home() {
           {SPORTS.map((s) => (
             <button key={s.id} className="sport-row" onClick={() => navigate(`/sport/${s.id}`)}>
               <span className="sport-icon"><s.Icon /></span>
-              <span><span className="name">{s.name}</span><span className="sub">{s.blurb}</span></span>
+              <span className="name">{s.name}</span>
               <span className="chev" aria-hidden="true">›</span>
             </button>
           ))}

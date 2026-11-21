@@ -14,6 +14,8 @@
   --gold-soft: #fdf3c4;
   --green: #5fa82a;
   --green-soft: #edf6e4;
+  /* Logo green, darkened enough to read as text on white. */
+  --green-text: #3d7a1a;
   --teal: #0d9488;
   --teal-text: #0f766e;
   --grey: #64748b;
@@ -26,7 +28,7 @@
   --accent: #0f2747;
   --accent-strong: #0f2747;
   --accent-soft: rgba(15, 39, 71, 0.08);
-  --link: #0f766e;
+  --link: #3d7a1a;
   --timer: #f5c518;
   /* Hockey tap buttons: the colours of the previous MatchIQ app. */
   --attack: #4987ea;
@@ -96,16 +98,17 @@ h3 { font-size: 16px; font-weight: 600; }
 /* ---------- header ---------- */
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
 .topbar.at-home { justify-content: flex-end; }
-.home-link { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 16px; color: var(--navy); padding: 8px 4px; }
+.home-link { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 16px; color: var(--green-text); padding: 8px 4px; }
 .home-link span { font-size: 22px; line-height: 1; margin-top: -2px; }
 .topbar-right { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .profile-btn { display: flex; align-items: center; gap: 10px; border-radius: 999px; padding: 2px 4px 2px 2px; min-width: 0; text-align: left; }
 .profile-btn:active { background: var(--accent-soft); }
 .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: var(--gold); display: grid; place-items: center; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; flex: none; position: relative; }
-.avatar.held::after { content: ""; position: absolute; right: -1px; bottom: -1px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); border: 2px solid var(--bg); }
+.status-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy); background: var(--gold); border-radius: 999px; padding: 3px 8px; white-space: nowrap; }
 .avatar.large { width: 52px; height: 52px; font-size: 17px; }
 .profile-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
 .profile-name { font-size: 13px; font-weight: 600; color: var(--navy); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.profile-role { font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .profile-head { display: flex; align-items: center; gap: 14px; }
 .profile-head .badge { display: inline-block; margin-top: 4px; }
 .sync { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
@@ -123,10 +126,10 @@ input[type="text"], input[type="email"], input[type="password"], select, textare
 }
 textarea { min-height: 96px; resize: vertical; }
 .check { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--text); font-size: 15px; margin-top: 16px; }
-.check input { width: 22px; height: 22px; accent-color: var(--accent); }
+.check input { width: 22px; height: 22px; accent-color: var(--green); }
 .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; }
 .seg button { min-height: 42px; border-radius: 10px; background: var(--card-light); border: 1px solid var(--border); font-weight: 600; }
-.seg button[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+.seg button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--navy); }
 .message { padding: 10px 12px; border-radius: 10px; background: #fff7ed; color: #7c2d12; border: 1px solid #fdba74; font-size: 14px; }
 .message.ok { background: #f0fdf4; color: #14532d; border-color: #86efac; }
 
@@ -137,7 +140,7 @@ textarea { min-height: 96px; resize: vertical; }
   transition: transform 0.15s ease, background-color 0.15s ease;
 }
 .btn:active { transform: scale(0.98); }
-.btn.primary { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+.btn.primary { background: var(--navy); border-color: var(--navy); color: var(--gold); }
 .btn.primary:active { background: var(--navy-soft); }
 .btn.success { background: var(--success-dark); border-color: var(--success-dark); color: #fff; }
 .btn.danger { background: transparent; border-color: var(--danger); color: var(--danger-dark); }
@@ -152,7 +155,7 @@ textarea { min-height: 96px; resize: vertical; }
   min-height: 68px; padding: 12px 14px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--border);
   color: var(--text); text-align: left; text-decoration: none; transition: border-color 0.15s ease, transform 0.15s ease;
 }
-.sport-row:active { transform: scale(0.99); border-color: var(--accent); }
+.sport-row:active { transform: scale(0.99); border-color: var(--green); }
 .sport-row .sport-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--green-soft); color: var(--green); }
 .sport-row .sport-icon svg { width: 26px; height: 26px; }
 .sport-row .name { font-size: 16px; font-weight: 600; display: block; }
@@ -186,7 +189,7 @@ textarea { min-height: 96px; resize: vertical; }
 .auth-card input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .auth-card .btn.primary { min-height: 44px; }
 .auth-card .btn:not(.primary) { background: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
-.auth-card .link { color: var(--accent-strong); font-size: 14px; }
+.auth-card .link { color: var(--green-text); font-size: 14px; }
 .auth-card .muted { color: #64748b; font-size: 14px; }
 .auth-card .message { color: #7c2d12; background: #fff7ed; border-color: #fdba74; }
 .auth-card .message.ok { color: #14532d; background: #f0fdf4; border-color: #86efac; }
@@ -205,8 +208,14 @@ textarea { min-height: 96px; resize: vertical; }
 .event-button.attack { background: linear-gradient(135deg, var(--attack), var(--attack-dark)); }
 .event-button.defence { background: linear-gradient(135deg, var(--defence), var(--defence-dark)); }
 .event-button.discipline { background: linear-gradient(135deg, var(--discipline), var(--discipline-dark)); }
-/* The opponent's cards: same amber, outlined, so they can't be mistaken for ours. */
-.event-button.discipline.opp { background: #fff; color: var(--discipline-dark); border: 3px solid var(--discipline); }
+/* Cards: a compact block, one row per team; the opponent's row is outlined. */
+.event-category.small { font-size: 15px; margin: 0 0 6px; }
+.cards-block { display: grid; gap: 6px; }
+.card-row { display: grid; grid-template-columns: minmax(70px, 1fr) repeat(3, minmax(0, 1fr)); gap: 6px; align-items: center; }
+.card-team { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-btn { min-height: 38px; border-radius: 10px; font-size: 13px; font-weight: 600; color: #fff; background: linear-gradient(135deg, var(--discipline), var(--discipline-dark)); border: 2px solid transparent; }
+.card-btn.opp { background: #fff; color: var(--discipline-dark); border-color: var(--discipline); }
+.card-btn.flash { box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.55); }
 .event-button.control { background: linear-gradient(135deg, #a1a6ac, #898e94); }
 .event-button .sub { font-size: 11.5px; font-weight: 500; opacity: 0.9; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .event-button.flash { border-color: var(--highlight); box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.55); }
@@ -238,7 +247,7 @@ textarea { min-height: 96px; resize: vertical; }
 
 .insights { display: flex; flex-direction: column; gap: 8px; }
 .insight { display: grid; grid-template-columns: 6px 1fr; gap: 12px; background: var(--card-light); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px 10px 0; overflow: hidden; }
-.insight::before { content: ""; border-radius: 0 3px 3px 0; background: var(--accent); }
+.insight::before { content: ""; border-radius: 0 3px 3px 0; background: var(--green); }
 .insight.strength::before { background: var(--success); }
 .insight.workon::before { background: var(--coral); }
 .insight b { display: block; }

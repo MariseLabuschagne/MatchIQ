@@ -1,4 +1,4 @@
-import { newClock } from "./clock";
+import { newClock, startClock } from "./clock";
 import { uid } from "./events";
 import { saveMatch } from "./storage/sync";
 import { SCHEMA_VERSION, type Match, type SportId } from "./types";
@@ -16,7 +16,8 @@ export async function createMatch<TSetup>(sport: SportId, setup: TSetup, periodM
     status: "active",
     setup,
     events: [],
-    clock: newClock(periodMinutes),
+    // Timed sports: the clock starts with the match (there is only a pause button).
+    clock: periodMinutes > 0 ? startClock(newClock(periodMinutes)) : newClock(periodMinutes),
     ...(squadId && ownerUid ? { squadId, createdBy: ownerUid } : {})
   };
   await saveMatch(match as Match, ownerUid, true);

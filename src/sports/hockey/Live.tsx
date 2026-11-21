@@ -7,7 +7,7 @@ import type { Match } from "../../core/types";
 import type { MatchSession } from "../../core/useMatch";
 import * as A from "./actions";
 import { describeTap } from "./describe";
-import { PERIOD_NAMES, periodsFor, type EntryLocation, type HockeySetup, type Side, type Zone } from "./model";
+import { PERIOD_NAMES, periodsFor, type CardColour, type EntryLocation, type HockeySetup, type Side, type Zone } from "./model";
 import { deriveLive, type HockeyLive } from "./reducer";
 
 type Session = MatchSession<HockeySetup>;
@@ -16,7 +16,7 @@ interface Btn {
   id: string;
   ico: string;
   label: string;
-  cls: "attack" | "defence" | "discipline" | "discipline opp" | "control";
+  cls: "attack" | "defence" | "control";
   sub?: string;
   run: (live: HockeyLive, m: Match<HockeySetup>) => NewEvent[];
 }
@@ -112,7 +112,8 @@ export function HockeyLive({ session }: { session: Session }) {
     const to = periods[live.periodIndex + 1];
     if (!to) return;
     record(A.nextPeriod(live, to), { period: live.period, second: secs });
-    update((m) => ({ ...m, clock: resetClock(m.clock) }));
+    // The next quarter or half starts its clock straight away.
+    update((m) => ({ ...m, clock: startClock(resetClock(m.clock)) }));
   };
   const endMatch = () => {
     update((m) => ({ ...m, status: "completed", completedAt: new Date().toISOString(), clock: pauseClock(m.clock) }), true);
@@ -135,22 +136,12 @@ export function HockeyLive({ session }: { session: Session }) {
         { id: "16-against", ico: "▶", label: "16 against", cls: "defence", run: (l) => A.restart16(l, "against") },
         ...ZONES.map(([z, label]): Btn => ({ id: `tl-${z}`, ico: "⬇️", label: `Turnover lost ${label}`, cls: "defence", run: (l) => A.generalTurnover(l, false, z) }))
       ]
-    },
-    {
-      title: `Discipline · ${s.ourTeam}`, cls: "discipline", items: [
-        { id: "green", ico: "🟩", label: "Green card", cls: "discipline", sub: s.ourTeam, run: (l) => A.card(l, "green", "for") },
-        { id: "yellow", ico: "🟨", label: "Yellow card", cls: "discipline", sub: s.ourTeam, run: (l) => A.card(l, "yellow", "for") },
-        { id: "red", ico: "🟥", label: "Red card", cls: "discipline", sub: s.ourTeam, run: (l) => A.card(l, "red", "for") }
-      ]
-    },
-    {
-      title: `Discipline · ${s.opponent}`, cls: "discipline", items: [
-        { id: "green-against", ico: "🟩", label: "Green card", cls: "discipline opp", sub: s.opponent, run: (l) => A.card(l, "green", "against") },
-        { id: "yellow-against", ico: "🟨", label: "Yellow card", cls: "discipline opp", sub: s.opponent, run: (l) => A.card(l, "yellow", "against") },
-        { id: "red-against", ico: "🟥", label: "Red card", cls: "discipline opp", sub: s.opponent, run: (l) => A.card(l, "red", "against") }
-      ]
     }
   ];
+
+  // Cards: used rarely, so a compact block of small buttons, one row per team.
+  const cardRows: { team: string; side: "for" | "against" }[] = [{ team: s.ourTeam, side: "for" }, { team: s.opponent, side: "against" }];
+  const CARDS: [CardColour, string, string][] = [["green", "🟩", "Green"], ["yellow", "🟨", "Yellow"], ["red", "🟥", "Red"]];
 
   const taps = groups(match.events).reverse();
   const shown = showAll ? taps : taps.slice(0, 6);
@@ -169,10 +160,10 @@ export function HockeyLive({ session }: { session: Session }) {
         <div className="period-label">{PERIOD_NAMES[live.period] ?? live.period}{over ? " · time up" : ""}</div>
         <div className="clock-controls">
           <button className={`btn small ${running ? "" : "success"}`} onClick={() => update((m) => ({ ...m, clock: running ? pauseClock(m.clock) : startClock(m.clock) }))}>
-            {running ? "Pause" : secs > 0 ? "Resume" : "Start clock"}
+            {running ? "Pause" : "Resume"}
           </button>
           {!live.isLastPeriod ? (
-            <button className="btn small" onClick={nextPeriod}>Next: {PERIOD_NAMES[periods[live.periodIndex + 1]]}</button>
+            <button className="btn small" onClick={nextPeriod}>Start {PERIOD_NAMES[periods[live.periodIndex + 1]]}</button>
           ) : (
             <button className="btn small danger" onClick={() => setConfirmEnd(true)}>End match</button>
           )}
@@ -231,6 +222,23 @@ export function HockeyLive({ session }: { session: Session }) {
         </section>
       ))}
 
+      <section className="cards-block" aria-label="Cards">
+        <h3 className="event-category discipline small">Cards</h3>
+        {cardRows.map(({ team, side }) => (
+          <div key={side} className={`card-row ${side}`}>
+            <span className="card-team">{team}</span>
+            {CARDS.map(([colour, ico, label]) => {
+              const id = `card-${colour}-${side}`;
+              return (
+                <button key={id} className={`card-btn${side === "against" ? " opp" : ""}${flash === id ? " flash" : ""}`} onClick={() => tap(id, A.card(live, colour, side))} aria-label={`${label} card, ${team}`}>
+                  <span aria-hidden="true">{ico}</span> {label}
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </section>
+
       <div className="toolbar">
         <button className="btn" disabled={!canUndo} onClick={undo}>↩ Undo</button>
         <button className="btn" disabled={!canRedo} onClick={redo}>↪ Redo</button>
@@ -244,7 +252,7 @@ export function HockeyLive({ session }: { session: Session }) {
           <span className="muted small">{taps.length} taps</span>
         </div>
         {taps.length === 0 ? (
-          <p className="muted small">Nothing captured yet. Start the clock and tap what happens.</p>
+          <p className="muted small">Nothing captured yet. Tap what happens.</p>
         ) : (
           <div className="timeline">
             {shown.map((g) => (
