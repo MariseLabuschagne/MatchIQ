@@ -132,7 +132,6 @@ textarea { min-height: 96px; resize: vertical; }
 
 .home { max-width: 420px; width: 100%; margin: 12px auto 0; display: flex; flex-direction: column; gap: 14px; }
 .home-logo { width: 100%; max-width: 190px; margin: 0 auto; background: white; padding: 10px; border-radius: var(--radius); }
-.home-tagline { color: var(--muted); font-size: 15px; text-align: center; }
 .home-foot { text-align: center; }
 
 /* ---------- sign-in: one white card holding the logo and the form ---------- */
@@ -143,7 +142,6 @@ textarea { min-height: 96px; resize: vertical; }
   color-scheme: light;
 }
 .auth-card .auth-logo { width: 190px; max-width: 70%; margin: 0 auto 2px; display: block; }
-.auth-card .auth-tagline { text-align: center; color: #64748b; font-size: 13px; margin-top: -4px; }
 .auth-card h2 { font-size: 17px; font-weight: 600; margin-top: 6px; }
 .auth-card .field { color: #475569; font-size: 13px; gap: 6px; }
 .auth-card .field + .field { margin-top: 4px; }

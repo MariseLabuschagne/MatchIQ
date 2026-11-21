@@ -75,7 +75,6 @@ export function AuthScreen() {
     <div className="auth-wrap">
       <form className="auth-card" onSubmit={submit}>
         <img className="auth-logo" src="./matchiq-logo.jpeg" alt="MatchIQ" />
-        <p className="auth-tagline">Capture the match with taps. Get the insights after.</p>
         <h2>{mode === "login" ? "Log in" : mode === "register" ? "Create account" : "Reset password"}</h2>
         {mode === "register" && (
           <label className="field">Your name<input id="reg-name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} /></label>

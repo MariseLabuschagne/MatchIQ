@@ -48,7 +48,6 @@ function Home() {
       <Topbar />
       <div className="home">
         <img className="home-logo" src="./matchiq-logo.jpeg" alt="MatchIQ" />
-        <p className="home-tagline">Tap what happens. See what matters.</p>
         <p className="section-label">Choose a sport</p>
         <div className="sport-list">
           {SPORTS.map((s) => (
