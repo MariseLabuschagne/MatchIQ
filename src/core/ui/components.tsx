@@ -22,9 +22,9 @@ export function Topbar({ right }: { right?: ReactNode }) {
   const online = useOnline();
   return (
     <header className="topbar">
-      <button className="brand" onClick={() => navigate("/")} aria-label="MatchIQ home">
+      <button className="brand" onClick={() => navigate("/")}>
         <img src="./matchiq-logo.jpeg" alt="" />
-        MatchIQ
+        Home
       </button>
       {right ?? (
         <div className="who">

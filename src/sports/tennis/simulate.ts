@@ -48,7 +48,7 @@ export function simulateMatch(setup: TennisSetup, seed = 20261120): TennisPoint[
     let pWin = srv === "p" ? (firstIn ? 0.68 : 0.4) : firstIn ? 0.37 : 0.56;
     const position = pick(r, [["baseline", 7], ["approach", 2], ["net", 1.4]]);
     if (position === "net") pWin += 0.16;
-    const rally = pick(r, [["1-3", 5], ["4-6", 3], ["7-9", 1.6], ["10+", 1]]);
+    const rally = pick(r, [["short", 4], ["10+", 1]]);
     if (rally === "10+") pWin -= 0.12;
     const serveDir = srv === "p" ? pick(r, [["t", 2], ["wide", 2], ["body", 1]]) : null;
     if (serveDir === "t") pWin += 0.06;

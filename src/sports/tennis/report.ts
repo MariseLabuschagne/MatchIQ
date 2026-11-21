@@ -1,7 +1,8 @@
 import { pct } from "../../core/insights";
 import type { ReportDoc, ReportRow } from "../../core/report";
 import type { Match } from "../../core/types";
-import { FORMATS, SHOT_LABEL, SHOTS, type P, type TennisSetup } from "./model";
+import { FORMATS, isGamesFormat, SHOT_LABEL, SHOTS, type P, type TennisSetup } from "./model";
+import { venueLabel } from "./words";
 import { resultString, type TennisState } from "./scoring";
 import type { TennisInsights, TennisStats } from "./stats";
 
@@ -37,11 +38,10 @@ export function tennisReport(m: Match<TennisSetup>, r: TennisState, st: TennisSt
   const s = m.setup;
   const name = (x: P) => (x === "p" ? s.player : s.opponent);
   const shotKeys = SHOTS.map(([k]) => k).filter((k) => st.shots[k] || st.oShots[k]);
-  const avgT = st.taps.length ? (st.taps.reduce((a, b) => a + b, 0) / st.taps.length).toFixed(1) : "–";
   return {
     kind: "Tennis match report",
     title: `${s.player} vs ${s.opponent}`,
-    meta: [fmtDate(m.createdAt), s.competition, FORMATS[s.format].label + (s.noAd ? ", no-ad" : "")],
+    meta: [fmtDate(m.createdAt), venueLabel(s), s.competition, FORMATS[s.format].label + (s.noAd ? ", no-ad" : "")],
     result: resultString(r) || `${r.games.p}–${r.games.o}`,
     resultNote: r.done ? `${name(r.winner!)} won` : s.endReason ? `Ended early: ${s.endReason}` : "In progress",
     sections: [
@@ -86,11 +86,11 @@ export function tennisReport(m: Match<TennisSetup>, r: TennisState, st: TennisSt
         ? [{
             kind: "table" as const,
             title: "Final shot",
-            head: ["Shot", "Winners", "Errors", `${name("o")} errors`],
+            head: ["Shot", `${name("p")} winners`, `${name("p")} errors`, `${name("o")} errors`],
             rows: shotKeys.map((k) => ({ cells: [SHOT_LABEL[k], String(st.shots[k]?.w ?? 0), String(st.shots[k]?.e ?? 0), String(st.oShots[k]?.e ?? 0)] }))
           }]
         : []),
-      ...(st.sets.length
+      ...(st.sets.length > 1 && !isGamesFormat(s.format)
         ? [{
             kind: "table" as const,
             title: "By set",
@@ -98,16 +98,6 @@ export function tennisReport(m: Match<TennisSetup>, r: TennisState, st: TennisSt
             rows: st.sets.map((x, i) => ({ cells: [`Set ${i + 1}`, `${x.won} of ${x.n}`, `${pct(x.won, x.n)}%`, String(x.winners), String(x.errors)], dim: x.n < 10 ? [2] : [] }))
           }]
         : []),
-      {
-        kind: "table",
-        title: "Capture check",
-        head: ["", "Count", "%"],
-        rows: [
-          statCells(["Points with detail", st.detailCount, st.n]),
-          { cells: ["Missed points", String(st.missed), ""] },
-          { cells: ["Average taps per point", avgT, ""] }
-        ]
-      },
       { kind: "text", title: "Notes", body: m.notes ?? "" }
     ]
   };

@@ -1,6 +1,6 @@
 import { frac, InsightCollector, plural } from "../../core/insights";
 import type { Insight } from "../../core/types";
-import { SHOT_LABEL, type ShotKey, type TennisPoint } from "./model";
+import { isLongRally, SHOT_LABEL, type ShotKey, type TennisPoint } from "./model";
 import type { TennisState } from "./scoring";
 
 interface Bucket { n: number; won: number; w: number; e: number; ue: number }
@@ -65,7 +65,7 @@ export function computeTennisStats(points: TennisPoint[], r: TennisState): Tenni
       if (isErr) { b.e++; if (e === "unforcedError") b.ue++; }
     }
     if (pt.position === "net") { st.net.n++; st.net.won += won; }
-    if (pt.rally) { const rb = bucket(st.rally, pt.rally); rb.n++; rb.won += won; }
+    if (pt.rally) { const rb = bucket(st.rally, isLongRally(pt.rally) ? "10+" : "short"); rb.n++; rb.won += won; }
     if (pt.serveDir && c.server === "p") { const db = bucket(st.dir, pt.serveDir); db.n++; db.won += won; }
     if (pt.shot || pt.serve) st.detailCount++;
     if (pt.taps) { st.taps.push(pt.taps); st.ms.push(pt.ms ?? 0); }
@@ -103,9 +103,10 @@ export function tennisInsights(st: TennisStats, playerName: string, opponentName
       else ins.add("workon", b.e - b.w, `${label} breaking down`, `${label}: ${plural(b.w, "winner")}, ${plural(b.e, "error")}${b.ue ? ` (${b.ue} unforced)` : ""}.`);
     }
   }
-  const short = st.rally["1-3"], long = st.rally["10+"];
-  if (short && short.n >= 8 && short.won / short.n >= 0.6) ins.add("strength", short.won / 2, "Wins the short points", `Won ${frac(short.won, short.n)} points that lasted 1–3 shots.`);
-  if (long && long.n >= 6 && long.won / long.n < 0.4) ins.add("workon", long.n - long.won, "Long rallies", `Won only ${frac(long.won, long.n)} points that went 10+ shots. Build fitness and patience.`);
+  const short = st.rally["short"], long = st.rally["10+"];
+  if (short && short.n >= 8 && short.won / short.n >= 0.6) ins.add("strength", short.won / 2, "Wins the shorter points", `Won ${frac(short.won, short.n)} points under 10 shots.`);
+  if (long && long.n >= 6 && long.won / long.n >= 0.6) ins.add("strength", long.won / 2, "Strong in long rallies", `Won ${frac(long.won, long.n)} points that went 10 or more shots.`);
+  if (long && long.n >= 6 && long.won / long.n < 0.4) ins.add("workon", long.n - long.won, "Long rallies", `Won only ${frac(long.won, long.n)} points that went 10 or more shots. Build fitness and patience.`);
   const r2 = st.second.n ? st.second.won / st.second.n : 1;
   if (st.second.n >= 6 && r2 < 0.45) ins.add("workon", (0.5 - r2) * st.second.n * 3, "Second serve under attack", `Won only ${frac(st.second.won, st.second.n)} points on the second serve.`);
   if (st.first.n >= 10 && st.first.inn / st.first.n < 0.55) ins.add("workon", (0.6 - st.first.inn / st.first.n) * st.first.n, "More first serves in", `${frac(st.first.inn, st.first.n)} first serves went in.`);
@@ -117,7 +118,7 @@ export function tennisInsights(st: TennisStats, playerName: string, opponentName
     const a = st.sets[0].errors, z = st.sets[st.sets.length - 1].errors;
     if (z >= a * 1.5 && z - a >= 4) ins.add("workon", z - a, "Errors rose as the match went on", `${a} errors in set 1, ${z} in set ${st.sets.length}. Check fitness and focus.`);
   }
-  if (st.run.len >= 4) ins.add("workon", st.run.len, "Losing streak", `Lost ${st.run.len} games in a row in set ${st.run.set}. Practise a reset routine between points.`);
+  if (st.run.len >= 4) ins.add("workon", st.run.len, "Losing streak", `Lost ${st.run.len} games in a row${st.sets.length > 1 ? ` in set ${st.run.set}` : ""}. Practise a reset routine between points.`);
   if (st.pressure.n >= 8 && st.pressure.won / st.pressure.n < 0.4) ins.add("workon", st.pressure.n - st.pressure.won, "Big points", `Won ${frac(st.pressure.won, st.pressure.n)} points at 30–30 or later and on break points.`);
 
   let worst: ShotKey | null = null;
