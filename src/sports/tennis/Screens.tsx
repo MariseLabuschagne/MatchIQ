@@ -337,6 +337,25 @@ export function TennisPoints({ session }: { session: Session }) {
   );
 }
 
+/** [label, count] or [label, won, out of]. */
+type StatRow = [string, number] | [string, number, number];
+
+/** Stats in two columns: the count ("3 of 5") and the percentage. Under 10, the % is greyed: too few to be a trend. */
+function StatTable({ rows }: { rows: StatRow[] }) {
+  return (
+    <div className="table-wrap"><table className="period-table stat-table">
+      <thead><tr><th></th><th>Count</th><th>%</th></tr></thead>
+      <tbody>{rows.map(([label, a, n]) => (
+        <tr key={label}>
+          <td>{label}</td>
+          <td>{n === undefined ? a : `${a} of ${n}`}</td>
+          <td className={n !== undefined && n < 10 ? "dim" : ""}>{n === undefined ? "" : n ? `${pct(a, n)}%` : "–"}</td>
+        </tr>
+      ))}</tbody>
+    </table></div>
+  );
+}
+
 export function TennisReport({ session }: { session: Session }) {
   const { m, points, r, name } = useTennis(session);
   const st = useMemo(() => computeTennisStats(points, r), [points, r]);
@@ -356,7 +375,7 @@ export function TennisReport({ session }: { session: Session }) {
         <div className="final" style={{ fontSize: 34, fontWeight: 900, margin: "6px 0" }}>{resultString(r) || `${r.games.p}–${r.games.o}`}</div>
         <p className="muted">{r.done ? `${name(r.winner!)} won` : m.setup.endReason ? `Ended early · ${m.setup.endReason}` : "In progress"} · {st.n} points captured</p>
       </section>
-      {st.n < 10 && <p className="hint">Capture at least 10 points to see patterns. Counts show as "3 of 5" until there are 10 or more.</p>}
+      {st.n < 10 && <p className="hint">Capture at least 10 points to see patterns. Percentages in grey come from fewer than 10 points.</p>}
       <section className="card stack">
         <InsightList title="Strengths" items={ins.strengths} empty="No clear strength yet. Keep capturing." />
         <InsightList title="Work-ons" items={ins.workons} empty="No clear work-on yet." />
@@ -373,14 +392,18 @@ export function TennisReport({ session }: { session: Session }) {
       </section>
       <section className="card">
         <h3>Serve, return and pressure</h3>
-        <div className="table-wrap"><table className="period-table"><tbody>{rows([
-          ["Service points won", frac(st.srv.won, st.srv.n)],
-          ["Return points won", frac(st.ret.won, st.ret.n)],
-          ...(st.first.n ? ([["1st serve in", frac(st.first.inn, st.first.n)], ["Won on 1st serve", frac(st.first.won, st.first.inn)], ["Won on 2nd serve", frac(st.second.won, st.second.n)]] as [string, string][]) : []),
-          ["Aces", st.aces], ["Double faults", st.dfs],
-          ["Break points saved", frac(st.bpSaved, st.bpFaced)], ["Break points converted", frac(st.bpWon, st.bpChances)],
-          ["Big points won", frac(st.pressure.won, st.pressure.n)]
-        ])}</tbody></table></div>
+        <StatTable rows={[
+          ["Points won", st.won, st.n],
+          ["Service points won", st.srv.won, st.srv.n],
+          ["Return points won", st.ret.won, st.ret.n],
+          ...(st.first.n ? ([["1st serve in", st.first.inn, st.first.n], ["Won on 1st serve", st.first.won, st.first.inn], ["Won on 2nd serve", st.second.won, st.second.n]] as StatRow[]) : []),
+          ["Service games held", st.holds.won, st.holds.n],
+          ["Return games broken", st.breaks.won, st.breaks.n],
+          ["Break points saved", st.bpSaved, st.bpFaced],
+          ["Break points converted", st.bpWon, st.bpChances],
+          ["Big points won", st.pressure.won, st.pressure.n],
+          ["Aces", st.aces], ["Double faults", st.dfs]
+        ]} />
       </section>
       <section className="card">
         <h3>How points ended</h3>
@@ -407,8 +430,8 @@ export function TennisReport({ session }: { session: Session }) {
         <section className="card">
           <h3>By set</h3>
           <div className="table-wrap"><table className="period-table">
-            <thead><tr><th>Set</th><th>Points won</th><th>Winners</th><th>Errors</th></tr></thead>
-            <tbody>{st.sets.map((x, i) => <tr key={i}><td>{i + 1}</td><td>{frac(x.won, x.n)}</td><td>{x.winners}</td><td>{x.errors}</td></tr>)}</tbody>
+            <thead><tr><th>Set</th><th>Points won</th><th>%</th><th>Winners</th><th>Errors</th></tr></thead>
+            <tbody>{st.sets.map((x, i) => <tr key={i}><td>{i + 1}</td><td>{x.won} of {x.n}</td><td className={x.n < 10 ? "dim" : ""}>{pct(x.won, x.n)}%</td><td>{x.winners}</td><td>{x.errors}</td></tr>)}</tbody>
           </table></div>
         </section>
       )}

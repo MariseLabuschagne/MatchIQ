@@ -204,7 +204,7 @@ textarea { min-height: 96px; resize: vertical; }
 .insight { display: grid; grid-template-columns: 6px 1fr; gap: 12px; background: var(--card-light); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px 10px 0; overflow: hidden; }
 .insight::before { content: ""; border-radius: 0 3px 3px 0; background: var(--accent); }
 .insight.strength::before { background: var(--success); }
-.insight.workon::before { background: var(--discipline); }
+.insight.workon::before { background: var(--defence); }
 .insight b { display: block; }
 .insight span { color: var(--muted); font-size: 14px; }
 .insight-group h4 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 6px 0 8px; }

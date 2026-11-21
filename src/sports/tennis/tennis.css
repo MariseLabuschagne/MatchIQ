@@ -38,3 +38,5 @@
 .tabs button { padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); }
 .tabs button[aria-current="page"] { background: var(--accent-strong); color: white; }
 
+.stat-table td:nth-child(2) { color: var(--text); font-weight: 500; }
+.stat-table td.dim, .period-table td.dim { color: var(--muted); font-weight: 400; }

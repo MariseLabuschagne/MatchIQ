@@ -2,7 +2,7 @@ import type { MatchEvent } from "../../core/types";
 
 export type P = "p" | "o";
 export type Level = "quick" | "standard" | "detailed";
-export type FormatKey = "bo3" | "bo3mtb" | "pro8" | "short4";
+export type FormatKey = "bo3" | "bo3mtb" | "pro8" | "short4" | "bo5g" | "bo7g" | "bo9g" | "bo11g";
 export type Ending = "ace" | "doubleFault" | "winner" | "forcedError" | "unforcedError" | "error" | "unknown";
 export type ShotKey = "forehand" | "backhand" | "volley" | "overhead" | "return" | "droplob";
 
@@ -23,13 +23,19 @@ export interface Format {
   games: number;
   tbAt: number;
   finalMtb: boolean;
+  /** Games formats: one set that ends as soon as someone reaches this many games (no tiebreak, no 2-game margin). */
+  firstTo?: number;
 }
 
 export const FORMATS: Record<FormatKey, Format> = {
   bo3: { label: "Best of 3 sets", setsToWin: 2, games: 6, tbAt: 6, finalMtb: false },
   bo3mtb: { label: "2 sets + match tiebreak to 10", setsToWin: 2, games: 6, tbAt: 6, finalMtb: true },
   pro8: { label: "One pro set to 8", setsToWin: 1, games: 8, tbAt: 8, finalMtb: false },
-  short4: { label: "Short sets to 4, best of 3", setsToWin: 2, games: 4, tbAt: 4, finalMtb: false }
+  short4: { label: "Short sets to 4, best of 3", setsToWin: 2, games: 4, tbAt: 4, finalMtb: false },
+  bo5g: { label: "Best of 5 games (first to 3)", setsToWin: 1, games: 3, tbAt: 99, finalMtb: false, firstTo: 3 },
+  bo7g: { label: "Best of 7 games (first to 4)", setsToWin: 1, games: 4, tbAt: 99, finalMtb: false, firstTo: 4 },
+  bo9g: { label: "Best of 9 games (first to 5)", setsToWin: 1, games: 5, tbAt: 99, finalMtb: false, firstTo: 5 },
+  bo11g: { label: "Best of 11 games (first to 6)", setsToWin: 1, games: 6, tbAt: 99, finalMtb: false, firstTo: 6 }
 };
 
 export const LEVELS: Record<Level, { label: string; hint: string }> = {

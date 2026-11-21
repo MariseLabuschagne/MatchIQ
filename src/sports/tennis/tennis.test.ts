@@ -10,6 +10,25 @@ const P = (n: number) => Array.from({ length: n }, () => ({ winner: "p" as const
 const O = (n: number) => Array.from({ length: n }, () => ({ winner: "o" as const }));
 
 describe("tennis scoring", () => {
+  it("best of 5 games ends at 3 games, with no tiebreak or 2-game margin", () => {
+    const g = { ...base, format: "bo5g" as const };
+    // p wins 2 games, o wins 2 games, then p wins the 5th: 3–2.
+    const r = replay(g, [...P(4), ...O(4), ...P(4), ...O(4), ...P(4)]);
+    expect(r.done).toBe(true);
+    expect(r.winner).toBe("p");
+    expect(resultString(r)).toBe("3–2");
+  });
+
+  it("best of 7, 9 and 11 games end at 4, 5 and 6", () => {
+    for (const [format, n] of [["bo7g", 4], ["bo9g", 5], ["bo11g", 6]] as const) {
+      const before = replay({ ...base, format }, O(4 * (n - 1)));
+      expect(before.done).toBe(false);
+      const r = replay({ ...base, format }, O(4 * n));
+      expect(r.done).toBe(true);
+      expect(resultString(r)).toBe(`0–${n}`);
+    }
+  });
+
   it("6–0 6–0 ends the match", () => {
     const r = replay(base, P(48));
     expect(r.done).toBe(true);
