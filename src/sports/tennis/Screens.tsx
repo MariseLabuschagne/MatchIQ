@@ -9,6 +9,9 @@ import {
 } from "./model";
 import { bpFor, ptLabels, replay, resultString, type TennisState } from "./scoring";
 import { computeTennisStats, tennisInsights } from "./stats";
+import { serveReturnRows, statCells, tennisReport, type StatRow } from "./report";
+import { exportReportPdf } from "../../core/report";
+import { safeName } from "../../core/export";
 
 type Session = MatchSession<TennisSetup>;
 type Step = "serve1" | "serve2" | "who" | "how" | "shot" | "extras";
@@ -337,19 +340,16 @@ export function TennisPoints({ session }: { session: Session }) {
   );
 }
 
-/** [label, count] or [label, won, out of]. */
-type StatRow = [string, number] | [string, number, number];
-
 /** Stats in two columns: the count ("3 of 5") and the percentage. Under 10, the % is greyed: too few to be a trend. */
 function StatTable({ rows }: { rows: StatRow[] }) {
   return (
     <div className="table-wrap"><table className="period-table stat-table">
       <thead><tr><th></th><th>Count</th><th>%</th></tr></thead>
-      <tbody>{rows.map(([label, a, n]) => (
-        <tr key={label}>
-          <td>{label}</td>
-          <td>{n === undefined ? a : `${a} of ${n}`}</td>
-          <td className={n !== undefined && n < 10 ? "dim" : ""}>{n === undefined ? "" : n ? `${pct(a, n)}%` : "–"}</td>
+      <tbody>{rows.map(statCells).map((r) => (
+        <tr key={r.cells[0]}>
+          <td>{r.cells[0]}</td>
+          <td>{r.cells[1]}</td>
+          <td className={r.dim?.includes(2) ? "dim" : ""}>{r.cells[2]}</td>
         </tr>
       ))}</tbody>
     </table></div>
@@ -365,6 +365,11 @@ export function TennisReport({ session }: { session: Session }) {
   const avgS = st.ms.length ? `${(st.ms.reduce((a, b) => a + b, 0) / st.ms.length / 1000).toFixed(1)} s` : "–";
   const rows = (list: [string, string | number][]) => list.map(([a, b]) => <tr key={a}><td>{a}</td><td>{b}</td></tr>);
   const shotKeys = SHOTS.map(([k]) => k).filter((k) => st.shots[k] || st.oShots[k]);
+  const [busy, setBusy] = useState(false);
+  const pdf = async () => {
+    setBusy(true);
+    try { await exportReportPdf(tennisReport(m, r, st, ins), safeName("MatchIQ", m.setup.player, "v", m.setup.opponent, m.createdAt.slice(0, 10))); } finally { setBusy(false); }
+  };
 
   return (
     <>
@@ -392,18 +397,7 @@ export function TennisReport({ session }: { session: Session }) {
       </section>
       <section className="card">
         <h3>Serve, return and pressure</h3>
-        <StatTable rows={[
-          ["Points won", st.won, st.n],
-          ["Service points won", st.srv.won, st.srv.n],
-          ["Return points won", st.ret.won, st.ret.n],
-          ...(st.first.n ? ([["1st serve in", st.first.inn, st.first.n], ["Won on 1st serve", st.first.won, st.first.inn], ["Won on 2nd serve", st.second.won, st.second.n]] as StatRow[]) : []),
-          ["Service games held", st.holds.won, st.holds.n],
-          ["Return games broken", st.breaks.won, st.breaks.n],
-          ["Break points saved", st.bpSaved, st.bpFaced],
-          ["Break points converted", st.bpWon, st.bpChances],
-          ["Big points won", st.pressure.won, st.pressure.n],
-          ["Aces", st.aces], ["Double faults", st.dfs]
-        ]} />
+        <StatTable rows={serveReturnRows(st)} />
       </section>
       <section className="card">
         <h3>How points ended</h3>
@@ -443,7 +437,10 @@ export function TennisReport({ session }: { session: Session }) {
         ])}</tbody></table></div>
         <p className="muted small" style={{ marginTop: 8 }}>If capturing takes more than about 8 seconds a point, try a simpler level.</p>
       </section>
-      <button className="btn" onClick={() => navigate("/sport/tennis")}>Tennis home</button>
+      <div className="row">
+        <button className="btn primary" disabled={busy} onClick={pdf}>{busy ? "Making PDF…" : "Export PDF"}</button>
+        <button className="btn" onClick={() => navigate("/sport/tennis")}>Tennis home</button>
+      </div>
     </>
   );
 }
