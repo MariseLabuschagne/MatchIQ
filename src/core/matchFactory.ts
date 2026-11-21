@@ -3,7 +3,8 @@ import { uid } from "./events";
 import { saveMatch } from "./storage/sync";
 import { SCHEMA_VERSION, type Match, type SportId } from "./types";
 
-export async function createMatch<TSetup>(sport: SportId, setup: TSetup, periodMinutes: number, ownerUid: string | null): Promise<Match<TSetup>> {
+/** `squadId` shares the match with a team or player; leave it out for a match only this person sees. */
+export async function createMatch<TSetup>(sport: SportId, setup: TSetup, periodMinutes: number, ownerUid: string | null, squadId?: string): Promise<Match<TSetup>> {
   const now = new Date().toISOString();
   const match: Match<TSetup> = {
     id: uid(),
@@ -15,7 +16,8 @@ export async function createMatch<TSetup>(sport: SportId, setup: TSetup, periodM
     status: "active",
     setup,
     events: [],
-    clock: newClock(periodMinutes)
+    clock: newClock(periodMinutes),
+    ...(squadId && ownerUid ? { squadId, createdBy: ownerUid } : {})
   };
   await saveMatch(match as Match, ownerUid, true);
   return match;

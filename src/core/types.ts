@@ -57,6 +57,10 @@ export interface Match<TSetup = unknown> {
   importedFrom?: string;
   /** Free-text notes written after the match. */
   notes?: string;
+  /** Set when the match belongs to a team or player that is shared (see core/squads.ts). */
+  squadId?: string;
+  /** Who captured it. Only they or the squad's coach can delete a shared match. */
+  createdBy?: string;
 }
 
 export interface Insight {

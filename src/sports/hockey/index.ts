@@ -1,3 +1,4 @@
+import { SQUAD_WORDS } from "./words";
 import type { SportModule } from "../types";
 import { importLegacyOnce } from "./importLegacy";
 import { LegacyImport } from "./LegacyImport";
@@ -12,6 +13,7 @@ export const hockey: SportModule<HockeySetup> = {
   name: "Hockey",
   icon: "🏑",
   buttonClass: "hockey",
+  squad: SQUAD_WORDS,
   Setup: HockeySetupScreen,
   MatchView: HockeyMatchView,
   completedView: "summary",

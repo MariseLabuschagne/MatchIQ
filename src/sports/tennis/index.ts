@@ -1,3 +1,4 @@
+import { SQUAD_WORDS } from "./words";
 import type { SportModule } from "../types";
 import { mergePoints, type TennisSetup } from "./model";
 import { replay, resultString } from "./scoring";
@@ -10,6 +11,7 @@ export const tennis: SportModule<TennisSetup> = {
   name: "Tennis",
   icon: "🎾",
   buttonClass: "tennis",
+  squad: SQUAD_WORDS,
   Setup: TennisSetupScreen,
   MatchView: TennisMatchView,
   completedView: "report",

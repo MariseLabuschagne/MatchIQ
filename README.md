@@ -94,6 +94,16 @@ Nothing in hockey, tennis or `core/` needs to change.
 
 There are three capture levels (Quick, Standard and Detailed), and the parent can switch between them mid-match. After each point, the parent taps who won and, if they can, how. MatchIQ keeps the score. "Missed point" keeps the score right without guessing stats. The report includes a capture check (taps and seconds per point) so the level can be tuned. "See a sample report first" creates a generated match that stays on the phone only.
 
+## Teams, players and sharing
+
+A *squad* is a hockey team or a tennis player (`src/core/squads.ts`, screens in `src/core/ui/Squads.tsx`).
+
+- Whoever creates a squad is its **coach** and gets a 6-character **join code**. Anyone who enters the code joins as a **parent**.
+- Members see the squad's matches and can capture new ones. Only whoever captured a match, or the coach, can delete it.
+- The coach can remove people and make a new code (the old one stops working; people already in stay in).
+- On a new match, "Share with" picks the team or player, or "Only me" for a private match. Private matches and imported v2 matches stay private.
+- Shared matches live at `squads/{id}/matches`; private ones at `users/{uid}/matchesV3`. The rules check membership and the join code on the server, so nobody can read a team they're not in, even outside the app. Tests: `tests/rules/squads.rules.test.ts`.
+
 ## Firestore rules
 
 `firestore.rules` lets each user read and write only their own profile and matches, and stops a user from making themselves an administrator. It also accepts exactly what the old app writes, so it is safe to publish while the old app is still in use (`tests/rules` checks this). Deploy with:

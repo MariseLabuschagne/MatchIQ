@@ -5,6 +5,7 @@ import { navigate, useRoute } from "./core/router";
 import { listLocal, onLocalChange, type StoredMatch } from "./core/storage/local";
 import { pullAll, removeMatch } from "./core/storage/sync";
 import { Confirm, MovedNotice, Topbar } from "./core/ui/components";
+import { SquadScreen, SquadSection, useMySquads } from "./core/ui/Squads";
 import { useMatch } from "./core/useMatch";
 import { COMING_SOON, SPORTS, getSport } from "./sports/registry";
 import type { SportModule } from "./sports/types";
@@ -36,6 +37,7 @@ function Routes() {
   if (a === "new" && sport) return <sport.Setup />;
   if (a === "history" && sport) return <History sport={sport} />;
   if (a === "match" && b) return <MatchScreen key={b} id={b} view={c} />;
+  if (a === "squad" && b) return <SquadScreen key={b} id={b} words={(id) => getSport(id)?.squad} sportName={(id) => getSport(id)?.name ?? id} />;
   return <Home />;
 }
 
@@ -88,6 +90,7 @@ function SportMenu({ sport }: { sport: SportModule }) {
         ))}
         <button className={`sport-button ${sport.buttonClass}`} onClick={() => navigate(`/new/${sport.id}`)}>New match</button>
         <button className="sport-button history" onClick={() => navigate(`/history/${sport.id}`)}>Match history</button>
+        <SquadSection sport={sport.id} words={sport.squad} />
         <button className="link" onClick={() => navigate("/")}>← All sports</button>
       </div>
     </>
@@ -101,8 +104,17 @@ function History({ sport }: { sport: SportModule }) {
   const uid = user?.uid ?? null;
   const [list, setList] = useState<StoredMatch[] | null>(null);
   const [del, setDel] = useState<StoredMatch | null>(null);
+  const [squads] = useMySquads(sport.id);
   const load = () => listLocal(uid, sport.id).then(setList);
-  useEffect(() => { load(); return onLocalChange(load); }, [sport, uid]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    load();
+    // Fetch matches others in your teams have captured since you opened the app.
+    if (uid) pullAll(uid).catch(() => {});
+    return onLocalChange(load);
+  }, [sport, uid]); // eslint-disable-line react-hooks/exhaustive-deps
+  const squadOf = (m: StoredMatch) => squads?.find((s) => s.id === m.squadId);
+  // Your own matches, ones you captured, and any match in a team you coach can be deleted.
+  const canDelete = (m: StoredMatch) => !m.squadId || m.createdBy === uid || squadOf(m)?.role === "coach";
 
   return (
     <>
@@ -120,14 +132,15 @@ function History({ sport }: { sport: SportModule }) {
               <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
                 {m.status === "active" && <span className="badge">In progress</span>}
                 {m.importedFrom && <span className="badge">Imported</span>}
+                {m.squadId && <span className="badge">{squadOf(m)?.name ?? "Shared"}</span>}
               </div>
             </button>
-            <button className="btn small danger" onClick={() => setDel(m)} aria-label={`Delete ${sport.title(m.setup)}`}>Delete</button>
+            {canDelete(m) && <button className="btn small danger" onClick={() => setDel(m)} aria-label={`Delete ${sport.title(m.setup)}`}>Delete</button>}
           </div>
         ))}
       </div>
       {sport.HistoryExtra && <sport.HistoryExtra onChanged={load} />}
-      {del && <Confirm title="Delete this match?" body={`${sport.title(del.setup)} on ${fmtDate(del.createdAt)} is removed from this phone and the cloud. This cannot be undone.`} confirmLabel="Delete match" danger onConfirm={async () => { await removeMatch(del.id, uid); load(); }} onClose={() => setDel(null)} />}
+      {del && <Confirm title="Delete this match?" body={`${sport.title(del.setup)} on ${fmtDate(del.createdAt)} is removed from this phone and the cloud${del.squadId ? ", for everyone in the " + sport.squad.one : ""}. This cannot be undone.`} confirmLabel="Delete match" danger onConfirm={async () => { await removeMatch(del.id, uid); load(); }} onClose={() => setDel(null)} />}
     </>
   );
 }

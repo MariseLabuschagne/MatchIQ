@@ -51,3 +51,9 @@ export async function deleteLocal(id: string): Promise<void> {
 export async function markSynced(id: string, updatedAt: string): Promise<void> {
   await localDb.matches.update(id, { syncedAt: updatedAt });
 }
+
+/** Removes a squad's matches from this phone (after leaving it or being removed). */
+export async function dropSquadLocal(squadId: string, ownerUid: string): Promise<void> {
+  await localDb.matches.filter((m) => m.squadId === squadId && m.ownerUid === ownerUid).delete();
+  changed();
+}

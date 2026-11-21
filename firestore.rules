@@ -1,24 +1,106 @@
 rules_version = '2';
 // MatchIQ Firestore security rules.
-// Each signed-in user can read and write only their own profile and matches.
-// Deploy with: firebase deploy --only firestore:rules
+//
+// - Each person's profile and own matches are private to them.
+// - Shared matches belong to a squad (a hockey team or a tennis player). Only the squad's
+//   members can see or capture them. Its coach (whoever created it) holds a join code;
+//   people join as parents by presenting that code. The coach can remove anyone.
+//
+// Tests: npm run test:rules     Deploy: npm run deploy:rules
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function verified() { return signedIn() && request.auth.token.email_verified == true; }
+    function shortText(v, max) { return v is string && v.size() > 0 && v.size() <= max; }
+
     match /users/{uid} {
-      allow read: if request.auth != null && request.auth.uid == uid;
+      allow read: if signedIn() && request.auth.uid == uid;
       // A user may create their own profile, but may not give themselves a role other than parent.
-      allow create: if request.auth != null && request.auth.uid == uid
+      allow create: if signedIn() && request.auth.uid == uid
                     && request.resource.data.role == 'parent';
-      allow update: if request.auth != null && request.auth.uid == uid
+      allow update: if signedIn() && request.auth.uid == uid
                     && request.resource.data.role == resource.data.role;
 
-      // Legacy matches (v2 app) and new matches (v3 app).
+      // Legacy matches (v2 app), own matches (v3) and this person's list of squads.
       match /matches/{matchId} {
-        allow read, write: if request.auth != null && request.auth.uid == uid;
+        allow read, write: if signedIn() && request.auth.uid == uid;
       }
       match /matchesV3/{matchId} {
-        allow read, write: if request.auth != null && request.auth.uid == uid;
+        allow read, write: if signedIn() && request.auth.uid == uid;
       }
+      match /squads/{squadId} {
+        allow read, write: if signedIn() && request.auth.uid == uid;
+      }
+    }
+
+    match /squads/{squadId} {
+      function squadPath() { return /databases/$(database)/documents/squads/$(squadId); }
+      function isMember() { return exists(/databases/$(database)/documents/squads/$(squadId)/members/$(request.auth.uid)); }
+      function isCoach() { return get(squadPath()).data.coachUid == request.auth.uid; }
+
+      allow read: if verified() && isMember();
+      allow create: if verified()
+                    && request.resource.data.keys().hasOnly(['sport', 'name', 'coachUid', 'joinCode', 'createdAt'])
+                    && request.resource.data.coachUid == request.auth.uid
+                    && shortText(request.resource.data.name, 60)
+                    && shortText(request.resource.data.sport, 20)
+                    && request.resource.data.joinCode is string && request.resource.data.joinCode.size() == 6;
+      // The coach can rename the squad or change its code, but not hand it over or change its sport.
+      allow update: if verified() && isCoach()
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'joinCode'])
+                    && shortText(request.resource.data.name, 60)
+                    && request.resource.data.joinCode is string && request.resource.data.joinCode.size() == 6;
+      allow delete: if verified() && isCoach();
+
+      match /members/{memberUid} {
+        allow read: if verified() && isMember();
+        // People only ever add themselves: the coach while creating the squad,
+        // anyone else as a parent holding the squad's current join code.
+        allow create: if verified() && memberUid == request.auth.uid
+                      && request.resource.data.uid == memberUid
+                      && shortText(request.resource.data.name, 80)
+                      && (
+                        (request.resource.data.role == 'coach'
+                          && request.resource.data.keys().hasOnly(['uid', 'name', 'role', 'joinedAt'])
+                          && getAfter(squadPath()).data.coachUid == request.auth.uid)
+                        ||
+                        (request.resource.data.role == 'parent'
+                          && request.resource.data.keys().hasOnly(['uid', 'name', 'role', 'joinedAt', 'code'])
+                          && request.resource.data.code == get(squadPath()).data.joinCode)
+                      );
+        allow update: if false;
+        // Anyone may leave; the coach may remove anyone else (but not their own coach place).
+        allow delete: if verified() && (
+                        (memberUid == request.auth.uid && resource.data.role != 'coach')
+                        || (isCoach() && memberUid != request.auth.uid)
+                      );
+      }
+
+      match /matches/{matchId} {
+        allow read: if verified() && isMember();
+        allow create: if verified() && isMember()
+                      && request.resource.data.squadId == squadId
+                      && request.resource.data.createdBy == request.auth.uid;
+        allow update: if verified() && isMember()
+                      && request.resource.data.squadId == squadId
+                      && request.resource.data.createdBy == resource.data.createdBy;
+        allow delete: if verified() && (isCoach() || resource.data.createdBy == request.auth.uid);
+      }
+    }
+
+    // A join code points at its squad, so a code can be checked without being able to list squads.
+    match /joinCodes/{code} {
+      function codeSquad() { return /databases/$(database)/documents/squads/$(request.resource.data.squadId); }
+      allow get: if verified();
+      allow list: if false;
+      allow create: if verified()
+                    && request.resource.data.keys().hasOnly(['squadId', 'sport', 'name'])
+                    && getAfter(codeSquad()).data.coachUid == request.auth.uid
+                    && getAfter(codeSquad()).data.joinCode == code;
+      allow update: if false;
+      allow delete: if verified()
+                    && get(/databases/$(database)/documents/squads/$(resource.data.squadId)).data.coachUid == request.auth.uid;
     }
   }
 }

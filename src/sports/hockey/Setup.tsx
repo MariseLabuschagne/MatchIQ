@@ -3,6 +3,9 @@ import { useAuth } from "../../core/auth/AuthProvider";
 import { createMatch, remember } from "../../core/matchFactory";
 import { navigate } from "../../core/router";
 import { Topbar } from "../../core/ui/components";
+import { SquadPicker } from "../../core/ui/Squads";
+import type { MySquad } from "../../core/squads";
+import { SQUAD_WORDS } from "./words";
 import type { HockeySetup } from "./model";
 
 export function HockeySetupScreen() {
@@ -15,6 +18,8 @@ export function HockeySetupScreen() {
     format: (remember("hockey.format") as "2" | "4") || "4",
     periodMinutes: Number(remember("hockey.minutes")) || 15
   });
+  const [squad, setSquad] = useState<MySquad | null>(null);
+  const pickSquad = (s: MySquad | null) => { setSquad(s); if (s) set("ourTeam", s.name); };
   const [error, setError] = useState("");
   const set = <K extends keyof HockeySetup>(k: K, v: HockeySetup[K]) => setF((x) => ({ ...x, [k]: v }));
 
@@ -25,7 +30,7 @@ export function HockeySetupScreen() {
     remember("hockey.competition", f.competition.trim());
     remember("hockey.format", f.format);
     remember("hockey.minutes", String(f.periodMinutes));
-    const m = await createMatch("hockey", { ...f, ourTeam: f.ourTeam.trim(), opponent: f.opponent.trim() }, f.periodMinutes, user?.uid ?? null);
+    const m = await createMatch("hockey", { ...f, ourTeam: f.ourTeam.trim(), opponent: f.opponent.trim() }, f.periodMinutes, user?.uid ?? null, squad?.id);
     navigate(`/match/${m.id}`);
   };
 
@@ -36,6 +41,7 @@ export function HockeySetupScreen() {
       <div className="card">
         <h2 style={{ marginBottom: 16 }}>New hockey match</h2>
         <label className="field">Competition<input id="h-comp" type="text" value={f.competition} onChange={(e) => set("competition", e.target.value)} placeholder="League, festival, friendly" /></label>
+        <SquadPicker sport="hockey" words={SQUAD_WORDS} value={squad?.id ?? ""} onChange={pickSquad} />
         <label className="field">Our team<input id="h-team" type="text" value={f.ourTeam} onChange={(e) => set("ourTeam", e.target.value)} placeholder="e.g. U14A" /></label>
         <label className="field">Opposition<input id="h-opp" type="text" value={f.opponent} onChange={(e) => set("opponent", e.target.value)} /></label>
         <label className="field">Venue (optional)<input id="h-venue" type="text" value={f.venue} onChange={(e) => set("venue", e.target.value)} /></label>

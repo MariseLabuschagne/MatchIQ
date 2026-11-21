@@ -25,6 +25,8 @@ export interface SportModule<TSetup = any> { // eslint-disable-line @typescript-
   title: (setup: TSetup) => string;
   /** Score for lists, e.g. "2–1" or "6–4 6–3". */
   scoreLine: (match: Match<TSetup>) => string;
+  /** What a shared group is called in this sport: a hockey team, a tennis player. */
+  squad: { one: string; many: string; nameLabel: string; placeholder: string };
   /** Optional work to run in the background after someone signs in (e.g. a one-off import of old matches). */
   onSignIn?: (uid: string) => Promise<void>;
   /** Optional extra panel at the bottom of the sport's history page (e.g. importing old matches). */

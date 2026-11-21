@@ -197,3 +197,16 @@ textarea { min-height: 96px; resize: vertical; }
 .moved-notice { margin: 12px 0; display: grid; gap: 6px; }
 .moved-notice p { margin: 0; color: var(--muted); font-size: 14px; }
 .moved-notice .btn { justify-self: start; }
+
+/* Teams and players (core/ui/Squads.tsx) */
+.squads { width: 100%; display: grid; gap: 8px; margin-top: 8px; text-align: left; }
+.squads h3 { font-size: 16px; }
+.list-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 10px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--border); text-align: left; }
+.list-row.static { background: var(--card-light); }
+.row-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.row-buttons .btn { flex: 1; background: var(--card-light); border: 1px solid var(--border); }
+.row-buttons .btn.primary { background: var(--accent); border-color: transparent; }
+.code-card { display: grid; gap: 6px; margin-bottom: 14px; }
+.code-card p { margin: 0; }
+.join-code { font-size: 32px; font-weight: 700; letter-spacing: 0.18em; font-variant-numeric: tabular-nums; }
+.code-input { text-transform: uppercase; letter-spacing: 0.2em; font-size: 20px !important; }
