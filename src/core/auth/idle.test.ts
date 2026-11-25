@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { clearActive, IDLE_LIMIT_MS, isIdleTooLong, markActive, takeIdleNotice } from "./idle";
+import { clearActive, IDLE_LIMIT_MS, isIdleTooLong, markActive } from "./idle";
 
 const store = new Map<string, string>();
 (globalThis as unknown as { localStorage: Pick<Storage, "getItem" | "setItem" | "removeItem"> }).localStorage = {
@@ -9,7 +9,7 @@ const store = new Map<string, string>();
 };
 
 describe("idle log-out", () => {
-  beforeEach(() => { store.clear(); clearActive(false); });
+  beforeEach(() => { store.clear(); clearActive(); });
 
   it("treats no record as just used", () => {
     expect(isIdleTooLong()).toBe(false);
@@ -20,13 +20,9 @@ describe("idle log-out", () => {
     expect(isIdleTooLong(t + IDLE_LIMIT_MS - 1000)).toBe(false);
     expect(isIdleTooLong(t + IDLE_LIMIT_MS + 1000)).toBe(true);
   });
-  it("a sign-out clears the clock and leaves a one-time notice after idling", () => {
+  it("a sign-out clears the clock", () => {
     markActive(Date.now() - IDLE_LIMIT_MS * 2);
-    clearActive(true);
+    clearActive();
     expect(isIdleTooLong()).toBe(false);
-    expect(takeIdleNotice()).toBe(true);
-    expect(takeIdleNotice()).toBe(true);
-    clearActive(false); // signing in again clears it
-    expect(takeIdleNotice()).toBe(false);
   });
 });

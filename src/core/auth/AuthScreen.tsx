@@ -8,7 +8,7 @@ import {
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { useAuth } from "./AuthProvider";
-import { clearActive, takeIdleNotice } from "./idle";
+import { clearActive } from "./idle";
 import { BuiltBy } from "../ui/components";
 
 function friendly(code: string): string {
@@ -33,12 +33,11 @@ export function AuthScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [msg, setMsg] = useState<{ text: string; ok?: boolean } | null>(() =>
-    takeIdleNotice() ? { text: "You were logged out after 12 hours without use. Log in again to carry on.", ok: true } : null);
+  const [msg, setMsg] = useState<{ text: string; ok?: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
 
   const run = async (fn: () => Promise<void>) => {
-    clearActive(false); // a fresh sign-in starts the 12-hour clock again
+    clearActive(); // a fresh sign-in starts the 12-hour clock again
     setBusy(true);
     setMsg(null);
     try {

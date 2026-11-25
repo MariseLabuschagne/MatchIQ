@@ -5,7 +5,6 @@
  */
 export const IDLE_LIMIT_MS = 12 * 60 * 60 * 1000;
 const KEY = "matchiq.lastActive";
-const NOTICE = "matchiq.idleLoggedOut";
 
 const read = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
 const write = (k: string, v: string | null) => {
@@ -27,16 +26,9 @@ export function markActive(now = Date.now()) {
 }
 
 /** Forget the activity record on sign-out, so the next sign-in starts fresh. */
-export function clearActive(idle: boolean) {
+export function clearActive() {
   lastWrite = 0;
   write(KEY, null);
-  write(NOTICE, idle ? "1" : null);
-}
-
-/**
- * Shown on the sign-in screen after an idle log-out, until the next sign-in or sign-out
- * (reading it twice, as React may do, gives the same answer).
- */
-export function takeIdleNotice(): boolean {
-  return read(NOTICE) === "1";
+  // Tidy up the notice older builds left behind.
+  write("matchiq.idleLoggedOut", null);
 }

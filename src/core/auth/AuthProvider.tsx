@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       onAuthStateChanged(auth, async (user) => {
         if (!user) return setState({ ready: true, user: null, profile: null });
         // Opened after 12 hours without use: sign out before showing anything.
-        if (isIdleTooLong()) { clearActive(true); await signOut(auth); return; }
+        if (isIdleTooLong()) { clearActive(); await signOut(auth); return; }
         markActive();
         setState({ ready: true, user, profile: await loadProfile(user) });
       }),
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!signedIn) return;
     const active = () => markActive();
-    const check = () => { if (isIdleTooLong()) { clearActive(true); signOut(auth); } };
+    const check = () => { if (isIdleTooLong()) { clearActive(); signOut(auth); } };
     const onShow = () => { if (document.visibilityState === "visible") check(); };
     const events = ["pointerdown", "keydown", "touchstart", "wheel"] as const;
     events.forEach((e) => window.addEventListener(e, active, { passive: true }));
@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [signedIn]);
 
-  const logout = async () => { clearActive(false); await signOut(auth); };
+  const logout = async () => { clearActive(); await signOut(auth); };
 
   const refresh = async () => {
     const u = auth.currentUser;
