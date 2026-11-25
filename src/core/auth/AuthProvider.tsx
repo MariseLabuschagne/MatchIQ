@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { clearActive, IDLE_LIMIT_MS, isIdleTooLong, markActive } from "./idle";
 
 export type Role = "administrator" | "coach" | "parent" | "scorer";
 
@@ -42,10 +43,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () =>
       onAuthStateChanged(auth, async (user) => {
         if (!user) return setState({ ready: true, user: null, profile: null });
+        // Opened after 12 hours without use: sign out before showing anything.
+        if (isIdleTooLong()) { clearActive(true); await signOut(auth); return; }
+        markActive();
         setState({ ready: true, user, profile: await loadProfile(user) });
       }),
     []
   );
+
+  // Track use while signed in, and log out if the app sat open but untouched for 12 hours.
+  const signedIn = !!state.user;
+  useEffect(() => {
+    if (!signedIn) return;
+    const active = () => markActive();
+    const check = () => { if (isIdleTooLong()) { clearActive(true); signOut(auth); } };
+    const onShow = () => { if (document.visibilityState === "visible") check(); };
+    const events = ["pointerdown", "keydown", "touchstart", "wheel"] as const;
+    events.forEach((e) => window.addEventListener(e, active, { passive: true }));
+    document.addEventListener("visibilitychange", onShow);
+    const timer = window.setInterval(check, Math.min(5 * 60 * 1000, IDLE_LIMIT_MS));
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, active));
+      document.removeEventListener("visibilitychange", onShow);
+      window.clearInterval(timer);
+    };
+  }, [signedIn]);
+
+  const logout = async () => { clearActive(false); await signOut(auth); };
 
   const refresh = async () => {
     const u = auth.currentUser;
@@ -54,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setState({ ready: true, user: auth.currentUser, profile: await loadProfile(u) });
   };
 
-  return <Ctx.Provider value={{ ...state, refresh, logout: () => signOut(auth) }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ ...state, refresh, logout }}>{children}</Ctx.Provider>;
 }
 
 export const useAuth = () => useContext(Ctx);
